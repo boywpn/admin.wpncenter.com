@@ -128,6 +128,11 @@ class TransferApiController extends GameApiController
         $this->resJson['responseStatus']['code'] = 200;
         $this->resJson['responseStatus']['message'] = "SUCCESS";
         $this->resJson['responseStatus']['messageDetails'] = 'ยืนยันรายการเรียบร้อย';
+
+        $this->resJson['responseDetails']['staffid'] = (isset($custom['admin_id'])) ? $custom['admin_id'] : null;
+        $this->resJson['responseDetails']['staffname'] = (isset($custom['admin_name'])) ? $custom['admin_name'] : null;
+        $this->resJson['responseCustom'] = (!empty($custom)) ? $custom : null;
+
         return $this->returnJson();
 
     }
@@ -155,9 +160,9 @@ class TransferApiController extends GameApiController
 
         $this->arrLog['log_agent_id'] = $log_agent_id;
 
-        $custom = "";
+        $custom = [];
         if(isset($data['custom'])) {
-            $custom = json_decode($data['custom'], JSON_UNESCAPED_UNICODE);
+            $custom = json_decode($data['custom'], true);
         }
 
         // for type approve almost from withdrawal

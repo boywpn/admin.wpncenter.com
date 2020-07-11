@@ -2065,6 +2065,7 @@ class TransferApiController extends GameApiController
         $this->resJson['responseDetails']['transfer'] = ($data['type'] == "transfer") ? (float)$amount : 0;
         $this->resJson['responseDetails']['afterbanlance'] = (float)$afterbalance;
         $this->resJson['responseDetails']['order_api_id'] = $res_order_id;
+
         $this->resJson['responseDetails']['statuswd'] = $statuswd;
 
         $this->resJson['responseCustom'] = (!empty($custom)) ? $custom : null;

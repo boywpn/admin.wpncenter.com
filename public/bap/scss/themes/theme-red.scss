@@ -1,0 +1,94 @@
+﻿@import '_theme-color-variables';
+
+.theme-red {
+
+    .navbar {
+        background: $theme-red;
+        background: -webkit-linear-gradient(to right, $theme-red, lighten($theme-red,$navbar-lighten)); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, $theme-red, lighten($theme-red,$navbar-lighten)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    }
+
+    .navbar-brand {
+        color: $theme-red-navbar-brand;
+
+        &:hover {
+            color: $theme-red-navbar-brand_hover;
+        }
+
+        &:active {
+            color: $theme-red-navbar-brand_active;
+        }
+
+        &:focus {
+            color: $theme-red-navbar-brand_focus;
+        }
+    }
+
+    .nav {
+        > li {
+            > a {
+                color: $theme-red-nav-anchor;
+
+                &:hover {
+                    background-color: $theme-red-nav-anchor_hover;
+                }
+
+                &:focus {
+                    background-color: $theme-red-nav-anchor_focus;
+                }
+            }
+        }
+
+        .open {
+            > a {
+                background-color: $theme-red-nav-anchor-opened;
+
+                &:hover {
+                    background-color: $theme-red-nav-anchor-opened_hover;
+                }
+
+                &:focus {
+                    background-color: $theme-red-nav-anchor-opened_focus;
+                }
+            }
+        }
+    }
+
+    .bars {
+        color: $theme-red-bar;
+    }
+
+    .sidebar {
+        .menu {
+            .list {
+                li.active {
+                    background-color: $theme-red-menu-list-active;
+
+                    > :first-child {
+                        i, span {
+                            color: $theme-red;
+                        }
+                    }
+                }
+
+                .toggled {
+                    background-color: $theme-red-menu-list-toggled;
+                }
+
+                .ml-menu {
+                    background-color: $theme-red-menu-list-submenu;
+                }
+            }
+        }
+
+        .legal {
+            background-color: $theme-red-legal-bg;
+
+            .copyright {
+                a {
+                    color: $theme-red !important;
+                }
+            }
+        }
+    }
+}

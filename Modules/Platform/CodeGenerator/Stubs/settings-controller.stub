@@ -1,0 +1,45 @@
+<?php
+
+namespace Modules\:MODULE_NAME:\Http\Controllers\Settings;
+
+use Modules\:MODULE_NAME:\Datatables\Settings\:SETTING_NAME:Datatable;
+use Modules\:MODULE_NAME:\Entities\:SETTING_NAME:;
+use Modules\Platform\Core\Http\Controllers\ModuleCrudController;
+use Modules\Platform\Core\Http\Forms\NameDictionaryForm;
+use Modules\Platform\Core\Http\Requests\NameDictionaryRequest;
+
+class :SETTING_NAME:Controller extends ModuleCrudController
+{
+
+    protected $datatable = :SETTING_NAME:Datatable::class;
+    protected $formClass = NameDictionaryForm::class;
+    protected $storeRequest = NameDictionaryRequest::class;
+    protected $updateRequest = NameDictionaryRequest::class;
+    protected $entityClass = :SETTING_NAME:::class;
+
+    protected $moduleName = ':MODULE_NAME_LOWERCASE:';
+
+    protected $settingsBackRoute = ':MODULE_NAME_LOWERCASE:.:MODULE_NAME_LOWERCASE:.index';
+
+    protected $showFields = [
+         :MODULE_SHOW_FIELDS_PART:
+    ];
+
+    protected $languageFile = ':MODULE_NAME_LOWERCASE::::MODULE_NAME_LOWERCASE:.:SETTING_NAME_LOWER_CASE:';
+
+    protected $routes = [
+        'index' => ':MODULE_NAME_LOWERCASE:.:SETTING_NAME_LOWER_CASE:.index',
+        'create' => ':MODULE_NAME_LOWERCASE:.:SETTING_NAME_LOWER_CASE:.create',
+        'show' => ':MODULE_NAME_LOWERCASE:.:SETTING_NAME_LOWER_CASE:.show',
+        'edit' => ':MODULE_NAME_LOWERCASE:.:SETTING_NAME_LOWER_CASE:.edit',
+        'store' => ':MODULE_NAME_LOWERCASE:.:SETTING_NAME_LOWER_CASE:.store',
+        'destroy' => ':MODULE_NAME_LOWERCASE:.:SETTING_NAME_LOWER_CASE:.destroy',
+        'update' => ':MODULE_NAME_LOWERCASE:.:SETTING_NAME_LOWER_CASE:.update'
+    ];
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+}

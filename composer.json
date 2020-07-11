@@ -1,0 +1,118 @@
+{
+  "name": "laravel/laravel",
+  "description": "The Laravel Framework.",
+  "keywords": [
+    "framework",
+    "laravel"
+  ],
+  "license": "MIT",
+  "type": "project",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "repositories": [
+    {
+      "type": "vcs",
+      "url":  "git@github.com:hmazter/Landlord.git"
+    }
+  ],
+  "require": {
+    "php": ">=7.1.3",
+    "arrilot/laravel-widgets": "^3.8",
+    "barryvdh/laravel-ide-helper": "^2.5",
+    "barryvdh/laravel-snappy": "^0.4.1",
+    "bnbwebexpertise/laravel-attachments": "^1.0",
+    "consoletvs/charts": "^6.2",
+    "cybercog/laravel-ownership": "^5.0",
+    "doctrine/dbal": "^2.5",
+    "edvinaskrucas/settings": "^2.0",
+    "fideloper/proxy": "~4.0",
+    "genealabs/laravel-model-caching": "^0.3.6",
+    "graham-campbell/throttle": "^7.1",
+    "h4cc/wkhtmltoimage-amd64": "0.12.x",
+    "h4cc/wkhtmltoimage-i386": "0.12.x",
+    "h4cc/wkhtmltopdf-amd64": "0.12.x",
+    "h4cc/wkhtmltopdf-i386": "0.12.x",
+    "hipsterjazzbo/landlord": "dev-laravel-57",
+    "irazasyed/telegram-bot-sdk": "^3.0",
+    "josegonzalez/dotenv": "^3.2",
+    "kris/laravel-form-builder": "dev-master",
+    "laracasts/flash": "^3.0",
+    "laracasts/utilities": "^3.0",
+    "laravel/framework": "5.7.*",
+    "laravel/packer": "^2.1",
+    "laravel/tinker": "~1.0",
+    "laravelcollective/html": "^5.4.0",
+    "laravolt/avatar": "^2.0",
+    "letsdrink/ouzo-goodies": "^1.6",
+    "nwidart/laravel-modules": "^3.2.0",
+    "predis/predis": "^1.1",
+    "prettus/l5-repository": "^2.6",
+    "proengsoft/laravel-jsvalidation": "^2.3.2",
+    "pusher/pusher-php-server": "^3.0",
+    "rachidlaasri/laravel-installer": "^4.0.2",
+    "spatie/laravel-activitylog": "^2.1",
+    "spatie/laravel-medialibrary": "^7.14",
+    "spatie/laravel-menu": "^3.0",
+    "spatie/laravel-permission": "^2.6",
+    "tymon/jwt-auth": "^0.5.12",
+    "vinkla/hashids": "5.1.*",
+    "yajra/laravel-datatables-buttons": "4.*",
+    "yajra/laravel-datatables-fractal": "1.*",
+    "yajra/laravel-datatables-oracle": "8.*"
+  },
+  "require-dev": {
+    "barryvdh/laravel-debugbar": "^3.2",
+    "filp/whoops": "~2.0",
+    "fzaninotto/faker": "~1.4",
+    "mockery/mockery": "0.9.*",
+    "phpmd/phpmd": "@stable",
+    "phpunit/phpunit": "~6.0"
+  },
+  "autoload": {
+    "files": [
+      "app/helpers.php",
+      "app/html_dom.php"
+    ],
+    "classmap": [
+      "database/seeds",
+      "database/migrations",
+      "database/factories",
+      "app/cryptor.php"
+    ],
+    "psr-4": {
+      "App\\": "app/",
+      "Modules\\": "Modules/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "dont-discover": [
+      ]
+    }
+  },
+  "scripts": {
+    "post-root-package-install": [
+      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+    ],
+    "post-create-project-cmd": [
+      "@php artisan key:generate"
+    ],
+    "post-autoload-dump": [
+      "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+      "@php artisan package:discover"
+    ],
+    "post-update-cmd": [
+      "php artisan ide-helper:generate"
+    ]
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true
+  }
+}

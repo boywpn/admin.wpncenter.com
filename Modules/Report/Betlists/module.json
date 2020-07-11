@@ -1,0 +1,16 @@
+{
+    "name": "ReportBetlists",
+    "alias": "report/betlists",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Report\\Betlists\\Providers\\BetlistsServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

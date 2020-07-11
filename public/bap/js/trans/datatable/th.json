@@ -1,0 +1,24 @@
+{
+  "sEmptyTable": "ไม่มีข้อมูลในระบบ",
+  "sInfo": "หน้า _START_ ถึง _END_ จากทั้งหมด _TOTAL_ รายการ",
+  "sInfoEmpty": "หน้า 0 ถึง 0 จากทั้งหมด 0 รายการ",
+  "sInfoFiltered": "(ค้นหาจากทั้งหมด _MAX_ รายการ)",
+  "sInfoPostFix": "",
+  "sInfoThousands": ",",
+  "sLengthMenu": "_MENU_",
+  "sLoadingRecords": "กำลังโหลดข้อมูล...",
+  "sProcessing": "กำลังประมวลผล...",
+  "sSearch": "",
+  "sZeroRecords": "ไม่มีข้อมูลที่ต้องการค้นหา",
+  "oPaginate": {
+    "sFirst": "หน้าแรก",
+    "sLast": "หน้าสุดท้าย",
+    "sNext": "ต่อไป",
+    "sPrevious": "ก่อนหน้า"
+  },
+  "oAria": {
+    "sSortAscending": ": activate to sort column ascending",
+    "sSortDescending": ": activate to sort column descending"
+  },
+  "searchPlaceholder": "กำลังค้นหา..."
+}

@@ -1,0 +1,8 @@
+.sidebar .menu .list .ml-menu li .ml-menu li a {
+    padding-left: 60px;
+}
+
+.card .card-inside-title:first-child {
+    margin-top: 0;
+    margin-bottom: 15px;
+}

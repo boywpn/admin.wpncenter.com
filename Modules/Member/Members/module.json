@@ -1,0 +1,16 @@
+{
+    "name": "MemberMembers",
+    "alias": "member/members",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Member\\Members\\Providers\\MembersServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

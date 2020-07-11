@@ -1,0 +1,16 @@
+{
+    "name": "ReportCommission",
+    "alias": "report/commission",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Report\\Commission\\Providers\\CommissionServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

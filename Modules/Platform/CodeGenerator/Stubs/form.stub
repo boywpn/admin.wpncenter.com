@@ -1,0 +1,25 @@
+<?php
+
+namespace Modules\:MODULE_NAME:\Http\Forms;
+
+
+use Kris\LaravelFormBuilder\Form;
+
+use Modules\Platform\Core\Helper\FormHelper;
+:FORM_USE:
+
+class :SINGULAR_NAME:Form extends Form
+{
+    public function buildForm()
+    {
+
+        :FORM_FIELDS:
+
+        $this->add('submit', 'submit', [
+            'label' => trans('core::core.form.save'),
+            'attr' => ['class' => 'btn btn-primary m-t-15 waves-effect']
+        ]);
+
+    }
+
+}

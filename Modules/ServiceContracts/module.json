@@ -1,0 +1,16 @@
+{
+    "name": "ServiceContracts",
+    "alias": "servicecontracts",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\ServiceContracts\\Providers\\ServiceContractsServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

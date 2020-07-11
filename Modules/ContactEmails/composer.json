@@ -1,0 +1,24 @@
+{
+  "name": "Laravel BAP/contactemails",
+  "description": "",
+  "authors": [
+    {
+      "name": "Laravel BAP - Business Application Platform",
+      "email": "code@laravel-bap.com"
+    }
+  ],
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Modules\\ContactEmails\\Providers\\ContactEmailsServiceProvider"
+      ],
+      "aliases": {
+      }
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Modules\\ContactEmails\\": ""
+    }
+  }
+}

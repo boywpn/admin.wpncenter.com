@@ -1,0 +1,16 @@
+{
+    "name": "ContactRequests",
+    "alias": "contactrequests",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\ContactRequests\\Providers\\ContactRequestsServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

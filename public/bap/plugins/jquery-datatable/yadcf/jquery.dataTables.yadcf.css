@@ -1,0 +1,136 @@
+.hide {
+	display: none;
+}
+
+
+.yadcf-filter-reset-button {
+	display: none;
+
+}
+
+.yadcf-filter-reset-button.range-number-slider-reset-button {
+	position: relative;
+	top: -6px;
+
+}
+
+.yadcf-filter{
+	min-width: 120px;
+}
+
+.yadcf-filter, .yadcf-filter-date{
+
+	border: 1px solid #ffffff;
+	border-bottom: 1px solid #ddd;
+	padding: 5px 0px;
+	height: 30px;
+	font-weight: normal;
+	width: 100%;
+	background-color: #ffffff;
+
+}
+
+.yadcf-filter :focus, .yadcf-filter:active , yadcf-filter-date:focus, yadcf-filter-date:active{
+	border-bottom: 2px solid #1f91f3;
+}
+
+.yadcf-filter > option {
+	background: white;
+}
+
+.ui-autocomplete .ui-menu-item {
+	font-size: 12px;
+}
+
+#ui-datepicker-div {
+	font-size: 12px;
+}
+
+.yadcf-filter-wrapper {
+	display: block;
+	white-space: nowrap;
+}
+
+.yadcf-filter-range-number {
+	width: 40px;
+}
+
+.yadcf-filter-range-number-seperator {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.yadcf-filter-range-date {
+	width: 80px;
+}
+
+.yadcf-filter-range-date-seperator {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.yadcf-filter-wrapper-inner {
+	display: inline-block;
+	border: 1px solid #ABADB3;
+}
+
+.yadcf-number-slider-filter-wrapper-inner {
+	display: inline-block;
+	width: 200px;
+	margin-bottom: 7px;
+}
+
+.yadcf-filter-range-number-slider .ui-slider-handle {
+	width: 10px;
+	height: 10px;
+	margin-top: 1px;
+}
+
+.yadcf-filter-range-number-slider .ui-slider-range {
+	position: relative;
+	height: 5px;
+}
+
+.yadcf-filter-range-number-slider {
+	height: 5px;
+	margin-left: 6px;
+	margin-right: 6px;
+}
+
+.yadcf-filter-range-number-slider {
+	overflow: visible;
+}
+
+.yadcf-number-slider-filter-wrapper-inner .yadcf-filter-range-number-slider-min-tip {
+	font-size: 12px;
+	font-weight: normal;
+	position: absolute;
+	outline-style: none;
+}
+
+.yadcf-number-slider-filter-wrapper-inner .yadcf-filter-range-number-slider-max-tip {
+	font-size: 12px;
+	font-weight: normal;
+	position: absolute;
+	outline-style: none;
+}
+
+.yadcf-number-slider-filter-wrapper-inner .yadcf-filter-range-number-slider-min-tip-inner {
+	position: absolute;
+	top: 11px;
+}
+
+.yadcf-number-slider-filter-wrapper-inner .yadcf-filter-range-number-slider-max-tip-inner {
+	position: absolute;
+	top: 11px;
+}
+
+.yadcf-exclude-wrapper {
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.yadcf-label.small {
+	font-size: 10px;
+}

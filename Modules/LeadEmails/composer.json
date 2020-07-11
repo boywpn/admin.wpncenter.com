@@ -1,0 +1,24 @@
+{
+  "name": "Laravel BAP/leademails",
+  "description": "",
+  "authors": [
+    {
+      "name": "Laravel BAP - Business Application Platform",
+      "email": "code@laravel-bap.com"
+    }
+  ],
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Modules\\LeadEmails\\Providers\\LeadEmailsServiceProvider"
+      ],
+      "aliases": {
+      }
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Modules\\LeadEmails\\": ""
+    }
+  }
+}

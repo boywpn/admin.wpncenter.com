@@ -1,0 +1,16 @@
+{
+    "name": "$MODULENAME$",
+    "alias": "$LOWER_NAME$",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "$MODULE_NAMESPACE$\\$PATH_MODULE$\\Providers\\$STUDLY_NAME$ServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

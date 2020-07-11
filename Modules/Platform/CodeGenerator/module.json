@@ -1,0 +1,16 @@
+{
+    "name": "CodeGenerator",
+    "alias": "codegenerator",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Platform\\CodeGenerator\\Providers\\CodeGeneratorServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

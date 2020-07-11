@@ -1,0 +1,49 @@
+<?php
+
+namespace Modules\:MODULE_NAME:\Entities;
+
+use Bnb\Laravel\Attachments\HasAttachment;
+use Cog\Contracts\Ownership\Ownable;
+use Cog\Laravel\Ownership\Traits\HasMorphOwner;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Platform\Core\Helper\ActivityLogHelper;
+use Modules\Platform\Core\Traits\Commentable;
+use Spatie\Activitylog\Traits\LogsActivity;
+use HipsterJazzbo\Landlord\BelongsToTenants;
+use Carbon\Carbon;
+
+class :ENTITY_NAME: extends Model :IMPLEMENTS_OWNABLE:
+{
+
+    use SoftDeletes :BELONGSTOTENANTS: :HAS_MORPH_USE: :LOGS_ACTIVITY_USE: :COMMENATABLE_USE: :HAS_ATTACHMENT_USE: ;
+
+    :COMMENTS_MUST_BE_APPROVED:
+
+
+    :LOGS_ATTRIBUTES_PROP:
+
+    :GET_RELATED_MODEL_ATTRIBUTE_PROP:
+
+
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
+    /**
+     * Validation rules
+     *
+     * @var array
+     */
+    public static $rules = [
+
+    ];
+    public $table = ':ENTITY_TABLE:';
+
+    :FILLABLE_PROP:
+
+    protected $dates = ['deleted_at', 'created_at', 'updated_at'];
+
+    :DATE_FIELD_PARSE_PROP:
+
+    :MANY_TO_ONE_RELATIONS:
+
+}

@@ -1,0 +1,16 @@
+{
+    "name": "ReportWinloss",
+    "alias": "report/winloss",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Report\\Winloss\\Providers\\WinlossServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

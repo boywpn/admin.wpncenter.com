@@ -1,0 +1,94 @@
+﻿@import '_theme-color-variables';
+
+.theme-green {
+
+    .navbar {
+        background: $theme-green;
+        background: -webkit-linear-gradient(to right, $theme-green, lighten($theme-green,$navbar-lighten)); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, $theme-green, lighten($theme-green,$navbar-lighten)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    }
+
+    .navbar-brand {
+        color: $theme-green-navbar-brand;
+
+        &:hover {
+            color: $theme-green-navbar-brand_hover;
+        }
+
+        &:active {
+            color: $theme-green-navbar-brand_active;
+        }
+
+        &:focus {
+            color: $theme-green-navbar-brand_focus;
+        }
+    }
+
+    .nav {
+        > li {
+            > a {
+                color: $theme-green-nav-anchor;
+
+                &:hover {
+                    background-color: $theme-green-nav-anchor_hover;
+                }
+
+                &:focus {
+                    background-color: $theme-green-nav-anchor_focus;
+                }
+            }
+        }
+
+        .open {
+            > a {
+                background-color: $theme-green-nav-anchor-opened;
+
+                &:hover {
+                    background-color: $theme-green-nav-anchor-opened_hover;
+                }
+
+                &:focus {
+                    background-color: $theme-green-nav-anchor-opened_focus;
+                }
+            }
+        }
+    }
+
+    .bars {
+        color: $theme-green-bar;
+    }
+
+    .sidebar {
+        .menu {
+            .list {
+                li.active {
+                    background-color: $theme-green-menu-list-active;
+
+                    > :first-child {
+                        i, span {
+                            color: $theme-green;
+                        }
+                    }
+                }
+
+                .toggled {
+                    background-color: $theme-green-menu-list-toggled;
+                }
+
+                .ml-menu {
+                    background-color: $theme-green-menu-list-submenu;
+                }
+            }
+        }
+
+        .legal {
+            background-color: $theme-green-legal-bg;
+
+            .copyright {
+                a {
+                    color: $theme-green !important;
+                }
+            }
+        }
+    }
+}

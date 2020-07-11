@@ -1,0 +1,16 @@
+{
+    "name": "CoreAgents",
+    "alias": "core/agents",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Core\\Agents\\Providers\\AgentsServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

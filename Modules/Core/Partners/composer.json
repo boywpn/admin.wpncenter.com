@@ -1,0 +1,25 @@
+{
+    "name": "WPN/core/partners",
+    "description": "",
+    "authors": [
+        {
+            "name": "WPN - Business Application Platform",
+            "email": "dev@webpanun.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Core\\Partners\\Providers\\PartnersServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Core\\Partners\\": ""
+        }
+    }
+}

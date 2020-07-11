@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AACE,aAAG;EACD,OAAO,EAAE,cAAc;;AAI3B,YAAa;EACX,aAAa,EAAE,GAAG;;AAGpB,eAAgB;EACd,MAAM,EAAE,OAAO",
+"sources": ["BAP_Quote.scss"],
+"names": [],
+"file": "BAP_Quote.css"
+}

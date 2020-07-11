@@ -1,0 +1,16 @@
+<?php
+
+Route::group(['middleware' => ['web','permission::MODULE_NAME_LOWERCASE:.browse'],'prefix'=>':MODULE_NAME_LOWERCASE:','as'=>':MODULE_NAME_LOWERCASE:.', 'namespace' => 'Modules\:MODULE_NAME:\Http\Controllers'], function()
+{
+    Route::get('/',function(){
+       return redirect()->route(':MODULE_NAME_LOWERCASE:.:MODULE_NAME_LOWERCASE:.index');
+    });
+
+    Route::group(['middleware' => ['web','permission::MODULE_NAME_LOWERCASE:.settings']], function(){
+
+        :SETTINGS_ROUTES:
+
+    });
+
+    Route::resource(':MODULE_NAME_LOWERCASE:', ':MODULE_NAME:Controller');
+});

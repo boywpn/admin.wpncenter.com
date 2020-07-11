@@ -1,0 +1,1 @@
+{{ \Modules\Platform\Core\Helper\UserHelper::formatUserDate($entity->$fieldName) }}

@@ -1,0 +1,16 @@
+{
+    "name": "Announcement",
+    "alias": "announcement",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Platform\\Announcement\\Providers\\AnnouncementServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

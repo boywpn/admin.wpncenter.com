@@ -1,0 +1,18 @@
+<?php
+
+return [
+    'name' => ':MODULE_NAME:',
+
+    'entity_private_access' => :PRIVATE_ACCESS:,
+
+    /**
+     * Always use lower name without custom characters, spaces, etc
+     */
+    'permissions' => [
+        ':MODULE_NAME_LOWERCASE:.settings',
+        ':MODULE_NAME_LOWERCASE:.browse',
+        ':MODULE_NAME_LOWERCASE:.create',
+        ':MODULE_NAME_LOWERCASE:.update',
+        ':MODULE_NAME_LOWERCASE:.destroy'
+    ]
+];

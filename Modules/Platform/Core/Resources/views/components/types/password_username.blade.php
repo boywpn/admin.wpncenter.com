@@ -1,0 +1,1 @@
+{{ \Illuminate\Support\Facades\Crypt::decryptString($entity->$fieldName) }}

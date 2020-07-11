@@ -1,0 +1,16 @@
+{
+    "name": "CoreOwners",
+    "alias": "core/owners",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Core\\Owners\\Providers\\OwnersServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

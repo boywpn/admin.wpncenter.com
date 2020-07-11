@@ -1,0 +1,16 @@
+{
+    "name": "CoreBanksPartners",
+    "alias": "core/bankspartners",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Core\\BanksPartners\\Providers\\BanksPartnersServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

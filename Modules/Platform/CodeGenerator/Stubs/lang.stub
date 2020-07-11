@@ -1,0 +1,32 @@
+<?php
+
+return [
+
+    'module' => ':MODULE_NAME:',
+    'module_description' => ':MODULE_NAME: description',
+    'delete' => 'Delete',
+    'edit' => 'Edit',
+    'create' => 'Create',
+    'back' => 'Back',
+    'details' => 'Details',
+    'list' => ':MODULE_NAME: list',
+    'updated' => ':MODULE_NAME: updated',
+    'created' => ':MODULE_NAME: created',
+
+    'dict' => [
+    ],
+
+    'panel' => [
+    ],
+
+    'form' => [
+    ],
+
+    'table' => [
+    ],
+
+    'settings' => [
+    ],
+
+
+];

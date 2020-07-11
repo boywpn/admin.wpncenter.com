@@ -1,0 +1,16 @@
+{
+    "name": "Vendors",
+    "alias": "vendors",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Vendors\\Providers\\VendorsServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

@@ -1,0 +1,25 @@
+{
+    "name": "WPN/core/games",
+    "description": "",
+    "authors": [
+        {
+            "name": "WPN - Business Application Platform",
+            "email": "dev@webpanun.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Core\\Games\\Providers\\GamesServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Core\\Games\\": ""
+        }
+    }
+}

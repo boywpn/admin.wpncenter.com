@@ -1,0 +1,42 @@
+{
+    "name": "eusonlito/laravel-packer",
+    "keywords": ["packer", "minify", "laravel"],
+    "description": "A package for pack css and javascript files",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lito",
+            "email": "lito@eordes.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "imagecow/imagecow": "2.1.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*",
+        "mikey179/vfsStream": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Eusonlito\\LaravelPacker\\": "src/Eusonlito/LaravelPacker/"
+        },
+        "classmap": [
+            "src/Eusonlito/LaravelPacker/Processors/"
+        ],
+        "files": [
+            "src/Eusonlito/LaravelPacker/Exceptions.php"
+        ]
+    },
+    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Eusonlito\\LaravelPacker\\PackerServiceProvider"
+            ],
+            "aliases": {
+                "Packer": "Eusonlito\\LaravelPacker\\Facade"
+            }      
+        }
+    }  
+}

@@ -1,0 +1,37 @@
+{
+    "name": "laracasts/utilities",
+    "description": "Transform your PHP to JavaScript",
+    "keywords": ["laravel", "javascript"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jeffrey Way",
+            "email": "jeffrey@laracasts.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "~5.0"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "~2.0"
+    },
+    "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
+        "psr-4": {
+            "Laracasts\\Utilities\\JavaScript\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laracasts\\Utilities\\JavaScript\\JavaScriptServiceProvider"
+            ],
+            "aliases": {
+                "JavaScript": "Laracasts\\Utilities\\JavaScript\\JavaScriptFacade"
+            }
+        }
+    }
+}

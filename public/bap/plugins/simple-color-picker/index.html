@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jQuery simplecolorpicker.js Examples</title>
+    <style type="text/css">
+body { font: 12px 'Open Sans',Tahoma, Geneva, sans-serif; background-color:#fafafa; }
+
+#demoWrap {
+  overflow: hidden;
+  padding: 30px;
+}
+
+/*color picker core css*/
+
+.color-picker-input {
+  background-image: url('color-swatch.png');
+  background-repeat: no-repeat;
+  line-height: 0;
+  font-size: 0;
+  cursor: pointer;
+  text-indent: -999em;
+  padding: 0;
+  border: 1px solid #666
+}
+
+.color-picker-input.open,  .color-picker-input:focus {
+  border-color: #0070CC !important;
+  box-shadow: 0 0 5px #c00
+}
+
+.color-picker-chooser {
+  background: #fff;
+  padding: 1px;
+  list-style: none;
+  position: absolute;
+  z-index: 1000;
+  border-color: #666;
+  margin: 0;
+  border-style: solid
+}
+
+.color-picker-chooser li {
+  float: left;
+  cursor: pointer;
+  border-style: solid;
+  border-color: #fff;
+}
+
+.color-picker-chooser li.selected, .color-picker-chooser li:hover, .color-picker-chooser li:focus {
+  border-color: #fff;
+  outline: none;
+  -webkit-transform: scale(1.3);
+}
+</style>
+    </head>
+
+    <body>
+<div id="demoWrap">
+      <h1>jQuery simplecolorpicker.js Examples</h1>
+      <div class="jquery-script-ads"><script type="text/javascript"><!--
+google_ad_client = "ca-pub-2783044520727903";
+/* jQuery_demo */
+google_ad_slot = "2780937993";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div>
+      <hr>
+      <h3>Example 1 - Default color picker</h3>
+      <p>
+    <input class="color-picker-input one" value="" />
+  </p>
+      <h3>Example 2 - Color picker with prepopulated value</h3>
+      <p>
+    <input class="color-picker-input one" value="c00" />
+  </p>
+      <h3>Example 3 - Color picker with override options set through data attribute</h3>
+      <p>
+    <input class="color-picker-input one" value="ccc" data-options="({cellHeight:15, cellWidth:28, cols:5, elWidth:152, iconPos: 'left'})" />
+  </p>
+      <h3>Example 4 - Color picker with override options set through plugin function</h3>
+      <p>
+    <input class="color-picker-input two" value="" />
+  </p>
+      <hr>
+      <h2>Todo:</h2>
+      <ul>
+    <li>Allow positioning of background (left,right,center,custom)</li>
+    <li>Create/destroy picker on fly</li>
+    <li>Set picker position (top,right,bottom,left)</li>
+  </ul>
+    </div>
+<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script> 
+<script type="text/javascript" src="jquery.simplecolorpicker.min.js"></script> 
+<script  type="text/javascript">
+        $(document).ready(function () {
+            $('.color-picker-input.one').simpleColorPicker();
+            $('.color-picker-input.two').simpleColorPicker({cellHeight:40, cellWidth:40, columns:5, elWidth: 75,elHeight:75,iconPos:'center'});
+        });
+    </script><script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>

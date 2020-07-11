@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Models\Old;
+
+use GeneaLabs\LaravelModelCaching\CachedModel;
+use Illuminate\Database\Eloquent\Model;
+
+class Bonus extends Model
+{
+
+    protected $connection = 'mysql2';
+
+    public $timestamps = false;
+
+    public $table = 'member_bonus';
+}

@@ -1,0 +1,16 @@
+{
+  "name": "ContactEmails",
+  "alias": "contactemails",
+  "description": "",
+  "keywords": [],
+  "active": 1,
+  "order": 0,
+  "providers": [
+    "Modules\\ContactEmails\\Providers\\ContactEmailsServiceProvider"
+  ],
+  "aliases": {},
+  "files": [
+    "start.php"
+  ],
+  "requires": []
+}

@@ -1,0 +1,15 @@
+{
+    "name": "Laravel BAP/settings",
+    "description": "",
+    "authors": [
+        {
+            "name": "Laravel BAP - Business Application Platform",
+            "email": "code@laravel-bap.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\\Platform\\Settings\\": ""
+        }
+    }
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="7bd256ab-a15e-4f60-9c8b-3f31a199088c" name="wpncenter" url="http://13.250.124.30">
+        <fileTransfer host="13.250.124.30" port="21" rootFolder="/public_html/sub_domain/admin">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="acfe72b4-df44-4425-8daf-1fc1de4651d0" name="admin2" url="http://13.251.166.149">
+        <fileTransfer host="13.251.166.149" port="22" privateKey="E:\Dropbox\Files\SH\SSHKey\LightsailDefaultKey-ap-southeast-1.pem" rootFolder="/var/www/html/admin" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,80 @@
+{
+    "name": "cybercog/laravel-ownership",
+    "description": "Laravel Ownership simplify management of Eloquent model's owner.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "cybercog",
+        "cog",
+        "laravel",
+        "eloquent",
+        "trait",
+        "ownership",
+        "owned",
+        "owner",
+        "ownable",
+        "author",
+        "maker",
+        "copyright",
+        "proprietor",
+        "domain",
+        "creator",
+        "master",
+        "polymorphic",
+        "morph"
+    ],
+    "authors": [
+        {
+            "name": "Anton Komarev",
+            "email": "a.komarev@cybercog.su",
+            "homepage": "http://ell.folio.su",
+            "role": "Developer"
+        }
+    ],
+    "homepage": "https://github.com/cybercog/laravel-ownership",
+    "support": {
+        "email": "open@cybercog.su",
+        "issues": "https://github.com/cybercog/laravel-ownership/issues",
+        "wiki": "https://github.com/cybercog/laravel-ownership/wiki",
+        "source": "https://github.com/cybercog/laravel-ownership",
+        "docs": "https://github.com/cybercog/laravel-ownership/wiki"
+    },
+    "require": {
+        "php": "^5.6|^7.0",
+        "illuminate/database": "~5.2|~5.3|~5.4|~5.5|~5.6|~5.7",
+        "illuminate/support": "~5.2|~5.3|~5.4|~5.5|~5.6|~5.7"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.10",
+        "mockery/mockery": "^1.0",
+        "orchestra/database": "~3.5.0|~3.6.0|~3.7.0",
+        "orchestra/testbench": "~3.5.0|~3.6.0|~3.7.0",
+        "phpunit/phpunit": "^6.0|^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cog\\Contracts\\Ownership\\": "contracts/",
+            "Cog\\Laravel\\Ownership\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Cog\\Tests\\Laravel\\Ownership\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Cog\\Laravel\\Ownership\\Providers\\OwnershipServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable" : true
+}

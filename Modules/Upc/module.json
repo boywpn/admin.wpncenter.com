@@ -1,0 +1,16 @@
+{
+    "name": "Upc",
+    "alias": "upc",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Upc\\Providers\\UpcServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

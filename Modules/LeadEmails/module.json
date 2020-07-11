@@ -1,0 +1,16 @@
+{
+  "name": "LeadEmails",
+  "alias": "leademails",
+  "description": "",
+  "keywords": [],
+  "active": 1,
+  "order": 0,
+  "providers": [
+    "Modules\\LeadEmails\\Providers\\LeadEmailsServiceProvider"
+  ],
+  "aliases": {},
+  "files": [
+    "start.php"
+  ],
+  "requires": []
+}

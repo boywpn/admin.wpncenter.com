@@ -1,0 +1,16 @@
+{
+    "name": "CoreBanks",
+    "alias": "core/banks",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Core\\Banks\\Providers\\BanksServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

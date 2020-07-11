@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AACI,eAAE;EACE,OAAO,EAAE,cAAa;;AAG9B,YAAa;EACT,aAAa,EAAE,GAAG;;AAGtB,eAAe;EACX,MAAM,EAAE,OAAO",
+"sources": ["BAP_Invoice.scss"],
+"names": [],
+"file": "BAP_Invoice.css"
+}

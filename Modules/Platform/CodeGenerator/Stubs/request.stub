@@ -1,0 +1,31 @@
+<?php
+
+namespace Modules\:MODULE_NAME:\Http\Requests;
+
+use App\Http\Requests\Request;
+
+/**
+ * Class :MODULE_NAME:Request
+ * @package Modules\:MODULE_NAME:\Http\Requests
+ */
+class :MODULE_NAME:Request extends Request
+{
+
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    public function rules()
+    {
+        return [
+            :REQUEST_RULES_BODY:
+        ];
+    }
+
+}

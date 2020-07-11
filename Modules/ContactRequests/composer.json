@@ -1,0 +1,25 @@
+{
+    "name": "Laravel BAP/contactrequests",
+    "description": "",
+    "authors": [
+        {
+            "name": "Laravel BAP - Business Application Platform",
+            "email": "code@laravel-bap.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\ContactRequests\\Providers\\ContactRequestsServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\ContactRequests\\": ""
+        }
+    }
+}

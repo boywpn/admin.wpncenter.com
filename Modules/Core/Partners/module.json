@@ -1,0 +1,16 @@
+{
+    "name": "CorePartners",
+    "alias": "core/partners",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Core\\Partners\\Providers\\PartnersServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

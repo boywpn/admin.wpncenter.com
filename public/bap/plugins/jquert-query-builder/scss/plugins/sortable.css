@@ -1,0 +1,35 @@
+/*
+Sass::SyntaxError: ".query-builder .drag-handle" failed to @extend "%rule-component".
+The selector "%rule-component" was not found.
+Use "@extend %rule-component !optional" if the extend should be able to fail.
+
+
+Backtrace:
+sortable.scss:6
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/tree/visitors/extend.rb:56:in `block in check_extends_fired!'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/util/subset_map.rb:105:in `block in each_value'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/util/subset_map.rb:105:in `each'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/util/subset_map.rb:105:in `each_value'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/tree/visitors/extend.rb:51:in `check_extends_fired!'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/tree/visitors/extend.rb:16:in `visit'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/tree/root_node.rb:39:in `css_tree'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/tree/root_node.rb:29:in `render_with_sourcemap'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/engine.rb:389:in `_render_with_sourcemap'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/engine.rb:307:in `render_with_sourcemap'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/plugin/compiler.rb:462:in `update_stylesheet'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/plugin/compiler.rb:209:in `each'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/plugin.rb:82:in `update_stylesheets'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/exec/sass_scss.rb:340:in `watch_or_update'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/exec/sass_scss.rb:51:in `process_result'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/exec/base.rb:52:in `parse'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/lib/sass/exec/base.rb:19:in `parse!'
+/var/lib/gems/2.3.0/gems/sass-3.5.1/bin/scss:13:in `<top (required)>'
+/usr/local/bin/scss:23:in `load'
+/usr/local/bin/scss:23:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Sass::SyntaxError: \".query-builder .drag-handle\" failed to @extend \"%rule-component\".\A The selector \"%rule-component\" was not found.\A Use \"@extend %rule-component !optional\" if the extend should be able to fail.\A "; }

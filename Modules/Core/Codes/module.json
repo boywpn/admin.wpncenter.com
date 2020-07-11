@@ -1,0 +1,16 @@
+{
+    "name": "CoreCodes",
+    "alias": "core/codes",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Core\\Codes\\Providers\\CodesServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

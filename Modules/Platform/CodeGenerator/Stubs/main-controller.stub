@@ -1,0 +1,61 @@
+<?php
+
+namespace Modules\:MODULE_NAME:\Http\Controllers;
+
+use Modules\:MODULE_NAME:\Datatables\:SINGULAR_NAME:Datatable;
+use Modules\:MODULE_NAME:\Entities\:SINGULAR_NAME:;
+use Modules\:MODULE_NAME:\Http\Forms\:SINGULAR_NAME:Form;
+use Modules\:MODULE_NAME:\Http\Requests\:MODULE_NAME:Request;
+use Modules\Platform\Core\Http\Controllers\ModuleCrudController;
+
+class :MODULE_NAME:Controller extends ModuleCrudController
+{
+
+    protected $datatable = :SINGULAR_NAME:Datatable::class;
+    protected $formClass = :SINGULAR_NAME:Form::class;
+    protected $storeRequest = :MODULE_NAME:Request::class;
+    protected $updateRequest = :MODULE_NAME:Request::class;
+    protected $entityClass = :SINGULAR_NAME:::class;
+
+    protected $moduleName = ':MODULE_NAME_LOWERCASE:';
+
+    protected $permissions = [
+        'browse' => ':MODULE_NAME_LOWERCASE:.browse',
+        'create' => ':MODULE_NAME_LOWERCASE:.create',
+        'update' => ':MODULE_NAME_LOWERCASE:.update',
+        'destroy' => ':MODULE_NAME_LOWERCASE:.destroy'
+    ];
+
+    protected $moduleSettingsLinks = [
+
+        :MODULE_SETTINGS_PART:
+
+    ];
+
+    protected $settingsPermission = ':MODULE_NAME_LOWERCASE:.settings';
+
+    protected $showFields = [
+
+        :MODULE_SHOW_FIELDS_PART:
+
+    ];
+
+    protected $languageFile = ':MODULE_NAME_LOWERCASE::::MODULE_NAME_LOWERCASE:';
+
+    protected $routes = [
+        'index' => ':MODULE_NAME_LOWERCASE:.:MODULE_NAME_LOWERCASE:.index',
+        'create' => ':MODULE_NAME_LOWERCASE:.:MODULE_NAME_LOWERCASE:.create',
+        'show' => ':MODULE_NAME_LOWERCASE:.:MODULE_NAME_LOWERCASE:.show',
+        'edit' => ':MODULE_NAME_LOWERCASE:.:MODULE_NAME_LOWERCASE:.edit',
+        'store' => ':MODULE_NAME_LOWERCASE:.:MODULE_NAME_LOWERCASE:.store',
+        'destroy' => ':MODULE_NAME_LOWERCASE:.:MODULE_NAME_LOWERCASE:.destroy',
+        'update' => ':MODULE_NAME_LOWERCASE:.:MODULE_NAME_LOWERCASE:.update'
+    ];
+
+    public function __construct()
+    {
+        parent::__construct();
+
+    }
+
+}

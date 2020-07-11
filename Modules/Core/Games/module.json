@@ -1,0 +1,16 @@
+{
+    "name": "CoreGames",
+    "alias": "core/games",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Core\\Games\\Providers\\GamesServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

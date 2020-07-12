@@ -438,10 +438,18 @@ class JobsController extends ModuleCrudController
             'job' => $job,
             'member' => $job['jobs_member'],
             'member_banks' => $job['jobs_member']['banks_member'],
-            'username' => $job['jobs_username']
+            'username' => $job['jobs_username'],
+            'route_cancel' => 'jobs.cancel',
+            'route_approve' => 'jobs.approve',
         ];
         $view = view('job/jobs::layouts.deposit', $data);
         return $view;
+
+    }
+
+    public function cancel(Request $request, $id){
+
+        return $id;
 
     }
 

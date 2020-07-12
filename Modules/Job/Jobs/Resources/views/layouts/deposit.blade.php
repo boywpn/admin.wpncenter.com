@@ -1,14 +1,14 @@
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
 
-        <form class="form-horizontal">
-            <h2 class="card-inside-title">@lang($language_file.'.general_information')</h2>
+        <form id="frmDeposit" class="form-horizontal">
+            <h2 class="card-inside-title">@lang($language_file.'.general_information') {{ $job['id'] }}</h2>
             <table class="table table-striped table-hover table-bordered">
                 <tr>
                     <th width="20%">@lang($language_file.'.form.order_id')</th>
                     <td width="30%" class="font-16 font-bold col-red">{{ $job['order_code'] }}</td>
                     <th width="20%">@lang($language_file.'.form.cust_username')</th>
-                    <td width="30%" class="font-16 font-bold col-red">{{ $username['username'] }}</td>
+                    <td width="30%" class="font-16 font-bold col-red">{{ ($username['username'] != 0) ? $username['username'] : __($language_file.'.to_wallet') }}</td>
                 </tr>
                 <tr>
                     <th>@lang($language_file.'.form.created_at')</th>
@@ -92,6 +92,18 @@
                     <td></td>
                 </tr>
             </table>
+
+            <h2 class="card-inside-title">@lang($language_file.'.topup_notes')</h2>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <div class="form-line">
+                        <textarea rows="4" class="form-control no-resize" placeholder="Please type what you want..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-danger m-t-15 waves-effect">@lang($language_file.'.button.cancel')</button>
+            <button type="button" class="btn btn-primary m-t-15 waves-effect">@lang($language_file.'.button.approve')</button>
         </form>
 
     </div>

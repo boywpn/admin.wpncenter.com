@@ -18,6 +18,7 @@ return [
     'save' => 'สร้างรายการ',
 
     'no_order_id' => 'ไม่มีรายการที่ต้องการ',
+    'to_wallet' => 'ฝากเข้ากระเป๋าเงิน',
 
     'for_deposit' => 'สร้างรายการฝาก',
     'for_withdraw' => 'สร้างรายการถอน',
@@ -42,6 +43,8 @@ return [
     'transfer_information' => 'ข้อมูลการทำรายการ',
     'credit_information' => 'ข้อมูลเครดิตลูกค้า',
 
+    'topup_notes' => 'หมายเหตุ',
+
     'time' => 'เวลา',
     'partner' => 'พาร์ทเนอร์',
     'username' => 'Username',
@@ -59,6 +62,11 @@ return [
 
     'panel' => [
         'details' => 'รายละเอียด',
+    ],
+
+    'button' => [
+        'cancel' => 'ยกเลิกรายการ',
+        'approve' => 'ยืนยันรายการ'
     ],
 
     'form' => [

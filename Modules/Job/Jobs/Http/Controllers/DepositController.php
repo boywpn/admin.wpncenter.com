@@ -54,8 +54,6 @@ class DepositController extends ModuleCrudController
         $jobs_new = Jobs::getJobs(1, 1);
         $jobs_processing = Jobs::getJobs(1, 2);
 
-//        print_r($jobs);
-
         $data = [
             'jobs_new' => $jobs_new,
             'jobs_processing' => $jobs_processing,

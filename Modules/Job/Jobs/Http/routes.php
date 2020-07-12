@@ -15,6 +15,9 @@ Route::group(['middleware' => ['web','permission:job.jobs.browse'], 'prefix'=>'j
     Route::get('jobs/view-job/{id}', ['as'=>'jobs.view-job', 'uses' => 'JobsController@renderJobByID']);
     Route::get('jobs/lock-job/{id}', ['as'=>'jobs.lock-job', 'uses' => 'JobsController@lockJobByID']);
 
+    Route::post('jobs/cancel/{id}', ['as'=>'jobs.cancel', 'uses' => 'JobsController@cancel']);
+    Route::post('jobs/approve/{id}', ['as'=>'jobs.approve', 'uses' => 'JobsController@approve']);
+
     Route::get('jobs/withdraw', ['as'=>'jobs.withdraw', 'uses' => 'WithdrawController@index']);
 
     Route::resource('jobs', 'JobsController');

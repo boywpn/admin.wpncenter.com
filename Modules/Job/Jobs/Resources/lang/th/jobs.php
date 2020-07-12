@@ -44,6 +44,9 @@ return [
     'credit_information' => 'ข้อมูลเครดิตลูกค้า',
 
     'topup_notes' => 'หมายเหตุ',
+    'topup_notes_textarea' => 'กรอกหมายเหตุที่ต้องการ',
+
+    'canceled_notes' => 'หมายเหตุการยกเลิก',
 
     'time' => 'เวลา',
     'partner' => 'พาร์ทเนอร์',
@@ -66,7 +69,8 @@ return [
 
     'button' => [
         'cancel' => 'ยกเลิกรายการ',
-        'approve' => 'ยืนยันรายการ'
+        'approve' => 'ยืนยันรายการ',
+        'close' => 'ปิด',
     ],
 
     'form' => [

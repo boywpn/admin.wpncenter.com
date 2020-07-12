@@ -141,8 +141,6 @@ use Krucas\Settings\Facades\Settings as Settings;
 <section class="content">
     <div class="container-fluid">
 
-
-
         @include('flash::message')
 
         @yield('content')

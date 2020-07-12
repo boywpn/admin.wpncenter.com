@@ -191,5 +191,22 @@
                 }
             } );
         }
+
+        function lockJob(id){
+            $.ajax( {
+                url: "/job/jobs/lock-job/" + id,
+                dataType: "html",
+                success: function( html ) {
+
+                    $("#job-detail").html(html)
+
+                    $('#aniimated-thumbnials').lightGallery({
+                        thumbnail: true,
+                        selector: 'a'
+                    });
+
+                }
+            } );
+        }
     </script>
 @endpush

@@ -103,12 +103,16 @@
                 </div>
             </div>
 
-            <button type="button" onclick="onCancel()" class="btn btn-danger m-t-15 waves-effect">@lang($language_file.'.button.cancel')</button>
-            <button type="button" class="btn btn-primary m-t-15 waves-effect">@lang($language_file.'.button.approve')</button>
+            @if(!$view)
+                <button type="button" onclick="onCancel()" class="btn btn-danger m-t-15 waves-effect">@lang($language_file.'.button.cancel')</button>
+                <button type="button" class="btn btn-primary m-t-15 waves-effect">@lang($language_file.'.button.approve')</button>
+            @endif
         </form>
 
     </div>
 </div>
+
+@if(!$view)
 
 <!-- For Material Design Colors -->
 <div class="modal fade" id="mdCancel" tabindex="-1" role="dialog">
@@ -163,3 +167,5 @@
     }
 
 </script>
+
+@endif

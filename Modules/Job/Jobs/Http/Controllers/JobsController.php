@@ -54,6 +54,7 @@ class JobsController extends ModuleCrudController
         'store' => 'job.jobs.store',
         'destroy' => 'job.jobs.destroy',
         'update' => 'job.jobs.update',
+        'deposit' => 'job.jobs.deposit',
     ];
 
     public function __construct()
@@ -413,7 +414,7 @@ class JobsController extends ModuleCrudController
             $table .= '<td class="bold">'.number_format($job['amount'],0).'</td>';
             $table .= '<td>';
             if($job['status_id'] == "1") {
-                $table .= '<button type="button" class="btn btn-xs btn-info waves-effect"><i class="material-icons">lock</i></button> ';
+                $table .= '<button type="button" onclick="lockJob('.$job['id'].')" class="btn btn-xs btn-info waves-effect"><i class="material-icons">lock</i></button> ';
             }
             $table .= '<button type="button" onclick="viewJob('.$job['id'].')" class="btn btn-xs bg-green waves-effect"><i class="material-icons">search</i></button>';
             $table .= '</td>';
@@ -439,24 +440,46 @@ class JobsController extends ModuleCrudController
             'member' => $job['jobs_member'],
             'member_banks' => $job['jobs_member']['banks_member'],
             'username' => $job['jobs_username'],
-            'route_cancel' => 'jobs.cancel',
-            'route_approve' => 'jobs.approve',
+            'view' => true
         ];
-        $view = view('job/jobs::layouts.deposit', $data);
+        $view = view('job/jobs::layouts.show', $data);
+        return $view;
+
+    }
+
+    public function lockJobByID($id){
+
+        $job = Jobs::getJobByID($id);
+        $data = [
+            'job' => $job,
+            'member' => $job['jobs_member'],
+            'member_banks' => $job['jobs_member']['banks_member'],
+            'username' => $job['jobs_username'],
+            'route_cancel' => 'job.jobs.cancel',
+            'route_approve' => 'job.jobs.approve',
+            'view' => false
+        ];
+        $view = view('job/jobs::layouts.show', $data);
         return $view;
 
     }
 
     public function cancel(Request $request, $id){
 
-        return $id;
+        $repository = $this->getRepository();
+        $entity = $repository->find($id);
 
-    }
+        $arrUpdate = [
+            'canceled_at' => date('Y-m-d H:i:s'),
+            'canceled_by' => \Auth::id(),
+            'canceled_notes' => $request->post('canceled_notes'),
+            'status_id' => 4
+        ];
 
-    public function lockJobByID($id){
+        $repository->updateEntity($arrUpdate, $entity);
 
-        $job = Jobs::lockJobByID($id);
-        print_r($job);
+        flash('ทำรายการเรียบร้อย')->success();
+        return redirect()->route($this->routes['deposit']);
 
     }
 

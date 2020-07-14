@@ -59,6 +59,8 @@ class Banks extends Model
                 'banks.name as bank_name',
                 'banks.code as bank_code'
             )
+            ->orderBy('core_banks.account')
+            ->orderBy('banks.sort', 'asc')
             ->get();
 
         $data = [];

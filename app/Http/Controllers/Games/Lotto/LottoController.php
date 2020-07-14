@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Games\Lotto;
 
+use App\Http\Controllers\AppController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class LottoController extends Controller
+class LottoController extends AppController
 {
 
     public $apiUrl;
@@ -63,10 +64,16 @@ class LottoController extends Controller
         $this->redirect = $mode['redirect'];
 
         if(!empty($key)) { // If key not default
-            $this->apiUrl = $key['api_url'];
-            $this->redirect = $key['redirect'];
-            $this->agent = $key['agent'];
+            $this->setKey($key);
         }
+    }
+
+    public function setKey($key){
+
+        $this->apiUrl = $key['api_url'];
+        $this->redirect = $key['redirect'];
+        $this->agent = $key['agent'];
+
     }
 
     public function getCode($id){

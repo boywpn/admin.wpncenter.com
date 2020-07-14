@@ -514,27 +514,27 @@ class MembersController extends UpcController
         $member = $member->toArray();
 
         $bank_to = ['bank_to' => null];
-        if(isset($member['members_agent']['agents_partner']['id'])){
-            // Check bank to transfer
-            $bank = BanksPartners::where('partner_id', $member['members_agent']['agents_partner']['id'])
-                ->where('member_status_id', $member['status_id'])
-                ->with(['banksBank' => function($q){
-                    $q->where('is_active', 1)->select('id', 'bank_id', 'account', 'number', 'is_active');
-                }, 'banksBank.banks' => function($q){
-                    $q->select('id', 'code', 'name');
-                }])
-                ->where('is_active', 1)
-                //->select('id', 'bank_id', 'partner_id', 'member_status_id', 'is_active')
-                ->get();
-
-            if($bank){
-                $bank = $bank->toArray();
-                $bank_to = ['bank_to' => $bank];
+//        if(isset($member['members_agent']['agents_partner']['id'])){
+//            // Check bank to transfer
+//            $bank = BanksPartners::where('partner_id', $member['members_agent']['agents_partner']['id'])
+//                ->where('member_status_id', $member['status_id'])
+//                ->with(['banksBank' => function($q){
+//                    $q->where('is_active', 1)->select('id', 'bank_id', 'account', 'number', 'is_active');
+//                }, 'banksBank.banks' => function($q){
+//                    $q->select('id', 'code', 'name');
+//                }])
+//                ->where('is_active', 1)
+//                //->select('id', 'bank_id', 'partner_id', 'member_status_id', 'is_active')
+//                ->get();
+//
+//            if($bank){
+//                $bank = $bank->toArray();
+//                $bank_to = ['bank_to' => $bank];
 //                if(!empty($bank['banks_bank'])) {
 //                    $bank_to = ['bank_to' => $bank];
 //                }
-            }
-        }
+//            }
+//        }
 
         $resArr = array_merge($member, $bank_to);
 

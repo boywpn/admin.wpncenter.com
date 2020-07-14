@@ -94,16 +94,43 @@
                 </tr>
             </table>
 
-            <h2 class="card-inside-title">@lang($language_file.'.topup_notes')</h2>
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <div class="form-line">
-                        <textarea rows="4" name="topup_notes" class="form-control no-resize" placeholder="@lang($language_file.'.topup_notes_textarea')"></textarea>
-                    </div>
-                </div>
-            </div>
+            <h2 class="card-inside-title">@lang($language_file.'.staff_information')</h2>
+            <table class="table table-striped table-hover table-bordered">
+                <tr>
+                    <th width="20%"></th>
+                    <th width="40%" class="text-center">@lang($language_file.'.staff.name')</th>
+                    <th width="40%" class="text-center">@lang($language_file.'.staff.time')</th>
+                </tr>
+                <tr>
+                    <th>@lang($language_file.'.staff.staff_locked')</th>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>@lang($language_file.'.staff.notes')</th>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <th>@lang($language_file.'.staff.staff_canceled')</th>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>@lang($language_file.'.staff.notes_canceled')</th>
+                    <td colspan="2"></td>
+                </tr>
+            </table>
 
             @if(!$view)
+                <h2 class="card-inside-title">@lang($language_file.'.topup_notes')</h2>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <div class="form-line">
+                            <textarea rows="4" name="topup_notes" class="form-control no-resize" placeholder="@lang($language_file.'.topup_notes_textarea')"></textarea>
+                        </div>
+                    </div>
+                </div>
+
                 <button type="button" onclick="onCancel()" class="btn btn-danger m-t-15 waves-effect">@lang($language_file.'.button.cancel')</button>
                 <button type="button" class="btn btn-primary m-t-15 waves-effect">@lang($language_file.'.button.approve')</button>
             @endif
@@ -145,6 +172,10 @@
 
 <script>
 
+    $( document ).ready(function() {
+        getStatement()
+    });
+
     function onCancel(){
 
         $('#mdCancel').modal('show')
@@ -163,6 +194,24 @@
 
             }
         });*/
+
+    }
+
+    function getStatement(){
+
+        $.ajax( {
+            url: "{{ route($route_statement, $job['id']) }}",
+            type: "GET",
+            dataType: "json",
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            success: function( data ) {
+
+                console.log(data);
+
+            }
+        });
 
     }
 

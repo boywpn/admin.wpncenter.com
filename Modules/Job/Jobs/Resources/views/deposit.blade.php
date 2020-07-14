@@ -157,6 +157,14 @@
     @endforeach
 
     <script>
+        var channel_job = window.PUSHER.subscribe('jobs');
+        channel_job.bind('deposit_locked', function(data) {
+            console.log(data);
+            $("table#job-new tr#job_"+data.message.id).remove();
+        });
+    </script>
+
+    <script>
 
         $('document').ready(function(){
             getTable();

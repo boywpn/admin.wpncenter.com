@@ -37,6 +37,8 @@ use Krucas\Settings\Facades\Settings as Settings;
         <script src="https://js.pusher.com/3.1/pusher.min.js"></script>
         <script>
 
+            Pusher.logToConsole = true;
+
             window.PUSHER = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
                 cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}',
                 encrypted: true
@@ -90,6 +92,7 @@ use Krucas\Settings\Facades\Settings as Settings;
         @else
             window.APPLICATION_USER_TIME_FORMAT_24 = false;
         @endif
+
     </script>
 
 

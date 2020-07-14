@@ -18,6 +18,8 @@ Route::group(['middleware' => ['web','permission:job.jobs.browse'], 'prefix'=>'j
     Route::post('jobs/cancel/{id}', ['as'=>'jobs.cancel', 'uses' => 'JobsController@cancel']);
     Route::post('jobs/approve/{id}', ['as'=>'jobs.approve', 'uses' => 'JobsController@approve']);
 
+    Route::get('jobs/check-statement/{id}', ['as'=>'jobs.check-statement', 'uses' => 'JobsController@checkStatementByJobID']);
+
     Route::get('jobs/withdraw', ['as'=>'jobs.withdraw', 'uses' => 'WithdrawController@index']);
 
     Route::resource('jobs', 'JobsController');

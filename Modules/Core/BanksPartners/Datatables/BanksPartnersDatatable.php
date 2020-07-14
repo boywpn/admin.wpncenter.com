@@ -87,7 +87,19 @@ class BanksPartnersDatatable extends PlatformDataTable
                             'label' => trans('core::core.no')
                         ]
                     ]
-                ]
+                ],
+                'created_at' => [
+                    'data' => 'created_at',
+                    'title' => trans('core::core.table.created_at'),
+                    'data_type' => 'datetime',
+                    'filter_type' => 'bap_date_range_picker',
+                ],
+                'updated_at' => [
+                    'data' => 'updated_at',
+                    'title' => trans('core::core.table.updated_at'),
+                    'data_type' => 'datetime',
+                    'filter_type' => 'bap_date_range_picker',
+                ],
             ];
     }
 
@@ -155,6 +167,7 @@ class BanksPartnersDatatable extends PlatformDataTable
             ->leftJoin('core_banks', 'core_banks_partners.bank_id', '=', 'core_banks.id')
             ->leftJoin('banks', 'core_banks.bank_id', '=', 'banks.id')
             ->whereNull('core_banks.deleted_at')
+            ->where('core_banks.is_active', 1)
             ->select(
                 'core_banks_partners.*',
                 'member_members_dict_status.name as member_status',

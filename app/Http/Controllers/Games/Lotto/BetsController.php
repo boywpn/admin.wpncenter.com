@@ -14,7 +14,7 @@ use Modules\Report\Betlists\Entities\Betlists;
 use Modules\Report\Betlists\Entities\BetlistsResults;
 use Modules\Report\Betlists\Entities\BetlistsTmp;
 
-class BetsController extends CshController
+class BetsController extends LottoController
 {
 
     /**
@@ -30,10 +30,11 @@ class BetsController extends CshController
     public function getBetItems($key = 0, $debug = false)
     {
 
-        $this->apiUrl = "http://betflikbetlog.psg-api.com/api/";
+        $this->apiUrl = "http://www.lottosh.bet/api/";
         $setParam = [
-            'start' => $this->level,
-            'end' => $this->id,
+            'start' => date('Y-m-d H:i:s', strtotime('-7 minutes', strtotime(date('Y-m-d H:i:s')))),
+            //'end' => '2020-07-01 23:59:59',
+            'end' => date('Y-m-d H:i:s'),
         ];
 
         $param = $this->setParam($setParam, 'betlog');
@@ -46,146 +47,6 @@ class BetsController extends CshController
         $response = json_decode($response, true);
 
         return $response;
-    }
-
-    public function getBetItemsFix($key = 0, $debug = false)
-    {
-
-        $this->apiUrl = "http://betflikbetlog.psg-api.com/fixslot/";
-        $setParam = [];
-        $param = $this->setParam($setParam, 'getFixJoker');
-        $response = $this->push();
-
-        if($debug) {
-            return compact('param', 'response');
-        }
-
-        $response = json_decode($response, true);
-
-        return $response;
-    }
-
-    public function getBetItemsByTime($user, $debug = false)
-    {
-
-        $this->apiUrl = "http://betflikbetlog.psg-api.com/api/";
-
-        $setParam = [
-            'username' => $user,
-            'start' => '2020-04-10 21:00:00',
-            'end' => '2020-04-10 23:59:59',
-        ];
-
-        $param = $this->setParam($setParam, 'getBetlogByTime');
-        $response = $this->push();
-
-        if($debug) {
-            return compact('param', 'response');
-        }
-
-        $response = json_decode($response, true);
-
-        return $response;
-    }
-
-    public function betLogTmpByTime($boards){
-
-        $this->entityClass = BetlistsTmp::class;
-        $repository = $this->getRepository();
-
-        $arrList = [];
-        $arrCount = [];
-
-        foreach ($boards as $board){
-
-            $key = json_decode($board['api_code'], true);
-            $this->setKey($key);
-
-            $arrAdd = [];
-            $arrUpdate = [];
-            $board_game_id = $board['game_id'];
-
-            if(empty($board['lastkey'])){
-                $lastKey = 0;
-            }else{
-                $lastKey = $board['lastkey'];
-            }
-
-            $bets = $this->getBetItemsByTime($key['agent']);
-
-            $arrList[$key['agent']] = [
-                'count' => count($bets['data'])
-            ];
-
-//            print_r($arrList);
-//            continue;
-
-            if($bets['status'] != "success"){
-                continue;
-            }
-
-            $items = $bets['data'];
-
-            if(count($items) == 0){
-                continue;
-            }
-
-            foreach ($items as $item) {
-
-                $user = $item['username'];
-
-                $hash = $board_game_id.$item['id'];
-                $md5 = md5($hash);
-
-                $exist = BetlistsTmp::where('hash', $md5)->first();
-
-                if(empty($exist)) {
-
-                    $arrTmp = [
-                        'game_id' => $board_game_id,
-                        'hash' => $md5,
-                        'bet_id' => $item['id'],
-                        'last_key' => $item['id'],
-                        'agent_ref' => $key['agent'],
-                        'data' => json_encode($item, JSON_UNESCAPED_UNICODE),
-                    ];
-                    $entity = $repository->createEntity($arrTmp, \App::make(BetlistsTmp::class));
-
-                    $arrAdd[] = $entity;
-                }
-                /**
-                 * Update
-                 */
-                else{
-
-                    $arrUpdate[] = $item;
-
-                }
-
-                $lastKey = $item['id'];
-
-            }
-
-            /**
-             * Update Last Key
-             */
-            Boards::where(['ref' => $board['ref']])->update(['lastkey' => $lastKey]);
-
-            $arrList[$key['agent']] = [
-                'add' => $arrAdd,
-                'update' => $arrUpdate
-            ];
-
-            $arrCount[$key['agent']] = [
-                'add' => count($arrAdd),
-                'update' => count($arrUpdate),
-                'lastKey' => $lastKey
-            ];
-
-        } // End foreach boards
-
-        return compact('arrCount', 'arrList');
-
     }
 
     public function betLogTmp($boards){
@@ -205,13 +66,13 @@ class BetsController extends CshController
             $arrUpdate = [];
             $board_game_id = $board['game_id'];
 
-            return $bets = $this->getBetItems();
+            $bets = $this->getBetItems();
 
             if($bets['status'] != "success"){
                 continue;
             }
 
-            $items = $bets['data'];
+            $items = $bets['msg'];
 
             if(count($items) == 0){
                 $items = [];
@@ -221,7 +82,7 @@ class BetsController extends CshController
 
                 $user = $item['username'];
 
-                $hash = $board_game_id.$item['id'];
+                $hash = $board_game_id.$item['id'].$item['bill_id'];
                 $md5 = md5($hash);
 
                 $exist = BetlistsTmp::where('hash', $md5)->first();
@@ -232,15 +93,11 @@ class BetsController extends CshController
                         'game_id' => $board_game_id,
                         'hash' => $md5,
                         'bet_id' => $item['id'],
-                        'last_key' => $item['id'],
-                        'agent_ref' => $key['agent'],
                         'data' => json_encode($item, JSON_UNESCAPED_UNICODE),
                     ];
                     $entity = $repository->createEntity($arrTmp, \App::make(BetlistsTmp::class));
 
                     $arrAdd[] = $entity;
-
-                    $lastKey = $item['id'];
 
                 }
                 /**

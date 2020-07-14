@@ -407,7 +407,7 @@ class JobsController extends ModuleCrudController
                 $tr_bg = "bg-red";
             }
 
-            $table .= '<tr class="'.$tr_bg.'">';
+            $table .= '<tr class="'.$tr_bg.'" id="job_'.$job['id'].'">';
             $table .= '<td title="'.$job['created_at'].'">'.$date[1].'</td>';
             $table .= '<td>'.$job['jobs_member']['members_agent']['agents_partner']['name'].'</td>';
             $table .= '<td class="bold">'.(($job['username_id'] != 0) ? $job['jobs_username']['username'] : 'To Wallet').'</td>';
@@ -450,6 +450,20 @@ class JobsController extends ModuleCrudController
     public function lockJobByID($id){
 
         $job = Jobs::getJobByID($id);
+
+        // Update Job Before doing
+//        $repository = $this->getRepository();
+//        $entity = $repository->find($id);
+//        $arrUpdate = [
+//            'locked_at' => date('Y-m-d H:i:s'),
+//            'locked_by' => \Auth::id(),
+//            'status_id' => 2
+//        ];
+//        $repository->updateEntity($arrUpdate, $entity);
+
+        // Pusher to remove on list
+        pusherSend(['id'=>$id, 'action'=>'deposit_locked'], 'jobs', 'deposit_locked');
+
         $data = [
             'job' => $job,
             'member' => $job['jobs_member'],
@@ -457,10 +471,19 @@ class JobsController extends ModuleCrudController
             'username' => $job['jobs_username'],
             'route_cancel' => 'job.jobs.cancel',
             'route_approve' => 'job.jobs.approve',
+            'route_statement' => 'job.jobs.check-statement',
             'view' => false
         ];
         $view = view('job/jobs::layouts.show', $data);
         return $view;
+
+    }
+
+    public function checkStatementByJobID($id){
+
+        $job = Jobs::getJobByID($id);
+
+        return $job;
 
     }
 

@@ -42,6 +42,7 @@ return [
     'general_information' => 'ข้อมูลทั่วไป',
     'transfer_information' => 'ข้อมูลการทำรายการ',
     'credit_information' => 'ข้อมูลเครดิตลูกค้า',
+    'staff_information' => 'ข้อมูลการทำงาน',
 
     'topup_notes' => 'หมายเหตุ',
     'topup_notes_textarea' => 'กรอกหมายเหตุที่ต้องการ',
@@ -152,5 +153,14 @@ return [
         'detail-job' => 'รายละเอียดของรายการ',
         'job_processing' => 'รายการกำลังดำเนินการ',
     ],
+
+    'staff' => [
+        'name' => 'ชื่อพนักงาน',
+        'time' => 'เวลา',
+        'staff_locked' => 'ล็อครายการ',
+        'staff_canceled' => 'ยกเลิกรายการ',
+        'notes_canceled' => 'หมายเหตุยกเลิก',
+        'notes' => 'หมายเหตุ',
+    ]
 
 ];

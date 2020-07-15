@@ -36,7 +36,7 @@ class BetsController extends TfgController
         for($i=1; $i<=10; $i++){
             $setParam = [
                 'page' => $i,
-                'from_modified_datetime' => date("Y-m-d\TH:i:s\Z", strtotime(genDate('-424 minutes'))),
+                'from_modified_datetime' => date("Y-m-d\TH:i:s\Z", strtotime(genDate('-425 minutes'))),
                 'to_modified_datetime' => date("Y-m-d\TH:i:s\Z", strtotime(genDate('-420 minutes'))),
             ];
             $response = $this->actionGet($setParam, 'bet-transaction/');

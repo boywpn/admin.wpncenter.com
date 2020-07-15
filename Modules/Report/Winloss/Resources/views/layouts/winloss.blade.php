@@ -43,6 +43,11 @@
                 <img src="/images/tfg.jpg" class="img-responsive">
             </a>
         </div>
+        <div class="col-xs-6 col-md-3">
+            <a href="{{ route($gameRoute, 'lottosh') }}" class="thumbnail">
+                <img src="/images/lottosh.jpg" class="img-responsive">
+            </a>
+        </div>
     </div>
 
 @endsection

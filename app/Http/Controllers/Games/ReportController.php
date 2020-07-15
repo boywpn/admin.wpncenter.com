@@ -1282,10 +1282,12 @@ class ReportController extends AppController
          * LottoSH
          */
         elseif($game == "lottosh"){
-
             $api = new LOTTO();
             return $api->betLogTmp($boards);
-
+        }
+        elseif($game == "lottosh_save"){
+            $api = new LOTTO();
+            return $api->betLogSave(23);
         }
 
         /**

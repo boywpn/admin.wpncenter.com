@@ -82,7 +82,7 @@ class BetsController extends LottoController
 
                 $user = $item['username'];
 
-                $hash = $board_game_id.$item['id'].$item['bill_id'];
+                $hash = $board_game_id.$item['id'].$item['bill_id'].$item['updated_at']; // Add updated_ at b/c when data change the date it change to current date.
                 $md5 = md5($hash);
 
                 $exist = BetlistsTmp::where('hash', $md5)->first();
@@ -98,89 +98,6 @@ class BetsController extends LottoController
                     $entity = $repository->createEntity($arrTmp, \App::make(BetlistsTmp::class));
 
                     $arrAdd[] = $entity;
-
-                }
-                /**
-                 * Update
-                 */
-                else{
-
-                    $arrUpdate[] = $item;
-
-                }
-
-            }
-
-            $arrList[$key['agent']] = [
-                'add' => $arrAdd,
-                'update' => $arrUpdate
-            ];
-
-            $arrCount[$key['agent']] = [
-                'add' => count($arrAdd),
-                'update' => count($arrUpdate),
-                'time' => date('Y-m-d H:i:s'),
-            ];
-
-        } // End foreach boards
-
-        return compact('arrCount', 'arrList');
-
-    }
-
-    public function betLogTmpFix($boards){
-
-        $this->entityClass = BetlistsTmp::class;
-        $repository = $this->getRepository();
-
-        $arrList = [];
-        $arrCount = [];
-
-        foreach ($boards as $board){
-
-            $key = json_decode($board['api_code'], true);
-            $this->setKey($key);
-
-            $arrAdd = [];
-            $arrUpdate = [];
-            $board_game_id = $board['game_id'];
-
-            $bets = $this->getBetItemsFix();
-
-            if($bets['status'] != "success"){
-                continue;
-            }
-
-            $items = $bets['data'];
-
-            if(count($items) == 0){
-                $items = [];
-            }
-
-            foreach ($items as $item) {
-
-                $user = $item['username'];
-
-                $hash = $board_game_id.$item['id'];
-                $md5 = md5($hash);
-
-                $exist = BetlistsTmp::where('hash', $md5)->first();
-
-                if(empty($exist)) {
-
-                    $arrTmp = [
-                        'game_id' => $board_game_id,
-                        'hash' => $md5,
-                        'bet_id' => $item['id'],
-                        'last_key' => $item['id'],
-                        'agent_ref' => $key['agent'],
-                        'data' => json_encode($item, JSON_UNESCAPED_UNICODE),
-                    ];
-                    $entity = $repository->createEntity($arrTmp, \App::make(BetlistsTmp::class));
-
-                    $arrAdd[] = $entity;
-
-                    $lastKey = $item['id'];
 
                 }
                 /**
@@ -254,7 +171,7 @@ class BetsController extends LottoController
             $comm = MembersCommissions::getMemberCommissions($member_id);
 
             // Check Game Type
-            $game_type = $item['game'];
+            $game_type = $item['zone'];
             $gameType = GamesTypes::getTypeByCode($game_type, $username['game_id']);
             $game_type_id = $gameType['id'];
 //                print_r($gameType);
@@ -277,14 +194,13 @@ class BetsController extends LottoController
             // check commission
             $commission = 0;
             $commission_amount = 0;
-            $validAmount = $item['valid_amount'];
-//                if (isset($comm[$board_game_id][$game_type_id])) {
-//                    $commission = $comm[$board_game_id][$game_type_id] / 100; // b/c show on system 0.00 - 1.00
-//                    $commission_amount = $validAmount * $commission;
-//                }
+            $validAmount = $item['amount'];
+            if (isset($comm[$board_game_id][$game_type_id])) {
+                $commission = $comm[$board_game_id][$game_type_id] / 100; // b/c show on system 0.00 - 1.00
+                $commission_amount = $validAmount * $commission;
+            }
 
-            $commission_amount = $item['commission'];
-            $result_amount = $item['winloss'];
+            $result_amount = (empty($item['winloss'])) ? 0 : $item['winloss'];
 
             $result_winloss = $result_amount;
             $result_rolling = $validAmount; // use for calculate commission
@@ -309,6 +225,8 @@ class BetsController extends LottoController
 
             $detail = json_encode($item, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 
+            $hash = md5($board_game_id.$item['id'].$item['bill_id']);
+
             $arrItem = [
                 'member_id' => $member_id,
                 'agent_id' => $agent_id,
@@ -317,24 +235,24 @@ class BetsController extends LottoController
                 'board_game_id' => $board_game_id,
                 'game_type_id' => $game_type_id,
                 'bet_id' => $bet_id,
-                'hash' => $items['hash'],
-                'bet_time' => $item['bettime'],
-                'payout_time' => $item['bettime'],
-                'work_time' => $item['bettime'],
-                'match_time' => $item['bettime'],
-                'game_id' => $item['ref'],
-                'host_id' => null,
+                'hash' => $hash,
+                'bet_time' => $item['created_at'],
+                'payout_time' => $item['finished_at'],
+                'work_time' => $item['times'],
+                'match_time' => $item['created_at'],
+                'game_id' => $item['bill_id'],
+                'host_id' => $item['number'],
                 'host_name' => null,
                 'game_type' => $game_type,
-                'set' => $item['getCom'],
+                'set' => null,
                 'round' => null,
-                'bet_type' => $item['game_type'],
-                'bet_amount' => $item['turnover'],
-                'turnover' => $item['turnover'],
+                'bet_type' => $item['type'],
+                'bet_amount' => $item['amount'],
+                'turnover' => $item['amount'],
                 'rolling' => $validAmount,
                 'result_amount' => $result_winloss,
                 'balance' => null,
-                'state' => null,
+                'state' => $item['status'],
                 'commission' => (string)$commission,
                 'commission_amount' => (string)$commission_amount,
 
@@ -356,7 +274,7 @@ class BetsController extends LottoController
             ];
 
             // Check Exist
-            $exist = Betlists::where('hash', $items['hash'])->first();
+            $exist = Betlists::where('hash', $hash)->first();
 
             if(empty($exist)) {
 

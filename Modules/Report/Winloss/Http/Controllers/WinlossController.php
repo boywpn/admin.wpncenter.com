@@ -262,6 +262,30 @@ class WinlossController extends ModuleCrudController
 
             }
 
+            /**
+             * LottoSH
+             */
+            elseif($game == "lottosh"){
+
+                $game_id = 23; // have to change manual
+
+                $formData['game'] = $game_id;
+                $formData['filter'] = 'work_time';
+                if(empty($input)){
+                    $formData['from'] = genDateFilter('0 day');
+                    $formData['to'] = genDateFilter('0 day');
+                    $formData['from_time'] = '00:00:00';
+                    $formData['to_time'] = '23:59:59';
+                }
+
+                $data['gameCode'] = $game;
+                $data['gameID'] = $game_id;
+                $data['subFixTitle'] = "LottoSH";
+                $data['gameType'] = GamesTypes::getTypeFromGame($game_id);
+                $data['dataWinloss'] = $this->getData($formData, $game_id);
+
+            }
+
         }
 
 //        return $formData;

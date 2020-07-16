@@ -890,8 +890,8 @@ class ReportController extends AppController
         }
         elseif($game == "aec_fix"){
 
-            $sDate = '2020-05-15';
-            $eDate = '2020-05-16';
+            $sDate = '2020-07-16';
+            $eDate = '2020-07-17';
 
             $game_type = "sportsbook";
 

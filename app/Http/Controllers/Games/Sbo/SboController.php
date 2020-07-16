@@ -163,6 +163,7 @@ class SboController extends AppController
         curl_setopt($this->ch, CURLOPT_AUTOREFERER, true);
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($this->ch, CURLOPT_TIMEOUT, 30);
 
         $response = curl_exec($this->ch);
         $response = preg_replace('/[\xEF\xBB\xBF]/', '', $response); // Remove BOM

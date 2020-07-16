@@ -33,7 +33,7 @@ class BetsController extends LottoController
         $this->apiUrl = "http://www.lottosh.bet/api/";
         $setParam = [
             'start' => date('Y-m-d H:i:s', strtotime('-7 minutes', strtotime(date('Y-m-d H:i:s')))),
-            //'end' => '2020-07-01 23:59:59',
+            // 'start' => '2020-07-16 00:00:00',
             'end' => date('Y-m-d H:i:s'),
         ];
 

@@ -2,6 +2,8 @@
 
 namespace Modules\Job\Jobs\Datatables;
 
+use App\Models\TransfersLog;
+use App\Models\Trnf\TransferLogs;
 use Modules\Core\Agents\Entities\Agents;
 use Modules\Job\Jobs\Entities\Jobs;
 use Modules\Job\Jobs\Entities\JobsStatus;
@@ -138,6 +140,15 @@ class JobsDatatables extends PlatformDataTable
             return StringHelper::badgeFullHelper($record->type_id, JobsType::badgeTable());
         });
 
+        $dataTable->editColumn('credit_bf', function ($record) {
+            $transfer = TransfersLog::where('job_id', $record->id)->first();
+            return ($transfer) ? $transfer->credit_bf : null;
+        });
+        $dataTable->editColumn('credit_af', function ($record) {
+            $transfer = TransfersLog::where('job_id', $record->id)->first();
+            return ($transfer) ? $transfer->credit_af : null;
+        });
+
         $dataTable->filterColumn('created_at', function ($query, $keyword) {
             $dates = DataTableHelper::getDatesForFilter($keyword);
 
@@ -169,15 +180,15 @@ class JobsDatatables extends PlatformDataTable
             ->leftJoin('job_jobs_dict_type', 'job_jobs.type_id', '=', 'job_jobs_dict_type.id')
             ->leftJoin('member_members', 'job_jobs.member_id', '=', 'member_members.id')
             ->leftJoin('core_username', 'job_jobs.username_id', '=', 'core_username.id')
-            ->leftJoin('transfers_log', 'job_jobs.id', '=', 'transfers_log.job_id')
+            // ->leftJoin('transfers_log', 'job_jobs.id', '=', 'transfers_log.job_id')
             ->select(
                 'job_jobs.*',
                 'job_jobs_dict_status.name as status',
                 'job_jobs_dict_type.name as type',
                 'member_members.name as member_name',
-                'core_username.username as username',
-                'transfers_log.credit_bf',
-                'transfers_log.credit_af'
+                'core_username.username as username'
+                //'transfers_log.credit_bf',
+                //'transfers_log.credit_af'
             );
 
         return $query;

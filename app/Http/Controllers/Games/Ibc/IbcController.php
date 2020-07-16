@@ -167,6 +167,7 @@ class IbcController extends AppController
         curl_setopt($this->ch, CURLOPT_AUTOREFERER, true);
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($this->ch, CURLOPT_TIMEOUT, 30);
 
         $response = curl_exec($this->ch);
         $err = curl_error($this->ch);

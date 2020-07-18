@@ -1,0 +1,16 @@
+{
+    "name": "JobJobs",
+    "alias": "job/jobs",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Job\\Jobs\\Providers\\JobsServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

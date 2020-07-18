@@ -68,5 +68,6 @@ return [
     'report_winloss' => 'แพ้ชนะ',
 
     'events' => 'จัดการกิจกรรม',
+    'transfer_logs' => 'รายการฝากถอน',
 
 ];

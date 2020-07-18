@@ -1,0 +1,16 @@
+{
+    "name": "ReportTransferLogs",
+    "alias": "report/transferlogs",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Report\\TransferLogs\\Providers\\TransferLogsServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

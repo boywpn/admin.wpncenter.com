@@ -3,6 +3,7 @@
   <component name="SshConfigs">
     <configs>
       <sshConfig host="13.251.166.149" id="5a73f8bd-f2db-4073-9982-8444254ba41c" keyPath="E:\Dropbox\Files\SH\SSHKey\LightsailDefaultKey-ap-southeast-1.pem" port="22" customName="admin2" nameFormat="CUSTOM" />
+      <sshConfig host="13.251.166.149" id="c4f1cdfe-9a60-492d-bf99-e0b53235e47d" keyPath="E:\Dropbox\Files\SH\SSHKey\LightsailDefaultKey-ap-southeast-1.pem" port="22" customName="admin2" nameFormat="CUSTOM" />
     </configs>
   </component>
 </project>

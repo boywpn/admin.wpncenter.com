@@ -1,0 +1,21 @@
+<IfModule mod_rewrite.c>
+    #Header set Access-Control-Allow-Origin "*"
+    RewriteEngine On
+    # RewriteCond %{HTTP:Authorization} ^(.*)
+    # RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+    SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
+
+    RewriteCond %{REQUEST_URI} ^system.*
+    RewriteRule ^(.*)$ /index.php?/$1 [L]
+
+    RewriteCond %{REQUEST_URI} ^application.*
+    RewriteRule ^(.*)$ /index.php?/$1 [L]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?/$1 [L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    ErrorDocument 404 /index.php
+</IfModule>

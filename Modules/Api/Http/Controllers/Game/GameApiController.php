@@ -21,7 +21,7 @@ use Modules\Platform\Core\Repositories\GenericRepository;
  *
  * @package Modules\Api\Http\Controllers
  */
-class GameApiController extends CrudApiController
+class  GameApiController extends CrudApiController
 {
 
     use TransfersLogTrait;

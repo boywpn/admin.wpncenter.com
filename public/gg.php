@@ -5,5 +5,4 @@
  * Date: 2/2/2020
  * Time: 11:58 PM
  */
-
 phpinfo();

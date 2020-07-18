@@ -11,6 +11,11 @@
 |
 */
 
+
+
+
+
+
 Route::group(['middleware' => 'web', 'prefix' => 'games', 'as' => 'games.', 'namespace' => 'Games'], function()
 {
 
@@ -231,5 +236,6 @@ Route::domain('api.hiwpn.com')->group(function () {
 
 
 Route::get('/', 'Auth\LoginController@toLogin');
+
 
 Auth::routes();

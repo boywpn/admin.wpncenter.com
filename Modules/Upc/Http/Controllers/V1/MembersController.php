@@ -386,6 +386,8 @@ class MembersController extends UpcController
             $arrData[] = [
                 'game_id' => $game->id,
                 'game_name' => $game->name,
+                'game_api' => ($game->is_api) ? true : false,
+                'mobile' => ($game->m_version) ? true : false,
                 'username' => $username
             ];
 

@@ -1,5 +1,5 @@
 {
-    "name": "Laravel BAP/job/jobs",
+    "name": "Laravel BAP/job2",
     "description": "",
     "authors": [
         {
@@ -7,19 +7,9 @@
             "email": "code@laravel-bap.com"
         }
     ],
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Modules\\Job\\Jobs\\Providers\\JobsServiceProvider"
-            ],
-            "aliases": {
-                
-            }
-        }
-    },
     "autoload": {
         "psr-4": {
-            "Modules\\Job\\Jobs\\": ""
+            "Modules\\Job2\\": ""
         }
     }
 }

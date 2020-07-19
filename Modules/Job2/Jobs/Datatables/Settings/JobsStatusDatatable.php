@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Job\Jobs\Datatables\Settings;
+namespace Modules\Job2\Jobs\Datatables\Settings;
 
 use Modules\Platform\Core\Datatable\PlatformDataTable;
 use Modules\Platform\Core\Helper\DataTableHelper;
 use Yajra\DataTables\EloquentDataTable;
-use Modules\Job\Jobs\Entities\JobsStatus;
+use Modules\Job2\Jobs\Entities\JobsStatus;
 
 /**
  * Class PaymentStatusDatatable
@@ -13,9 +13,9 @@ use Modules\Job\Jobs\Entities\JobsStatus;
  */
 class JobsStatusDatatables extends PlatformDataTable
 {
-    const SHOW_URL_ROUTE = 'job.jobs.status.show';
+    const SHOW_URL_ROUTE = 'job2.jobs.status.show';
 
-    protected $editRoute = 'job.jobs.status.edit';
+    protected $editRoute = 'job2.jobs.status.edit';
 
 
     /**

@@ -1,13 +1,13 @@
 <?php
 
-namespace Modules\Job\Jobs\Datatables;
+namespace Modules\Job2\Jobs\Datatables;
 
 use App\Models\TransfersLog;
 use App\Models\Trnf\TransferLogs;
 use Modules\Core\Agents\Entities\Agents;
-use Modules\Job\Jobs\Entities\Jobs;
-use Modules\Job\Jobs\Entities\JobsStatus;
-use Modules\Job\Jobs\Entities\JobsType;
+use Modules\Job2\Jobs\Entities\Jobs;
+use Modules\Job2\Jobs\Entities\JobsStatus;
+use Modules\Job2\Jobs\Entities\JobsType;
 use Modules\Platform\Core\Datatable\PlatformDataTable;
 use Modules\Platform\Core\Helper\DataTableHelper;
 use Modules\Platform\Core\Helper\StringHelper;
@@ -19,9 +19,9 @@ use Yajra\DataTables\EloquentDataTable;
  */
 class JobsDatatables extends PlatformDataTable
 {
-    const SHOW_URL_ROUTE = 'job.jobs.show';
+    const SHOW_URL_ROUTE = 'job2.jobs.show';
 
-    protected $editRoute = 'job.jobs.edit';
+    protected $editRoute = 'job2.jobs.edit';
 
 
     public static function availableColumns()

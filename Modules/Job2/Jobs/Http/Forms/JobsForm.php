@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Job\Jobs\Http\Forms;
+namespace Modules\Job2\Jobs\Http\Forms;
 
 use Kris\LaravelFormBuilder\Form;
 use Modules\Core\Agents\Entities\AgentsStatus;

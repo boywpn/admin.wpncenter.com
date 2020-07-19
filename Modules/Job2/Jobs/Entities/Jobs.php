@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Job\Jobs\Entities;
+namespace Modules\Job2\Jobs\Entities;
 
 use Bnb\Laravel\Attachments\HasAttachment;
 use GeneaLabs\LaravelModelCaching\CachedModel;

@@ -1,16 +1,16 @@
 <?php
 
-namespace Modules\Job\Jobs\Http\Controllers;
+namespace Modules\Job2\Jobs\Http\Controllers;
 
 use Modules\Core\BanksPartners\Entities\BanksPartners;
 use Modules\Core\Promotions\Entities\Promotions;
 use Modules\Core\Username\Entities\Username;
-use Modules\Job\Jobs\Datatables\JobsDatatables;
-use Modules\Job\Jobs\Entities\Jobs;
-use Modules\Job\Jobs\Http\Forms\JobsForm;
-use Modules\Job\Jobs\Http\Requests\JobsProRequest;
-use Modules\Job\Jobs\Http\Requests\JobsRequest;
-use Modules\Job\Jobs\Http\Requests\UpdateJobsRequest;
+use Modules\Job2\Jobs\Datatables\JobsDatatables;
+use Modules\Job2\Jobs\Entities\Jobs;
+use Modules\Job2\Jobs\Http\Forms\JobsForm;
+use Modules\Job2\Jobs\Http\Requests\JobsProRequest;
+use Modules\Job2\Jobs\Http\Requests\JobsRequest;
+use Modules\Job2\Jobs\Http\Requests\UpdateJobsRequest;
 use Modules\Member\Members\Entities\Members;
 use Modules\Platform\Core\Http\Controllers\ModuleCrudController;
 use Illuminate\Http\Request;
@@ -30,7 +30,7 @@ class DepositController extends ModuleCrudController
         'deposit' => 'job.jobs.deposit'
     ];
 
-    protected $languageFile = 'job/jobs::jobs';
+    protected $languageFile = 'jobs2/jobs::jobs';
 
     protected $routes = [
         'index' => 'job.jobs.index',
@@ -59,7 +59,7 @@ class DepositController extends ModuleCrudController
             'jobs_processing' => $jobs_processing,
         ];
 
-        $view = view('job/jobs::deposit', $data);
+        $view = view('jobs2/jobs::deposit', $data);
         return $view;
 
     }

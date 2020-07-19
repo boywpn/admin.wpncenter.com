@@ -14,11 +14,11 @@ return [
      * Always use lower name without custom characters, spaces, etc
      */
     'permissions' => [
-        'job.jobs.settings',
-        'job.jobs.browse',
-        'job.jobs.create',
-        'job.jobs.update',
-        'job.jobs.destroy'
+        'job2.jobs.settings',
+        'job2.jobs.browse',
+        'job2.jobs.create',
+        'job2.jobs.update',
+        'job2.jobs.destroy'
     ]
     
 ];

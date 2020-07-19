@@ -31,6 +31,7 @@ Route::group(['middleware' => 'upc', 'prefix' => 'upc', 'namespace' => 'Modules\
             Route::group(['prefix' => 'username'], function (){
 
                 Route::post('balance', ['uses'=> 'UsernamesController@getTransfer']);
+                Route::post('game-login', ['uses'=> 'UsernamesController@gameLogin']);
 
             });
 

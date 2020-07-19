@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Job\Jobs\Http\Requests;
+namespace Modules\Job2\Jobs\Http\Requests;
 
 use App\Http\Requests\Request;
 

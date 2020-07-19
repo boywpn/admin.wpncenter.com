@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Job\Jobs\Database\Seeders;
+namespace Modules\Job2\Jobs\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;

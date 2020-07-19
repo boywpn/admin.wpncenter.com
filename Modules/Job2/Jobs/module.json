@@ -1,12 +1,12 @@
 {
-    "name": "JobJobs",
-    "alias": "job/jobs",
+    "name": "Job2Jobs",
+    "alias": "job2/jobs",
     "description": "",
     "keywords": [],
     "active": 1,
     "order": 0,
     "providers": [
-        "Modules\\Job\\Jobs\\Providers\\JobsServiceProvider"
+        "Modules\\Job2\\Jobs\\Providers\\JobsServiceProvider"
     ],
     "aliases": {},
     "files": [

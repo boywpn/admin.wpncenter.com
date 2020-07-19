@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Job\Jobs\Providers;
+namespace Modules\Job2\Jobs\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
@@ -46,10 +46,10 @@ class JobsServiceProvider extends ServiceProvider
     protected function registerConfig()
     {
         $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('job/jobs.php'),
+            __DIR__.'/../Config/config.php' => config_path('job2/jobs.php'),
         ], 'config');
         $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'job/jobs'
+            __DIR__.'/../Config/config.php', 'job2/jobs'
         );
     }
 
@@ -60,7 +60,7 @@ class JobsServiceProvider extends ServiceProvider
      */
     public function registerViews()
     {
-        $viewPath = resource_path('views/modules/job/jobs');
+        $viewPath = resource_path('views/modules/job2/jobs');
 
         $sourcePath = __DIR__.'/../Resources/views';
 
@@ -69,8 +69,8 @@ class JobsServiceProvider extends ServiceProvider
         ],'views');
 
         $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path . '/modules/job/jobs';
-        }, \Config::get('view.paths')), [$sourcePath]), 'job/jobs');
+            return $path . '/modules/job2/jobs';
+        }, \Config::get('view.paths')), [$sourcePath]), 'job2/jobs');
     }
 
     /**
@@ -80,12 +80,12 @@ class JobsServiceProvider extends ServiceProvider
      */
     public function registerTranslations()
     {
-        $langPath = resource_path('lang/modules/job/jobs');
+        $langPath = resource_path('lang/modules/job2/jobs');
 
         if (is_dir($langPath)) {
-            $this->loadTranslationsFrom($langPath, 'job/jobs');
+            $this->loadTranslationsFrom($langPath, 'job2/jobs');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'job/jobs');
+            $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'job2/jobs');
         }
     }
 

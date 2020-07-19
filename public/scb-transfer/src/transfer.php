@@ -1,6 +1,7 @@
 <?php
 
-// include_once __DIR__ . '/db.php';
+include_once __DIR__ . '/db.php';
+
 if (isset($_POST)) {
     $d = $_POST;
     $bankID = $d['bankID'];

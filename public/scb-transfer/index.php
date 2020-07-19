@@ -83,8 +83,7 @@ body {
 
         <div class="form-group">
             <label for="exampleInputPassword1">รหัสผ่าน</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" name="password"
-                placeholder="Password" required>
+            <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Password" required>
         </div>
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">เข้าสู่ระบบ</button>

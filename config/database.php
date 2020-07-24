@@ -93,6 +93,21 @@ return [
             'engine' => 'InnoDB',
         ],
 
+        'db_report' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST_4', '127.0.0.1'),
+            'port' => env('DB_PORT_4', '3306'),
+            'database' => env('DB_DATABASE_4', 'forge'),
+            'username' => env('DB_USERNAME_4', 'forge'),
+            'password' => env('DB_PASSWORD_4', ''),
+            'unix_socket' => env('DB_SOCKET_4', ''),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+            'strict' => false,
+            'engine' => 'InnoDB',
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', '127.0.0.1'),

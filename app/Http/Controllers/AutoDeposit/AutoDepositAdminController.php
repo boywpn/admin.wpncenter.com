@@ -183,11 +183,11 @@ class AutoDepositAdminController extends AppController
             elseif($list['bank_id'] == 6){
                 $bank_id = 3;
 
-                if(!empty($list['state_account_no'])){
+                if(!empty($list['state_account_no']) && $list['state_from'] == 0){
                     $bank_no = $list['state_account_no'];
                     $name_ref = 1;
                 }else {
-                    $text = str_replace(array('นาย ', 'นางสาว ', 'น.ส. '), array('', '', ''), $list['state_detail']);
+                    $text = str_replace(array('นาย ', 'นางสาว ', 'น.ส. ', 'นาง '), array('', '', '', ''), $list['state_detail']);
                     $tmp = preg_match('/x([0-9]{4}) (.*) (.*)/', $text, $arr);
                     if (!$tmp) {
                         $tmp = preg_match('/X([0-9]{6})/', $text, $arr);
@@ -227,7 +227,12 @@ class AutoDepositAdminController extends AppController
             $member_bank = Members::when($bank_id, function ($query) use ($bank_id, $bank_no, $bank_acc, $name_ref){
                 if($bank_id == 3){ // For SCB
                     if($name_ref == 0) {
-                        $query->where('withdraw_bank', $bank_id)->where('withdraw_ac', 'like', '%' . $bank_no);
+                        $len = strlen($bank_no);
+                        if($len == 4){
+                            $query->where('withdraw_bank', $bank_id)->where('withdraw_ac', 'like', '%' . $bank_no);
+                        }else{
+                            $query->where('withdraw_ac', 'like', '%' . $bank_no);
+                        }
                         // Check with name match
                         if (!empty($bank_acc)) {
                             $query->where('withdraw_name', 'like', '%' . $bank_acc . '%');
@@ -348,11 +353,11 @@ class AutoDepositAdminController extends AppController
             // SCB
             elseif($list['bank_id'] == 6){
                 $bank_id = 3;
-                if(!empty($list['state_account_no'])){
+                if(!empty($list['state_account_no']) && $list['state_from'] == 0){
                     $bank_no = $list['state_account_no'];
                     $name_ref = 1;
                 }else {
-                    $text = str_replace(array('นาย ', 'นางสาว ', 'น.ส. '), array('', '', ''), $list['state_detail']);
+                    $text = str_replace(array('นาย ', 'นางสาว ', 'น.ส. ','นาง '), array('', '', '', ''), $list['state_detail']);
                     $tmp = preg_match('/x([0-9]{4}) (.*) (.*)/', $text, $arr);
                     if (!$tmp) {
                         $tmp = preg_match('/X([0-9]{6})/', $text, $arr);
@@ -393,7 +398,12 @@ class AutoDepositAdminController extends AppController
             $member_bank = Members::when($bank_id, function ($query) use ($bank_id, $bank_no, $bank_acc, $name_ref){
                 if($bank_id == 3){ // For SCB
                     if($name_ref == 0) {
-                        $query->where('withdraw_bank', $bank_id)->where('withdraw_ac', 'like', '%' . $bank_no);
+                        $len = strlen($bank_no);
+                        if($len == 4){
+                            $query->where('withdraw_bank', $bank_id)->where('withdraw_ac', 'like', '%' . $bank_no);
+                        }else{
+                            $query->where('withdraw_ac', 'like', '%' . $bank_no);
+                        }
                         // Check with name match
                         if (!empty($bank_acc)) {
                             $query->where('withdraw_name', 'like', '%' . $bank_acc . '%');
@@ -413,7 +423,7 @@ class AutoDepositAdminController extends AppController
             ->select('A_I', 'new_id', 'id', 'username', 'domain', 'status', 'withdraw_bank', 'withdraw_ac', 'withdraw_name', 'vip', 'level', 'deposit_bank_set')
             ->get();
 
-            return $query_filter = compact('bank_id', 'bank_no', 'bank_acc', 'member_bank');
+            // return $query_filter = compact('bank_id', 'bank_no', 'bank_acc', 'member_bank');
 
             // Update Status Already Check
             $member_data = (count($member_bank) > 0) ? json_encode($member_bank->toArray(), JSON_UNESCAPED_UNICODE) : null;
@@ -465,6 +475,8 @@ class AutoDepositAdminController extends AppController
                 ];
                 $arrData[] = $list;
             }
+
+            return $query_filter = compact('bank_id', 'bank_no', 'bank_acc', 'member_bank', 'list');
 
             // $arrData[] = $list;
 

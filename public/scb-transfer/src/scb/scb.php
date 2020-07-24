@@ -71,7 +71,7 @@ class SCB
                 return $len;
             }
         );
-        $result = curl_exec($this->ch);
+        echo $result = curl_exec($this->ch);
         if (curl_errno($this->ch)) {
             return false;
         }

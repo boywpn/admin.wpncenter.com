@@ -36,4 +36,6 @@ class BoardsUsersControllerTab extends ModuleCrudRelationController
     protected $belongsToName = 'usersBoard';
 
     protected $whereCondition = 'core_boards_users.board_id';
+
+    protected $whereType = self::WHERE_TYPE__COLUMN;
 }

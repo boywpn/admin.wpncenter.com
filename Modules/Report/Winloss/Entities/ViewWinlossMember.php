@@ -18,6 +18,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class ViewWinlossMember extends CachedModel
 {
 
+    protected $connection = 'db_report';
+
     public $table = 'view_report_winloss_member';
 
 }

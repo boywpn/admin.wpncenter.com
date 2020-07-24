@@ -20,6 +20,8 @@ class Betlists extends Model
 {
     use SoftDeletes, BelongsToTenants, FunctionalTrait;
 
+    protected $connection = 'db_report';
+
     const COLORS = [
         0 => 'bg-red',
         1 => 'bg-green'

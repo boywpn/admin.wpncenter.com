@@ -19,6 +19,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class ViewWinlossAgent extends CachedModel
 {
 
+    protected $connection = 'db_report';
+
     public $table = 'view_report_winloss_agent';
 
     public static function getWinloss($formData){

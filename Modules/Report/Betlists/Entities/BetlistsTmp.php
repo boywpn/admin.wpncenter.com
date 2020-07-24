@@ -19,6 +19,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class BetlistsTmp extends Model
 {
 
+    protected $connection = 'db_report';
+
     const COLORS = [
         0 => 'bg-red',
         1 => 'bg-green'

@@ -106,9 +106,23 @@ class JobsApiController extends CrudApiController
         $json = file_get_contents('http://admin.wpnadmin.com/core_api.php?ss=true&backend=true&action=order_detail_wpnservice2&id=' . $orderid);
         $json = json_decode($json, true);
 
+//        // create curl resource
+//        $ch = curl_init();
+//        // set url
+//        curl_setopt($ch, CURLOPT_URL, 'https://admin.wpnadmin.com/core_api.php?ss=true&backend=true&action=order_detail_wpnservice2&id=' . $orderid);
+//        //return the transfer as a string
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+//        // $output contains the output string
+//        return $output = curl_exec($ch);
+//        // close curl resource to free up system resources
+//        curl_close($ch);
+//
+//        $json = json_decode($output, true);
+
         if (!$json['status']) {
             $this->resJson['responseStatus']['code'] = 201;
             $this->resJson['responseStatus']['message'] = "ERROR";
+            $this->resJson['responseStatus']['data'] = $json;
             $this->resJson['responseStatus']['messageDetails'] = 'ไม่มีรายการที่ต้องการ';
             return $this->resJson;
         }

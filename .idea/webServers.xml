@@ -18,6 +18,14 @@
           <option name="port" value="22" />
         </fileTransfer>
       </webServer>
+      <webServer id="6bb33b58-4c53-4bde-9c32-93f385f5861b" name="admin_bup" url="http://54.251.253.78">
+        <fileTransfer host="54.251.253.78" port="21" rootFolder="/public_html/admin">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

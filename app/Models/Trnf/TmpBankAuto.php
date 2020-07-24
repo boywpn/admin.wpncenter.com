@@ -83,7 +83,7 @@ class TmpBankAuto extends Model
 
     }
 
-    public static function getListForAdminTest($id = null){
+    public static function  getListForAdminTest($id = null){
 
         $state = self::leftJoin('ai_bank', 'tmp_bank.bank_id', 'ai_bank.bank_id')
             ->leftJoin('ai_bank_acc', 'tmp_bank.acc_id', 'ai_bank_acc.acc_id')

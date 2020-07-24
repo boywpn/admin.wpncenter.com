@@ -32,6 +32,7 @@ class MonitorController extends AppController
             }])
             ->where('state_deposit', '>', 0)
             ->where('match_name', 0)
+            ->where('state_from', 0)
             // ->where(DB::raw("order_id != '' OR state_account_no != '0'"))
             // ->whereRaw('order_id' != '' OR 'state_account_no' != 0)
             ->whereNotNull('state_account_no')

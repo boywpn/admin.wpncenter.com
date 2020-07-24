@@ -2,9 +2,9 @@
 
 
 $config['bank'] = [
-    'account_number' => '4160344136',
-    'deviceId' => 'e503bff4-3605-4dfe-8d83-7ca1cc028a16',
-    'ApiRefresh' => 'ee9664d6-3c33-45cd-bcd3-04856deb2ee5'
+    'account_number' => '4160343261',
+    'deviceId' => 'd19612f7-1dc4-4a01-9a14-9d752fcfb3ce',
+    'ApiRefresh' => '447d1d38-a047-4e04-8b25-0299d4fd7414'
 ];
 
 $config['db'] = [

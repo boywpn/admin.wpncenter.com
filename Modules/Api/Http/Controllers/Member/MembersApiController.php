@@ -587,6 +587,36 @@ class MembersApiController extends CrudApiController
 
         }
 
+        /**
+         * IBC
+         */
+        elseif($username['code'] == "ibc"){
+
+            $api = new IBC($key);
+            $setParam = [
+                'password' => Crypt::decryptString($username['password']),
+                'providercode' => 'IB',
+                'type' => 'SB',
+                'username' => $username['username']
+            ];
+
+            if(!isset($data['type']) || $data['type'] == "d"){
+                $res =$api->actionGet($setParam, 'launchGames.aspx');
+            }else{
+                $res =$api->actionGet($setParam, 'launchGames.aspx', [], ['html5' => 1]);
+            }
+
+            if($res['errCode'] != 0){
+                return $this->respond(false, [], ['error' => 'login_error'], ['message' => $res['errMsg']]);
+            }
+
+            $res['playUrl'] = str_replace("lang=en", "lang=th", $res['gameUrl']);
+            $res['playUrlMobile'] = str_replace("lang=en", "lang=th", $res['gameUrl']);
+
+            return $this->respond(true, [$res], [], ['message' =>  trans('core::core.entity.records_found')]);
+
+        }
+
         return $this->respond(false, [], ['error' => 'login_error'], ['message' => 'This provider not support for this username.']);
 
     }

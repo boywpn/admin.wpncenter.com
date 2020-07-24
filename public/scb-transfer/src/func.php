@@ -46,6 +46,8 @@ if (isLogin()) {
     $bank->setAccountNumber($config['bank']['account_number']);
     $bank->setLogin($config['bank']['deviceId'], $config['bank']['ApiRefresh']);
     $login = $bank->login();
+
+    exit;
 }
 function setSessionTime($_timeSecond)
 {

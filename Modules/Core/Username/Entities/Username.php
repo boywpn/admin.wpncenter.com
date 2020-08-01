@@ -7,6 +7,7 @@ use HipsterJazzbo\Landlord\BelongsToTenants;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Core\Boards\Entities\Boards;
+use Modules\Core\Boards\Entities\BoardsUsers;
 use Modules\Core\Games\Entities\Games;
 use Modules\Member\Members\Entities\Members;
 use Modules\Platform\Core\Traits\Commentable;

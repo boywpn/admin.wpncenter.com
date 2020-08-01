@@ -10,14 +10,6 @@
           <option name="port" value="21" />
         </fileTransfer>
       </webServer>
-      <webServer id="acfe72b4-df44-4425-8daf-1fc1de4651d0" name="admin2" url="http://13.251.166.149">
-        <fileTransfer host="13.251.166.149" port="22" privateKey="E:\Dropbox\Files\SH\SSHKey\LightsailDefaultKey-ap-southeast-1.pem" rootFolder="/var/www/html/admin" accessType="SFTP" keyPair="true">
-          <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
-          </advancedOptions>
-          <option name="port" value="22" />
-        </fileTransfer>
-      </webServer>
       <webServer id="6bb33b58-4c53-4bde-9c32-93f385f5861b" name="admin_bup" url="http://54.251.253.78">
         <fileTransfer host="54.251.253.78" port="21" rootFolder="/public_html/admin">
           <advancedOptions>

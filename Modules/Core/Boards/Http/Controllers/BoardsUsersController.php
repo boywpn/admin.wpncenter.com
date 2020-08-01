@@ -30,6 +30,7 @@ class BoardsUsersController extends ModuleCrudController
             'username' => ['type' => 'text'],
             'password' => ['type' => 'password'],
             'code' => ['type' => 'text'],
+            'level' => ['type' => 'text'],
             'board_id' => ['type' => 'manyToOne', 'relation' => 'usersBoard', 'column' => 'name'],
             'is_active' => ['type' => 'boolean'],
         ]

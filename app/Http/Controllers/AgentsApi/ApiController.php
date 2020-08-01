@@ -38,7 +38,8 @@ class ApiController extends Controller
         '201' => 'Invalid request data.',
         '202' => 'Transfer not success.',
 
-        '301' => 'Data not match.'
+        '301' => 'Data not match.',
+        '302' => 'Required not success.'
     ];
 
     const ACTION = [
@@ -50,7 +51,9 @@ class ApiController extends Controller
             'transferCredit',
             'login',
             'checkBalance',
-            'changePassword'
+            'changePassword',
+
+            'getWinloss'
         ]
     ];
 

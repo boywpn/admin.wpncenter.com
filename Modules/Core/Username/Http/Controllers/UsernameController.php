@@ -14,6 +14,7 @@ use App\Http\Controllers\Games\Tiger\MemberController AS TIGER;
 use App\Http\Controllers\Games\Csh\MemberController AS CSH;
 use App\Http\Controllers\Games\Pussy\MemberController AS PUSSY;
 use App\Http\Controllers\Games\Tfg\MemberController AS TFG;
+use App\Http\Controllers\Games\Trnf\MemberController AS Trnf;
 use App\Http\Requests\Request;
 use App\Models\Old\Members;
 use Illuminate\Support\Facades\Artisan;
@@ -286,6 +287,8 @@ class UsernameController extends ModuleCrudController
                 $query->select('*');
             }, 'usernameBoard.boardsPartner' => function($query){
                 $query->select('*');
+            }, 'usernameBoard.usersBoard' => function($query){
+                $query->select('*')->inRandomOrder()->first();
             }])
             ->first()
             ->toArray();
@@ -660,6 +663,47 @@ class UsernameController extends ModuleCrudController
                 return respond(true, [], ['error' => 'username_create_success'], ['message' => $api->getCode($response['error']['id']) ]);
             }else{
                 return respond(false, [], ['error' => 'username_create_error'], ['message' => $api->getCode($response['error']['id']) ]);
+            }
+
+
+        }
+
+        /**
+         * For credit website
+        */
+        elseif(in_array($username['username_board']['boards_game']['code'], ['ufa', 'lga', 'gcb'])){
+
+            $api = new Trnf($key);
+
+            $code = $username['username_board']['boards_game']['code'];
+            $ag_data = $username['username_board']['users_board'][0];
+            $api->setAgentUser($ag_data);
+
+//            return $username;
+            $user_create = $username['code'];
+            if($code == 'gcb'){
+                $user_create = $username['username_board']['board_number'].$username['code'];
+            }
+
+            $setParam = [
+                "username" => $user_create,
+                "username_login" => $user,
+                'password' => $password,
+                "game" => $username['username_board']['boards_game']['code']
+            ];
+            $response = $api->saveUsername($setParam);
+
+            if($response['responseStatus']['code'] == 200){
+                if(isset($response['responseStatus']['pass_status'])){
+                    if($response['responseStatus']['pass_status']){
+                        $new_pass = $password."+";
+                        $new_pass = Crypt::encryptString($new_pass);
+                        Username::where('id', $username['id'])->update(['password' => $new_pass]);
+                    }
+                }
+                return respond(true, [], ['error' => 'username_create_success'], ['message' => $response['responseStatus']['messageDetails'] ]);
+            }else{
+                return respond(false, [], ['error' => 'username_create_error'], ['message' => $response['responseStatus']['messageDetails'] ]);
             }
 
 

@@ -40,10 +40,10 @@ class WinlossTmpAgent extends CachedModel
         $from = $formData['from']." ".$formData['from_time'];
         $to = $formData['to']." ".$formData['to_time'];
 
-        $query = DB::table('report_betlists_temp_agent AS ta')
-            ->leftJoin('core_partners AS pn', 'pn.id', '=', 'ta.pn_id')
+        $query = DB::connection('db_report')->table('report_betlists_temp_agent AS ta')
+            //->leftJoin('wpn_admin.core_partners AS pn', 'pn.id', '=', 'ta.pn_id')
             ->where('ta.game_id', $game_id)
-            ->where('pn.api_show_report', 1)
+            //->where('pn.api_show_report', 1)
             ->select(
                 'ta.agent_id',
                 'ta.game_id',
@@ -99,7 +99,7 @@ class WinlossTmpAgent extends CachedModel
         $from = $formData['from']." ".$formData['from_time'];
         $to = $formData['to']." ".$formData['to_time'];
 
-        $query = DB::table('report_betlists_temp_member AS tm')
+        $query = DB::connection('db_report')->table('report_betlists_temp_member AS tm')
             ->where('tm.game_id', $game_id)
             ->select(
                 'tm.agent_id',
@@ -156,7 +156,7 @@ class WinlossTmpAgent extends CachedModel
         $from = $formData['from']." ".$formData['from_time'];
         $to = $formData['to']." ".$formData['to_time'];
 
-        $query = DB::table('report_betlists AS rb')
+        $query = DB::connection('db_report')->table('report_betlists AS rb')
             ->where('rb.board_game_id', $game_id)
             ->select(
                 'rb.agent_id',
@@ -207,6 +207,39 @@ class WinlossTmpAgent extends CachedModel
             ->groupBy('rb.member_id')
             ->orderBy('cu.username', 'asc')
             //->where('rb.member_id', $member_id)->orderBy('rb.payout_time', 'desc')
+            ->get();
+
+        return $query->toArray();
+
+    }
+
+    public static function getWinlossList($formData, $game_id){
+
+        $from = $formData['from']." ".$formData['from_time'];
+        $to = $formData['to']." ".$formData['to_time'];
+
+        $query = DB::connection('db_report')->table('report_betlists AS rb')
+            ->where('rb.board_game_id', $game_id)
+            ->select(
+                'rb.*',
+                'rb.bet_time AS bet_date',
+                'rb.payout_time AS pay_date',
+                'rb.work_time AS work_date'
+            )
+            ->whereBetween('rb.'.$formData['filter'], [$from, $to])
+
+            // For not all type
+            ->when(!isset($formData['type_all']), function($query) use ($formData){
+                if(isset($formData['type'])) {
+                    return $query->whereIn('rb.game_type_id', $formData['type']);
+                }
+            })
+
+            // For group by
+            ->when($formData, function($query) use ($formData){
+                $username = Username::where('username', $formData['user'])->select('member_id')->first();
+                return $query->where('rb.member_id', $username->member_id)->orderBy('rb.bet_time', 'desc');
+            })
             ->get();
 
         return $query->toArray();

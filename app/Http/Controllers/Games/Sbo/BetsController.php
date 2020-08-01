@@ -351,7 +351,7 @@ class BetsController extends SboController
                 $query->where('status', $status);
             })
             ->when((empty($status)), function($query) use ($status){
-                $query->whereNull('status');
+                $query->where('status', 0);
             })
             ->orderBy('id', 'ASC')
             ->limit($limit)

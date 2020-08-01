@@ -10,6 +10,7 @@ Route::group(['middleware' => ['web','permission:core.boards.browse'], 'prefix'=
     Route::resource('boards', 'BoardsController');
 
     Route::get('boards/create_members/{entityId}', ['as'=>'boards.create_members','uses'=> 'BoardsController@createMembers']);
+    Route::get('boards/change_pass_username/{entityId}', ['as'=>'boards.change_pass_username','uses'=> 'BoardsController@changePassUsername']);
     Route::get('boards/transfer_credit/{entityId}', ['as'=>'boards.transfer_credit','uses'=> 'BoardsController@transferCredit']);
 
     Route::get('boards/users-selection/{entityId}', ['as'=>'boards.users.selection','uses'=> 'Tabs\BoardsUsersControllerTab@selection']);

@@ -583,6 +583,9 @@
                                     $total_amount += $list->bet_amount;
                                     $total_valid_amount += $list->rolling;
                                     $total_winloss += $list->result_amount;
+
+                                    $type = \Modules\Core\Games\Entities\GamesTypes::where('id', $list->game_type_id)->first();
+                                    $game = \Modules\Core\Games\Entities\Games::where('id', $list->board_game_id)->first();
                                 @endphp
 
                                 <tr>
@@ -593,8 +596,8 @@
                                         {{ $list->work_date }}
                                     </td>
                                     <td class="text-right">
-                                        {{ trans("report/winloss::winloss.table.bet_on") }} {{ $list->type_name }}<br>
-                                        <span class="text-blue">{{ $list->game_name }}</span><br>
+                                        {{ trans("report/winloss::winloss.table.bet_on") }} {{ $type->name }}<br>
+                                        <span class="text-blue">{{ $game->name }}</span><br>
                                         <span class="text-black-bold">{{ date('d/m', strtotime($list->bet_time)) }}</span><br>
                                         {{ trans("report/winloss::winloss.table.bet_id") }} {{ $list->bet_id }}
                                     </td>

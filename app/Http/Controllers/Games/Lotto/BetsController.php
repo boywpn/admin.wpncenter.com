@@ -27,14 +27,16 @@ class BetsController extends LottoController
         //
     }
 
-    public function getBetItems($key = 0, $debug = false)
+    public function getBetItems($debug = false)
     {
 
         $this->apiUrl = "http://www.lottosh.bet/api/";
         $setParam = [
             'start' => date('Y-m-d H:i:s', strtotime('-7 minutes', strtotime(date('Y-m-d H:i:s')))),
-            // 'start' => '2020-07-16 00:00:00',
             'end' => date('Y-m-d H:i:s'),
+//            'start' => '2020-08-01 17:20:00',
+//            'end' => date('Y-m-d H:i:s'),
+
         ];
 
         $param = $this->setParam($setParam, 'betlog');
@@ -138,7 +140,7 @@ class BetsController extends LottoController
         $arrUpdate = [];
 
         $bets = BetlistsTmp::where('game_id', $game_id)
-            ->whereNull('status')
+            ->where('status', 0)
             ->orderBy('id', 'ASC')
             ->limit(500)
             ->get();

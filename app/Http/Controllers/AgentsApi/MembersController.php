@@ -10,9 +10,16 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use Modules\Api\Http\Controllers\Game\TransferApiController;
 use Modules\Api\Http\Controllers\Member\MembersApiController;
+use Modules\Core\Boards\Entities\Boards;
 use Modules\Core\Games\Entities\Games;
 use Modules\Core\Username\Entities\Username;
 use Modules\Core\Username\Http\Controllers\UsernameController;
+
+use App\Http\Controllers\Games\Ibc\BetsController AS IBC;
+use App\Http\Controllers\Games\Csh\BetsController AS CSH;
+use App\Http\Controllers\Games\Sbo\BetsController AS SBO;
+use App\Http\Controllers\Games\Tfg\BetsController AS TFG;
+use App\Http\Controllers\Games\Lotto\BetsController AS LOTTO;
 
 class MembersController extends ApiController
 {
@@ -297,6 +304,67 @@ class MembersController extends ApiController
         }
 
         return $this->success(0, [], 'Change Password Success.');
+
+    }
+
+    public function getWinloss($data){
+
+        $validator = Validator::make($data, [
+            'agent' => 'required',
+            'pcode' => 'required',
+            'sDate' => 'required',
+            'eDate' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->error(201, $validator->errors());
+        }
+
+        $game = Games::where('code', $data['pcode'])
+            ->with(['boardsGame' => function($query) use ($data){
+                //$query->where('agent_id', $this->agent_id)->where('ref', $data['agent'])->where('is_active', 1)->select('*');
+                $query->where('ref', $data['agent'])->where('is_active', 1)->select('*');
+            }])
+            ->first();
+
+        if(!$game){
+            return $this->error(201, [], 'The pcode invalid');
+        }
+        $game = $game->toArray();
+        if(empty($game['boards_game'])){
+            return $this->error(201, [], 'This game not available for this agent.');
+        }
+
+        $board = $game['boards_game'][0];
+        $game_code = $game['code'];
+        $api_code = $board['api_code'];
+
+        if($game_code == 'csh'){
+
+            $api = new CSH();
+            $key = json_decode($api_code, true);
+            $api->setKey($key);
+
+            $validator = Validator::make($data, [
+                'lastedId' => 'required',
+            ]);
+
+            if($validator->fails()){
+                return $this->error(201, $validator->errors());
+            }
+
+            $items = $api->getBetItems();
+            if($items['status'] != 'success'){
+                return $this->error(302, $items['msg']);
+            }
+            return $this->success(0, $items['data']);
+
+        }
+        else{
+
+            return $this->error(201, [], 'Game does not support!');
+
+        }
 
     }
 

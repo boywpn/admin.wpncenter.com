@@ -154,7 +154,7 @@ class BetsController extends TfgController
         $arrUpdate = [];
 
         $bets = BetlistsTmp::where('game_id', $game_id)
-            ->whereNull('status')
+            ->where('status', 0)
             ->orderBy('bet_time', 'ASC')
             ->limit(500)
             ->get();

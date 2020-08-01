@@ -328,13 +328,17 @@ class WinlossController extends ModuleCrudController
 
     public function getData($formData, $game_id){
 
+        $resp = App::make($this->winlossClass);
+
         if($formData['role'] == "mm"){
-            $resp = App::make(Winloss::class);
+            //$resp = App::make(Winloss::class);
+            $res = $resp::getWinlossList($formData, $game_id);
         }else {
-            $resp = App::make($this->winlossClass);
+            //$resp = App::make($this->winlossClass);
+            $res = $resp::getWinloss($formData, $game_id);
         }
 
-        return $resp::getWinloss($formData, $game_id);
+        return $res;
 
     }
 

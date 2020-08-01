@@ -25,7 +25,7 @@ class Winloss extends CachedModel
         $from = $formData['from']." ".$formData['from_time'];
         $to = $formData['to']." ".$formData['to_time'];
 
-        $query = DB::table('report_betlists AS rb')
+        $query = DB::connection('db_report')->table('report_betlists AS rb')
             ->where('rb.board_game_id', $game_id)
             ->when($formData, function($query) use ($formData){
                 if($formData['role'] != "mm"){

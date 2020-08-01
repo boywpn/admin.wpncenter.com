@@ -11,6 +11,7 @@ use Modules\Core\Boards\Datatables\Tabs\BoardsUsersDatatableTab;
 use Modules\Core\Boards\Entities\Boards;
 use Modules\Core\Boards\Http\Forms\BoardsForm;
 use Modules\Core\Boards\Http\Requests\BoardsRequest;
+use Modules\Core\Games\Entities\Games;
 use Modules\Core\Username\Entities\Username;
 use Modules\Platform\Core\Http\Controllers\ModuleCrudController;
 
@@ -198,7 +199,7 @@ class BoardsController extends ModuleCrudController
             // $member_code = padZero($i, strlen($entity->member_limit-1));
             $member_code = padZero($i, 3);
             $username = $entity->member_prefix . $member_code;
-            $password = Crypt::encryptString(rand12(6));
+            $password = Crypt::encryptString(rand12(8).rand(100,999).'@');
 
             $data = [
                 'board_id' => $entity->id,
@@ -250,6 +251,31 @@ class BoardsController extends ModuleCrudController
         ];
 
         return $data;
+
+    }
+
+    public function changePassUsername($entity){
+
+        $game = Games::where('id', $entity)
+            ->with(['boardsGame' => function($query){
+
+            }, 'boardsGame.membersBoard' => function($query){
+
+            }])
+            ->first()
+            ->toArray();
+
+        foreach ($game['boards_game'] as $boards){
+
+            foreach ($boards['members_board'] as $u) {
+
+                $password = Crypt::encryptString(rand12(8) . rand(100, 999) . '@');
+
+                Username::where('id', $u['id'])->update(['password' => $password]);
+
+            }
+
+        }
 
     }
 

@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Games\Sbo;
+namespace App\Http\Controllers\Games\Trnf;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use Modules\Api\Traits\RespondTrait;
 use Modules\Core\Boards\Entities\Boards;
 use Modules\Core\Username\Entities\Username;
 use Modules\Report\Commission\Entities\Commission;
 
-class MemberController extends SboController
+class MemberController extends TrnfController
 {
 
     use RespondTrait;
@@ -34,11 +35,17 @@ class MemberController extends SboController
     public function saveUsername($data = null)
     {
         $setParam = [
-            'Username' => $data['username'],
-            'Agent' => $this->agent
+            'type' => 'register',
+            'custid' => $data['username'],
+            'username_login' => $data['username_login'],
+            'password' => $data['password']
         ];
 
-        $param = $this->setParam($setParam, 'web-root/restricted/player/register-player.aspx');
+        if($data['game'] == 'ufa'){
+            $this->apiUrl = $this->apiUrlJp;
+        }
+
+        $param = $this->setParam($setParam, $data['game'].'/');
 
         $response = $this->push();
         $response = json_decode($response, true);

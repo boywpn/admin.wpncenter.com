@@ -59,6 +59,7 @@ class AgentApiMiddleware
         }
         // Set Session for Agent
         $request->request->add(['entity' => $agent->toArray()]);
+        $request->session()->put('entity', $agent->toArray());
 
         return $next($request);
     }

@@ -19,6 +19,9 @@ class BoardsUsersForm extends Form
         $this->add('code', 'text', [
             'label' => trans('core/boards::users.form.code'),
         ]);
+        $this->add('level', 'text', [
+            'label' => trans('core/boards::users.form.level'),
+        ]);
         $this->add('password', 'password', [
             'label' => trans('core/boards::users.form.password'),
         ]);

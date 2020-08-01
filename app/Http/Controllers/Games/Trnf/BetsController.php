@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Games\Ufa;
+namespace App\Http\Controllers\Games\Trnf;
 
 use Illuminate\Http\Request;
 use Modules\Api\Http\Controllers\Game\TransferApiController;
@@ -13,7 +13,7 @@ use Modules\Report\Betlists\Entities\BetlistsResults;
 use Modules\Report\Betlists\Entities\BetlistsTmp;
 use Modules\Report\Commission\Entities\Commission;
 
-class BetsController extends UfaController
+class BetsController extends TrnfController
 {
 
 

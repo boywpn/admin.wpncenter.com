@@ -398,7 +398,7 @@ class BetsController extends CshController
         $arrUpdate = [];
 
         $bets = BetlistsTmp::where('game_id', $game_id)
-            ->whereNull('status')
+            ->where('status', 0)
             ->orderBy('id', 'ASC')
             ->limit(500)
             ->get();

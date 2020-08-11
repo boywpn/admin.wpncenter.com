@@ -307,7 +307,7 @@ class BetsController extends IbcController
         $bets = BetlistsTmp::where('game_id', $game_id)
             ->where('status', 0)
             ->orderBy('id', 'ASC')
-            ->limit(500)
+            ->limit(100)
             ->get();
 
         foreach ($bets as $items) {
@@ -324,8 +324,8 @@ class BetsController extends IbcController
 //            print_r($username);
 //            continue;
 
-            $member_id = $username['member_id'];
-            $agent_id = $username['agent_id'];
+            $member_id = (!empty($username['member_id'])) ? $username['member_id'] : 0;
+            $agent_id = (!empty($username['agent_id'])) ? $username['agent_id'] : $username['b_agent_id'];
             $username_id = $username['username_id'];
             $board_game_id = $username['game_id'];
 
@@ -504,9 +504,9 @@ class BetsController extends IbcController
         $game_type = "SB";
 
         $bets = BetlistsTmp::where('game_id', $game_id)
-            ->whereNull('status')
+            ->where('status', 0)
             ->orderBy('id', 'ASC')
-            ->limit(500)
+            ->limit(100)
             ->get();
 
         foreach ($bets as $items) {
@@ -520,8 +520,8 @@ class BetsController extends IbcController
 //            print_r($username);
 //            continue;
 
-            $member_id = $username['member_id'];
-            $agent_id = $username['agent_id'];
+            $member_id = (!empty($username['member_id'])) ? $username['member_id'] : 0;
+            $agent_id = (!empty($username['agent_id'])) ? $username['agent_id'] : $username['b_agent_id'];
             $username_id = $username['username_id'];
             $board_game_id = $username['game_id'];
 

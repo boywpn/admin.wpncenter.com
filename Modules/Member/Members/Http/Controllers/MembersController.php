@@ -763,6 +763,7 @@ class MembersController extends ModuleCrudController
             ->join('core_games', 'core_boards.game_id', '=', 'core_games.id')
             ->where('core_boards.partner_id', $data['partner_id'])
             ->where('core_boards.board_number', $data['board_number'])
+//            ->whereNotNull('core_games.old_id')
 //            ->where('core_games.old_id', $order['web_to']) // Filter only game identify from admin
 //            ->where('core_games.id', $game['id']) // Filter only game identify from admin
             ->orderBy('core_boards.id', 'asc')
@@ -820,32 +821,36 @@ class MembersController extends ModuleCrudController
 
                 $arr_username = $entity_username->toArray();
 
-                // Create Username on Admin
-                $arrData = array(
-                    'company' => 1,
-                    'new_id' => $arr_username['id'],
-                    // 'locking' => $order,
-                    'domain' => $old_member['domain'],
-                    'agent' => $old_member['reference'],
-                    'member_id' => $old_member['id'],
-                    'member_username' => $old_member['username'],
-                    'game_web' => $arr_username['username_board']['boards_game']['old_id'],
-                    'web_name' => $arr_username['username_board']['boards_game']['name'],
-                    'username' => $arr_username['username'],
-                    'password' => Crypt::decryptString($arr_username['password']),
-                    'created' => $date,
-                    'created_by' => 1,
-                    'created_from' => 'api'
-                );
+                if(!empty($board['old_id'])) { // Insert only have old id
 
-                //$repository->createEntity($arrData, \App::make(\App\Models\Old\Username::class));
+                    // Create Username on Admin
+                    $arrData = array(
+                        'company' => 1,
+                        'new_id' => $arr_username['id'],
+                        // 'locking' => $order,
+                        'domain' => $old_member['domain'],
+                        'agent' => $old_member['reference'],
+                        'member_id' => $old_member['id'],
+                        'member_username' => $old_member['username'],
+                        'game_web' => $arr_username['username_board']['boards_game']['old_id'],
+                        'web_name' => $arr_username['username_board']['boards_game']['name'],
+                        'username' => $arr_username['username'],
+                        'password' => Crypt::decryptString($arr_username['password']),
+                        'created' => $date,
+                        'created_by' => 1,
+                        'created_from' => 'api'
+                    );
 
-                $entityUsername = \App::make(\App\Models\Old\Username::class);
-                foreach ($arrData as $field => $value) {
-                    $entityUsername->setAttribute($field, $value);
+                    //$repository->createEntity($arrData, \App::make(\App\Models\Old\Username::class));
+
+                    $entityUsername = \App::make(\App\Models\Old\Username::class);
+                    foreach ($arrData as $field => $value) {
+                        $entityUsername->setAttribute($field, $value);
+                    }
+
+                    $entityUsername->save();
+
                 }
-
-                $entityUsername->save();
 
                 // print_r($arrData);
 

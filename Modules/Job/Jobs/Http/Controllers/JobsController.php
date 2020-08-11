@@ -602,7 +602,7 @@ class JobsController extends ModuleCrudController
         // $this->afterStore($data, $entity);
 
         if($transfer_type == 4 || $transfer_type == 5) {
-            $arrTrans = [
+            return $arrTrans = [
                 'job_id' => $entity->id,
                 'wallet_id' => $data['wallet_id'],
                 'action' => 'transfer',
@@ -612,14 +612,14 @@ class JobsController extends ModuleCrudController
                 'amount' => (string)round($data['amount'], 2),
                 'staffid' => 1,
                 'from' => 'new_system',
-                'stateid' => null,
+                'stateid' => '222444',
                 'local_ip' => get_client_ip(),
                 'auto' => true,
             ];
 
             // If set auto transfer is true
             if ($data['auto']) {
-                $transfer = $this->setTransfer($arrTrans);
+                return $transfer = $this->setTransfer($arrTrans);
                 if ($transfer['responseStatus']['code'] != 200) {
                     if ($transfer['responseStatus']['code'] == 203) {
                         return ['status' => false, 'codeid' => 601, 'msg' => $transfer['responseStatus']['messageDetails'], 'job_id' => $entity->id, 'data' => $transfer];

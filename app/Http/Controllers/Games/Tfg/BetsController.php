@@ -156,7 +156,7 @@ class BetsController extends TfgController
         $bets = BetlistsTmp::where('game_id', $game_id)
             ->where('status', 0)
             ->orderBy('bet_time', 'ASC')
-            ->limit(500)
+            ->limit(100)
             ->get();
 
         foreach ($bets as $items) {
@@ -173,8 +173,8 @@ class BetsController extends TfgController
 //            print_r($username);
 //            continue;
 
-            $member_id = $username['member_id'];
-            $agent_id = $username['agent_id'];
+            $member_id = (!empty($username['member_id'])) ? $username['member_id'] : 0;
+            $agent_id = (!empty($username['agent_id'])) ? $username['agent_id'] : $username['b_agent_id'];
             $username_id = $username['username_id'];
             $board_game_id = $username['game_id'];
 

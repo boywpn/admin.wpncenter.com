@@ -30,19 +30,20 @@ class Winloss extends CachedModel
             ->when($formData, function($query) use ($formData){
                 if($formData['role'] != "mm"){
                     return $query->select(
-                        'rb.agent_id',
-                        'rb.board_game_id',
-                        'rb.game_type_id',
-                        'rb.member_id',
-                        'ca.name',
-                        'ca.ref',
-                        'ca.id AS agent_id',
-                        'cb.member_prefix',
-                        'ca.partner_id AS partner_id',
-                        'mm.name AS member_name',
-                        'cu.username',
-                        'cu.id AS username_id',
-                        'cgt.name AS type_name',
+                        'rb.*',
+//                        'rb.agent_id',
+//                        'rb.board_game_id',
+//                        'rb.game_type_id',
+//                        'rb.member_id',
+//                        'ca.name',
+//                        'ca.ref',
+//                        'ca.id AS agent_id',
+//                        'cb.member_prefix',
+//                        'ca.partner_id AS partner_id',
+//                        'mm.name AS member_name',
+//                        'cu.username',
+//                        'cu.id AS username_id',
+//                        'cgt.name AS type_name',
 //                        DB::raw('DATE_FORMAT(rb.bet_time, \'%Y-%m-%d\') AS bet_date'),
 //                        DB::raw('DATE_FORMAT(rb.payout_time, \'%Y-%m-%d\') AS pay_date'),
 
@@ -92,12 +93,12 @@ class Winloss extends CachedModel
                     );
                 }
             })
-            ->leftJoin('core_agents AS ca', 'ca.id', '=', 'rb.agent_id')
-            ->leftJoin('member_members AS mm', 'mm.id', '=', 'rb.member_id')
-            ->leftJoin('core_username AS cu', 'cu.id', '=', 'rb.username_id')
-            ->leftJoin('core_games AS cg', 'cg.id', '=', 'rb.board_game_id')
-            ->leftJoin('core_games_types AS cgt', 'cgt.id', '=', 'rb.game_type_id')
-            ->leftJoin('core_boards AS cb', 'cb.id', '=', 'cu.board_id')
+//            ->leftJoin('core_agents AS ca', 'ca.id', '=', 'rb.agent_id')
+//            ->leftJoin('member_members AS mm', 'mm.id', '=', 'rb.member_id')
+//            ->leftJoin('core_username AS cu', 'cu.id', '=', 'rb.username_id')
+//            ->leftJoin('core_games AS cg', 'cg.id', '=', 'rb.board_game_id')
+//            ->leftJoin('core_games_types AS cgt', 'cgt.id', '=', 'rb.game_type_id')
+//            ->leftJoin('core_boards AS cb', 'cb.id', '=', 'cu.board_id')
             ->whereBetween('rb.'.$formData['filter'], [$from, $to])
 
             // For not all type
@@ -110,11 +111,13 @@ class Winloss extends CachedModel
             // For group by
             ->when($formData, function($query) use ($formData){
                 if(empty($formData['user'])) {
-                    return $query->groupBy('rb.agent_id')->orderBy('ca.partner_id', 'asc')->orderBy('ca.ref', 'asc');
+                    // return $query->groupBy('rb.agent_id')->orderBy('ca.partner_id', 'asc')->orderBy('ca.ref', 'asc');
+                    return $query->groupBy('rb.agent_id');
                 }else{
                     if($formData['role'] == "ag"){
                         // $agent = Agents::where('ref', $formData['user'])->select('id')->first();
-                        return $query->where('rb.agent_id', $formData['id'])->groupBy('rb.member_id')->orderBy('cu.username', 'asc');
+                        // return $query->where('rb.agent_id', $formData['id'])->groupBy('rb.member_id')->orderBy('cu.username', 'asc');
+                        return $query->where('rb.agent_id', $formData['id'])->groupBy('rb.member_id');
                     }elseif($formData['role'] == "mm"){
                         $username = Username::where('username', $formData['user'])->select('member_id')->first();
                         return $query->where('rb.member_id', $username->member_id)->orderBy('rb.bet_time', 'desc');
@@ -134,20 +137,20 @@ class Winloss extends CachedModel
         $from = $formData['from']." ".$formData['from_time'];
         $to = $formData['to']." ".$formData['to_time'];
 
-        $query = DB::table('report_betlists AS rb')
+        $query = DB::connection('db_report')->table('report_betlists AS rb')
             ->where('rb.board_game_id', $game_id)
             ->select(
-                'rb.agent_id',
-                'rb.state',
-                'ca.name',
-                'ca.ref',
-                'ca.id AS agent_id',
-                'ca.partner_id AS partner_id',
-                'cb.member_prefix',
-                'rb.member_id',
-                'mm.name AS member_name',
-                'cu.username',
-                'cu.id AS username_id',
+                'rb.*',
+//                'rb.state',
+//                'rb.member_id',
+//                'ca.name',
+//                'ca.ref',
+//                'ca.id AS agent_id',
+//                'ca.partner_id AS partner_id',
+//                'cb.member_prefix',
+//                'mm.name AS member_name',
+//                'cu.username',
+//                'cu.id AS username_id',
                 DB::raw('DATE_FORMAT(rb.bet_time, \'%Y-%m-%d\') AS bet_date'),
                 DB::raw('DATE_FORMAT(rb.payout_time, \'%Y-%m-%d\') AS pay_date'),
                 DB::raw('DATE_FORMAT(rb.work_time, \'%Y-%m-%d\') AS work_date'),
@@ -175,15 +178,15 @@ class Winloss extends CachedModel
                 DB::raw('SUM(rb.company_commission) AS company_comm'),
                 DB::raw('SUM(rb.company_winloss + rb.company_commission) AS company_total')
             )
-            ->leftJoin('core_agents AS ca', 'ca.id', '=', 'rb.agent_id')
-            ->leftJoin('member_members AS mm', 'mm.id', '=', 'rb.member_id')
-            ->leftJoin('core_username AS cu', 'cu.id', '=', 'rb.username_id')
-            ->leftJoin('core_games AS cg', 'cg.id', '=', 'rb.board_game_id')
-            ->leftJoin('core_games_types AS cgt', 'cgt.id', '=', 'rb.game_type_id')
-            ->leftJoin('core_boards AS cb', 'cb.id', '=', 'cu.board_id')
+//            ->leftJoin('core_agents AS ca', 'ca.id', '=', 'rb.agent_id')
+//            ->leftJoin('member_members AS mm', 'mm.id', '=', 'rb.member_id')
+//            ->leftJoin('core_username AS cu', 'cu.id', '=', 'rb.username_id')
+//            ->leftJoin('core_games AS cg', 'cg.id', '=', 'rb.board_game_id')
+//            ->leftJoin('core_games_types AS cgt', 'cgt.id', '=', 'rb.game_type_id')
+//            ->leftJoin('core_boards AS cb', 'cb.id', '=', 'cu.board_id')
             ->whereBetween('rb.'.$formData['filter'], [$from, $to])
             ->groupBy('rb.member_id')
-            ->orderBy('cu.username', 'asc')
+            // ->orderBy('cu.username', 'asc')
             //->where('rb.member_id', $member_id)->orderBy('rb.payout_time', 'desc')
             ->get();
 

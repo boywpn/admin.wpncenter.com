@@ -14,6 +14,7 @@ use App\Http\Controllers\Games\Tiger\MemberController AS TIGER;
 use App\Http\Controllers\Games\Csh\MemberController AS CSH;
 use App\Http\Controllers\Games\Pussy\MemberController AS PUSSY;
 use App\Http\Controllers\Games\Tfg\MemberController AS TFG;
+use App\Http\Controllers\Games\Trnf\MemberController AS TRNF;
 use App\Models\Old\Bonus;
 use App\Models\Old\BonusLog;
 use App\Models\TransfersLog;
@@ -144,6 +145,10 @@ class TransferApiController extends GameApiController
                 $query->select('*');
             }, 'usernameBoard.boardsGame' => function($query){
                 $query->select('*');
+            }, 'usernameBoard.boardsPartner' => function($query){
+                $query->select('*');
+            }, 'usernameBoard.usersBoard' => function($query){
+                $query->select('*')->inRandomOrder()->first();
             }])
             ->first();
 
@@ -1914,7 +1919,7 @@ class TransferApiController extends GameApiController
         }
 
         /**
-         * Pussy888
+         * TFGaming
          */
         elseif($game == "tfg"){
 
@@ -2015,6 +2020,143 @@ class TransferApiController extends GameApiController
 
                 $afterbalance = $res['balance_amount'];
                 $res_order_id = $ref;
+
+                $arrUpdateLog['response_time'] = date('Y-m-d H:i:s');
+                $arrUpdateLog['response_data'] = json_encode($this->resJson, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_UNICODE);
+                $arrUpdateLog['credit_af'] = $afterbalance;
+                $arrUpdateLog['agcredit_af'] = (string)$agcredit_af;
+                $arrUpdateLog['approve_key'] = $approve_key;
+                $arrUpdateLog['statement_id'] = $data['stateid'];
+                $arrUpdateLog['updated_credit_af'] = date('Y-m-d H:i:s');
+                TransfersLog::where('id', $log->id)->update($arrUpdateLog);
+
+                $this->resJson['responseDetails']['requestApprove']['log_id'] = $log->id;
+
+                // If transfer
+                if(!empty($entity)) {
+                    $repository = \App::make(GenericRepository::class);
+                    $repository->setupModel(Jobs::class);
+                    // update job
+                    $arrUpdate = array(
+                        'completed_at' => date('Y-m-d H:i:s'),
+                        'statement_id' => $data['stateid'],
+                        'status_id' => 3,
+                        'order_api_id' => $res_order_id
+                    );
+                    $repository->updateEntity($arrUpdate, $entity);
+
+                    // update bank statement from trnf.tk
+                    BankStatement::where('state_id', $data['stateid'])
+                        ->update(['order_id' => $order_code, 'state_status' => '1', 'updated_at' => date('Y-m-d H:i:s')]);
+
+                    $this->resJson['responseDetails']['requestApprove']['tran_id'] = $entity->id;
+
+                }
+
+                $this->resJson['responseDetails']['requestApprove']['approve_key'] = $approve_key;
+
+            }
+
+        }
+
+        /**
+         * Ufabet
+         */
+        elseif(in_array($game, ['ufa', 'lga'])){
+
+            $api = new TRNF($key);
+
+            $ag_data = $user['username_board']['users_board'][0];
+            $api->setAgentUser($ag_data);
+
+            $arrUsername = [
+                'type' => 'detail',
+                'custid' => $username,
+                'game' => $game
+            ];
+
+            $user = $api->actionPost($arrUsername, $game.'/');
+
+            if($user['responseStatus']['code'] != 200){
+                $this->resJson['responseStatus']['code'] = 203;
+                $this->resJson['responseStatus']['message'] = "ERROR";
+                $this->resJson['responseStatus']['messageDetails'] = $user['responseStatus']['messageDetails'];
+                return $this->returnJson();
+            }
+
+            $detail = $user['responseDetails'];
+
+            $balance = (float)$detail['banlance'];
+            $playing = (float)$detail['playing'];
+            $netbalance = $balance - $playing;
+
+            if($checkwd <= $netbalance){
+                $statuswd = 200;
+            }
+
+            if($data['type'] == "transfer") {
+
+                if($checkwd > $netbalance && $amount < 0){
+                    $this->resJson['responseStatus']['code'] = 203;
+                    $this->resJson['responseStatus']['message'] = "ERROR";
+                    $this->resJson['responseStatus']['messageDetails'] = "จำนวนเครดิตของท่านไม่พอถอน";
+                    return $this->returnJson();
+                }
+
+                if($amount > 0 && $amount < 100 && !in_array($order, GameApiController::ACCEPT_MIN_AMOUNT)){
+                    $this->resJson['responseStatus']['code'] = 203;
+                    $this->resJson['responseStatus']['message'] = "ERROR";
+                    $this->resJson['responseStatus']['messageDetails'] = "ฝากขั้นต่ำ 100 บาทขึ้นไป";
+                    return $this->returnJson();
+                }
+
+                if($amount < 0 && $amount > -100 && !in_array($order, GameApiController::ACCEPT_MIN_AMOUNT)){
+                    $this->resJson['responseStatus']['code'] = 203;
+                    $this->resJson['responseStatus']['message'] = "ERROR";
+                    $this->resJson['responseStatus']['messageDetails'] = "ถอนขั้นต่ำ 100 บาทขึ้นไป";
+                    return $this->returnJson();
+                }
+
+                /**
+                 * Create Log Before Transfer
+                 */
+                $this->arrLog['job_id'] = $job_id;
+                $this->arrLog['order_code'] = $order_code;
+                $this->arrLog['amount'] = $amount;
+                $this->arrLog['game_id'] = $game_id;
+                $this->arrLog['game_code'] = $game;
+                $this->arrLog['username_id'] = $username_id;
+                $this->arrLog['username'] = $username;
+                $this->arrLog['agent_login'] = $aguser;
+                $this->arrLog['credit_bf'] = (string)$balance;
+                $this->arrLog['agcredit_bf'] = (string)$agcredit_bf;
+                $this->arrLog['status'] = 1;
+                $log = $this->saveLog($data);
+
+                $setParam = [
+                    'type' => 'transfer',
+                    'custid' => $username,
+                    'amount' => $amount,
+                    'orderid' => $data['orderid'],
+                    'stateid' => $data['stateid'],
+                    'game' => $game
+                ];
+
+                return $res = $api->actionPost($setParam, $game.'/', true);
+
+                if ($res['responseStatus']['code'] != 200) {
+                    $this->resJson['responseStatus']['code'] = 201;
+                    $this->resJson['responseStatus']['message'] = "ERROR";
+                    $this->resJson['responseStatus']['messageDetails'] = $res['responseStatus']['messageDetails'];
+                    $this->resJson['responseStatus']['setParam'] = $setParam;
+                    $this->resJson['responseStatus']['response'] = $res;
+                    return $this->returnJson();
+                }
+
+                $detail = $res['responseDetails'];
+
+                $afterbalance = $detail['afterbanlance'];
+                // $res_order_id = $ref;
 
                 $arrUpdateLog['response_time'] = date('Y-m-d H:i:s');
                 $arrUpdateLog['response_data'] = json_encode($this->resJson, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_UNICODE);

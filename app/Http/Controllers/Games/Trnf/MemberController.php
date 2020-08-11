@@ -38,12 +38,9 @@ class MemberController extends TrnfController
             'type' => 'register',
             'custid' => $data['username'],
             'username_login' => $data['username_login'],
-            'password' => $data['password']
+            'password' => $data['password'],
+            'game' => $data['game']
         ];
-
-        if($data['game'] == 'ufa'){
-            $this->apiUrl = $this->apiUrlJp;
-        }
 
         $param = $this->setParam($setParam, $data['game'].'/');
 

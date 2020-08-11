@@ -331,7 +331,7 @@ class BetsController extends SboController
 
     }
 
-    public function betLogSave($game_id, $limit = 500, $status = null){
+    public function betLogSave($game_id, $limit = 300, $status = null){
 
         $this->entityClass = Betlists::class;
         $repository = $this->getRepository();
@@ -347,12 +347,13 @@ class BetsController extends SboController
 
         $bets = BetlistsTmp::where('game_id', $game_id)
 //            ->whereNull('status')
-            ->when((!empty($status)), function($query) use ($status){
-                $query->where('status', $status);
-            })
-            ->when((empty($status)), function($query) use ($status){
-                $query->where('status', 0);
-            })
+//            ->when((!empty($status)), function($query) use ($status){
+//                $query->where('status', $status);
+//            })
+//            ->when((empty($status)), function($query) use ($status){
+//                $query->where('status', 0);
+//            })
+            ->where('status', 0)
             ->orderBy('id', 'ASC')
             ->limit($limit)
             ->get();
@@ -418,8 +419,8 @@ class BetsController extends SboController
         $user = $item['username'];
         $username = Username::getUsernameByUser($user);
 
-        $member_id = $username['member_id'];
-        $agent_id = $username['agent_id'];
+        $member_id = (!empty($username['member_id'])) ? $username['member_id'] : 0;
+        $agent_id = (!empty($username['agent_id'])) ? $username['agent_id'] : $username['b_agent_id'];
         $username_id = $username['username_id'];
         $board_game_id = $username['game_id'];
 
@@ -611,8 +612,8 @@ class BetsController extends SboController
         $user = $item['username'];
         $username = Username::getUsernameByUser($user);
 
-        $member_id = $username['member_id'];
-        $agent_id = $username['agent_id'];
+        $member_id = (!empty($username['member_id'])) ? $username['member_id'] : 0;
+        $agent_id = (!empty($username['agent_id'])) ? $username['agent_id'] : $username['b_agent_id'];
         $username_id = $username['username_id'];
         $board_game_id = $username['game_id'];
 
@@ -800,8 +801,8 @@ class BetsController extends SboController
         $user = $item['username'];
         $username = Username::getUsernameByUser($user);
 
-        $member_id = $username['member_id'];
-        $agent_id = $username['agent_id'];
+        $member_id = (!empty($username['member_id'])) ? $username['member_id'] : 0;
+        $agent_id = (!empty($username['agent_id'])) ? $username['agent_id'] : $username['b_agent_id'];
         $username_id = $username['username_id'];
         $board_game_id = $username['game_id'];
 

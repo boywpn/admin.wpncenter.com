@@ -60,6 +60,8 @@ class MemberController extends CshController
             'givePt_qtech' => '0',
             'openGames[13]' => 'bg',
             'givePt_bg' => '0',
+            'openGames[14]' => 'gamatron',
+            'givePt_gamatron' => '0',
             'limitGames[0]' => 'dg',
             'limitGames[1]' => 'sa',
             'limitGames[2]' => 'sexy',

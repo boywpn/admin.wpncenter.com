@@ -191,6 +191,7 @@ class WalletController extends UpcController
         $input = $request->input();
 
         $tranfer = $this->doTransfer($input);
+
         if(!$tranfer['status']){
             return $this->error($tranfer['codeid']);
         }
@@ -568,7 +569,7 @@ class WalletController extends UpcController
             return $this->error(404);
         }
 
-            // Generate OneTime Key
+        // Generate OneTime Key
         $onetime_key = rand12(16);
         // Update key to member
         Members::where('id', $member_id)->update(['onetime_key' => $onetime_key]);
@@ -651,7 +652,7 @@ class WalletController extends UpcController
 
         // Created Order Log
         $job = new JobsController();
-        $order = $job->createJob($data_post, $input['type']);
+        return $order = $job->createJob($data_post, $input['type']);
         $json = json_encode($order, JSON_UNESCAPED_UNICODE);
 
         // Update Job Status
@@ -719,7 +720,7 @@ class WalletController extends UpcController
          */
         if($order['codeid'] == 602){
             // return $this->success(0, ['code' => 602, 'msg' => parent::CODEID[602], 'ref' => $entity['ref'], 'amount' => $entity['amount'], 'created_at' => $entity['created_at'], 'order' => $order, 'data_wallet' => $data_wallet, 'transfer' => $transfer]);
-            return $this->error(602);
+            return $this->error(602, $order);
         }
 
         /**

@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Api\Http\Controllers\Game\TransferApiController;
 use Modules\Core\Boards\Entities\Boards;
+use Modules\Core\Username\Entities\Username;
 use Modules\Member\Members\Entities\Members;
 
 class LossController extends Controller
@@ -48,9 +49,11 @@ class LossController extends Controller
         // Loop
         $arrNew = [];
         foreach ($arrMix as $mix){
-            $arrNew[$mix->username_id]['username'] = $mix->username;
+            $username = Username::findOrFail($mix->username_id);
+            $member = Members::findOrFail($mix->member_id);
+            $arrNew[$mix->username_id]['username'] = $username->username;
             $arrNew[$mix->username_id]['member_id'] = $mix->member_id;
-            $arrNew[$mix->username_id]['name'] = $mix->member_name;
+            $arrNew[$mix->username_id]['name'] = $member->name;
             $arrNew[$mix->username_id]['date'][$mix->work_date][] = $mix;
         }
 
@@ -152,9 +155,11 @@ class LossController extends Controller
         // Loop
         $arrNew = [];
         foreach ($arrMix as $mix){
-            $arrNew[$mix->username_id]['username'] = $mix->username;
+            $username = Username::findOrFail($mix->username_id);
+            $member = Members::findOrFail($mix->member_id);
+            $arrNew[$mix->username_id]['username'] = $username->username;
             $arrNew[$mix->username_id]['member_id'] = $mix->member_id;
-            $arrNew[$mix->username_id]['name'] = $mix->member_name;
+            $arrNew[$mix->username_id]['name'] = $member->name;
             $arrNew[$mix->username_id]['date'][$mix->work_date][] = $mix;
         }
 

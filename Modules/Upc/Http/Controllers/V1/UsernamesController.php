@@ -78,6 +78,8 @@ class UsernamesController extends UpcController
         if(empty($username['username_board']['boards_game']['api_url'])){
             $transfer = $this->apiTransfer($username);
 
+            // return $transfer;
+
             $credit = 0;
             $outstanding = 0;
             $betcredit = 0;

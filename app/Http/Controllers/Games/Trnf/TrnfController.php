@@ -102,6 +102,11 @@ class TrnfController extends AppController
 
     public function setParam($data, $action, $prefix = null, $suffix = null, $url = null)
     {
+
+        if($data['game'] == 'ufa'){
+            $this->apiUrl = $this->apiUrlJp;
+        }
+
         $arrData = array(
             'username' => $this->agent,
             'apikey' => $this->key,

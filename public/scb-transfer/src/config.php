@@ -8,10 +8,10 @@ $config['bank'] = [
 ];
 
 $config['db'] = [
-    'host' => 'localhost',
-    'dbname' => 'wpncente_scb',
-    'user' => 'wpncente_scb',
-    'pass' => 'oDyN2sXTSgbb'
+    'host' => '178.128.51.115',
+    'dbname' => 'wpn_agent_db',
+    'user' => 'wpn_agent_db',
+    'pass' => 'wpNAg%ent@DB9!'
 ];
 
 $config['admin'] = "1234";

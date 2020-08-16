@@ -88,6 +88,10 @@ class UpcController extends Controller
         '7' => 'Void from Cancel',
     ];
 
+    const JOB_TYPE = [
+        ''
+    ];
+
     /**
      * Module Repository
      * @var

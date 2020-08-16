@@ -25,6 +25,7 @@ Route::group(['middleware' => 'upc', 'prefix' => 'upc', 'namespace' => 'Modules\
 
                 Route::post('deposit', ['uses'=> 'MembersController@deposit']);
                 Route::post('withdraw', ['uses'=> 'MembersController@withdraw']);
+                Route::post('transfer-log', ['uses'=> 'MembersController@transferLog']);
 
             });
 

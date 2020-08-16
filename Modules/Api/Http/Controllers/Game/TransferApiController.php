@@ -1581,6 +1581,11 @@ class TransferApiController extends GameApiController
                     $setParam['IsFullAmount'] = false;
                     $setParam['Amount'] = $amount * -1;
                 }
+
+                if(isset($data['refno'])){
+                    $ref = $data['refno'];
+                }
+
                 $setParam['TxnId'] = $ref;
 
                 $res = $api->actionPost($setParam, $url);
@@ -2062,7 +2067,7 @@ class TransferApiController extends GameApiController
         /**
          * Ufabet
          */
-        elseif(in_array($game, ['ufa', 'lga'])){
+        elseif(in_array($game, ['ufa', 'lga', 'gcb', 'vga'])){
 
             $api = new TRNF($key);
 
@@ -2142,7 +2147,7 @@ class TransferApiController extends GameApiController
                     'game' => $game
                 ];
 
-                return $res = $api->actionPost($setParam, $game.'/', true);
+                $res = $api->actionPost($setParam, $game.'/');
 
                 if ($res['responseStatus']['code'] != 200) {
                     $this->resJson['responseStatus']['code'] = 201;

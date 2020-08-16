@@ -510,7 +510,7 @@ class JobsController extends ModuleCrudController
             $type_id = 1;
             $transfer_type = 1; // Check type to statement -> wallet
         }
-        if($type == 2){
+        if($type == 4){
             $type_id = 2;
             $transfer_type = 2; // Check type to wallet -> statement
         }
@@ -531,7 +531,7 @@ class JobsController extends ModuleCrudController
         $input['order_code'] = null;
         $input['ref_job_id'] = (!empty($data['ref_job_id'])) ? $data['ref_job_id'] : null;
         $input['code'] = time();
-        $input['type_id'] = $type; // user original finance_type b/c need to use type of transfer for new system.
+        $input['type_id'] = $type_id; // user original finance_type b/c need to use type of transfer for new system.
         $input['status_id'] = (!empty($data['status_id'])) ? $data['status_id'] : 2;
         $input['member_id'] = $data['member_id'];
         $input['wallet_id'] = (!empty($data['wallet_id'])) ? $data['wallet_id'] : null;
@@ -602,7 +602,7 @@ class JobsController extends ModuleCrudController
         // $this->afterStore($data, $entity);
 
         if($transfer_type == 4 || $transfer_type == 5) {
-            return $arrTrans = [
+            $arrTrans = [
                 'job_id' => $entity->id,
                 'wallet_id' => $data['wallet_id'],
                 'action' => 'transfer',
@@ -619,7 +619,7 @@ class JobsController extends ModuleCrudController
 
             // If set auto transfer is true
             if ($data['auto']) {
-                return $transfer = $this->setTransfer($arrTrans);
+                $transfer = $this->setTransfer($arrTrans);
                 if ($transfer['responseStatus']['code'] != 200) {
                     if ($transfer['responseStatus']['code'] == 203) {
                         return ['status' => false, 'codeid' => 601, 'msg' => $transfer['responseStatus']['messageDetails'], 'job_id' => $entity->id, 'data' => $transfer];

@@ -222,14 +222,33 @@ class WalletController extends UpcController
         return $this->transferManual($input);
     }
 
+    public function withdraw(Request $request){
+
+        $input = $request->input();
+
+        $validator = Validator::make($input, [
+            'type' => 'required',
+            'member_id' => 'required',
+            'amount' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+        ],[
+            'amount.regex' => parent::CODEID[506]
+        ]);
+
+        if($validator->fails()){
+            return $this->error(103, $validator->errors());
+        }
+
+        return $this->transferManual($input);
+    }
+
     public function transferManual($input){
 
         $base = new \Modules\Member\Members\Http\Controllers\MembersController();
 
         $amount = $input['amount'];
         $tmp_id = (isset($input['tmp_id'])) ? $input['tmp_id'] : null; // If from tmp_bank auto system
-        $statement_id = $input['state_id'];
-        $statement_created = $input['state_date'];
+        $statement_id = (isset($input['state_id'])) ? $input['state_id'] : null;
+        $statement_created = (isset($input['state_date'])) ? $input['state_date'] : null;
         $member_id = $input['member_id'];
         $type = $input['type'];
 
@@ -500,11 +519,19 @@ class WalletController extends UpcController
                 'username_id' => $input['username_id'],
                 'auto' => $input['auto'],
                 'amount' => $input['amount'],
+                'transfer_type' => $input['type'],
             ];
             $from = $this->setTransfer($arrFrom);
 
             if(!$from['status']){
+                $ref_job_id = $from['data']['order']['job_id'];
                 $this->response_array = false;
+
+                // Update Job to Cancel
+                \Modules\Job\Jobs\Entities\Jobs::where('id', $ref_job_id)->update(['status_id' => 4]);
+                // Delete After Change Status
+                \Modules\Job\Jobs\Entities\Jobs::where('id', $ref_job_id)->delete();
+
                 return $from;
             }
 
@@ -520,6 +547,7 @@ class WalletController extends UpcController
                     'username_id' => $input['to_username_id'],
                     'auto' => $input['auto'],
                     'amount' => $input['amount'],
+                    'transfer_type' => $input['type'],
                 ];
                 $to = $this->setTransfer($arrTo);
 
@@ -536,6 +564,7 @@ class WalletController extends UpcController
 
         }else{
 
+            $input['transfer_type'] = $input['type'];
             return $this->setTransfer($input);
 
         }
@@ -652,7 +681,7 @@ class WalletController extends UpcController
 
         // Created Order Log
         $job = new JobsController();
-        return $order = $job->createJob($data_post, $input['type']);
+        $order = $job->createJob($data_post, $input['type']);
         $json = json_encode($order, JSON_UNESCAPED_UNICODE);
 
         // Update Job Status
@@ -669,6 +698,13 @@ class WalletController extends UpcController
             $arrJobUpdate = [
                 'status_id' => 1
             ];
+
+            if($input['transfer_type'] != 8){ // Delete first action on transfer casino to casino
+                // Update Job to Cancel
+                \Modules\Job\Jobs\Entities\Jobs::where('id', $order['job_id'])->update(['status_id' => 4]);
+                // Delete After Change Status
+                \Modules\Job\Jobs\Entities\Jobs::where('id', $order['job_id'])->delete();
+            }
         }
         \Modules\Job\Jobs\Entities\Jobs::where('id', $order['job_id'])->update($arrJobUpdate);
 

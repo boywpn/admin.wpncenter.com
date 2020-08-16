@@ -40,15 +40,6 @@ function ps($path)
 {
     return "https://fasteasy.scbeasy.com:8888/portalserver/content/bbp/repositories/contentRepository/?path=" . $path;
 }
-
-if (isLogin()) {
-    $bank = new SCB();
-    $bank->setAccountNumber($config['bank']['account_number']);
-    $bank->setLogin($config['bank']['deviceId'], $config['bank']['ApiRefresh']);
-    $login = $bank->login();
-
-    exit;
-}
 function setSessionTime($_timeSecond)
 {
     if (!isset($_SESSION['ses_time_life'])) {
@@ -62,4 +53,11 @@ function setSessionTime($_timeSecond)
             }
         }
     }
+}
+
+if (isLogin()) {
+    $bank = new SCB();
+    $bank->setAccountNumber($config['bank']['account_number']);
+    $bank->setLogin($config['bank']['deviceId'], $config['bank']['ApiRefresh']);
+    $login = $bank->login();
 }

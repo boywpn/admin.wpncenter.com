@@ -1,7 +1,5 @@
 <?php
 require_once './src/db.php';
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

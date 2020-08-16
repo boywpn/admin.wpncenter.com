@@ -39,7 +39,7 @@ class MembersController extends ApiController
 
         $game = Games::where('code', $data['pcode'])
             ->with(['boardsGame' => function($query) use ($data){
-                $query->where('agent_id', $this->agent_id)->where('ref', $data['agent'])->where('is_active', 1)->select('*');
+                $query->where('agent_id', $this->agent_id)->where('member_prefix', $data['agent'])->where('is_active', 1)->select('*');
             }])
             ->first();
 
@@ -150,6 +150,8 @@ class MembersController extends ApiController
         ];
 
         $repository->updateEntity($arrRequest, $entity);
+
+        $arrTrans['refno'] = $data['refno'];
 
         $trans = new TransferApiController();
         $response = $trans->transfer($arrTrans);

@@ -1351,14 +1351,24 @@ class ReportController extends AppController
             return $api->betLogTmp($boards, $get['portfolio']);
         }
         elseif($game == "sboapi_date"){
-            if(!isset($get['portfolio'])){
-                return "The portfolio field is required.";
-            }
+//            if(!isset($get['portfolio'])){
+//                return "The portfolio field is required.";
+//            }
             if(!isset($get['date'])){
                 return "The date field is required.";
             }
             $api = new SBO();
-            return $api->betLogTmp($boards, $get['portfolio'], $get['date']);
+
+            if(empty($get['portfolio'])) {
+                $arrPorts = ['SportsBook', 'Casino', 'Games', 'VirtualSports', 'SeamlessGame'];
+                $arrRes = [];
+                foreach ($arrPorts as $port) {
+                    $arrRes[$port] = $api->betLogTmp($boards, $port, $get['date']);
+                }
+                return $arrRes;
+            }else{
+                return $api->betLogTmp($boards, $get['portfolio'], $get['date']);
+            }
         }
         elseif($game == "sboapi_save"){
             $api = new SBO();

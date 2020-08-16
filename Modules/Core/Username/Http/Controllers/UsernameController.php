@@ -671,7 +671,7 @@ class UsernameController extends ModuleCrudController
         /**
          * For credit website
         */
-        elseif(in_array($username['username_board']['boards_game']['code'], ['ufa', 'lga', 'gcb'])){
+        elseif(in_array($username['username_board']['boards_game']['code'], ['ufa', 'lga', 'gcb', 'vga'])){
 
             $api = new Trnf($key);
 

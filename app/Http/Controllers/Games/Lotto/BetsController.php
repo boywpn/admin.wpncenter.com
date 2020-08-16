@@ -142,7 +142,7 @@ class BetsController extends LottoController
         $bets = BetlistsTmp::where('game_id', $game_id)
             ->where('status', 0)
             ->orderBy('id', 'ASC')
-            ->limit(100)
+            ->limit(300)
             ->get();
 
         foreach ($bets as $items) {

@@ -56,7 +56,7 @@ class TotalBetsController extends Controller
             $api->setEnv($ag);
             $login = $api->login();
             $totalBets = $api->getTotalBets();
-            // $totalBets = $api->getTotalBetsCalculate();
+//            $totalBets = $api->getTotalBetsCalculate();
 
             foreach ($totalBets as $key => $bet){
 

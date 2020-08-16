@@ -2,6 +2,8 @@
 
 include_once __DIR__ . '/db.php';
 
+
+
 if (isset($_POST)) {
     $d = $_POST;
     $bankID = $d['bankID'];
@@ -21,7 +23,7 @@ if (isset($_POST)) {
     }
     $v = $bank->Transfer($accnum, $bankID, $amount);
     if ($v['status'] === true) {
-        // query("INSERT INTO transaction (`action`,amount) VALUES (?,?);", ['โอนเงินออกไปยัง ' . $accnum, $amount]);
+        query("INSERT INTO transaction ('action', 'amount', 'created_at') VALUES (?,?,?);", ['โอนเงินออกไปยัง ' . $accnum, $amount, date('Y-m-d H:i:s')]);
     }
     echo json_encode($v);
 }

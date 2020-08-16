@@ -75,16 +75,44 @@ class BetsController extends SboController
         // gtm -4
         $sDate = date('Y-m-d\T00:00:00', strtotime($date));
         $eDate = date('Y-m-d\T23:59:59', strtotime($date));
+        $ck_eDate = date('Y-m-d\T23:59:59', strtotime($date));
 
-        $setParam = [
-            "StartDate" => $sDate,
-            "EndDate" => $eDate,
-            "Portfolio" => $Portfolio
-        ];
-        $param = $this->setParam($setParam, 'web-root/restricted/report/v2/get-bet-list-by-modify-date.aspx');
+        $arrDate = [];
+        $items = [];
+        while ($sDate < $ck_eDate)
+        {
+            $e_date = date('Y-m-d\TH:i:s', strtotime('+1799 seconds', strtotime($sDate)));
+            $arrDate[] = [
+                's_date' => $sDate,
+                'e_date' => $e_date
+            ];
 
-        $response = $this->push();
-        $response = json_decode($response, true);
+            $setParam = [
+                "StartDate" => $sDate,
+                "EndDate" => $e_date,
+                "Portfolio" => $Portfolio
+            ];
+            $param = $this->setParam($setParam, 'web-root/restricted/report/v2/get-bet-list-by-modify-date.aspx');
+
+            $response = $this->push();
+            $res = json_decode($response, true);
+            foreach ($res['result'] as $resp){
+                $items[] = $resp;
+            }
+
+            $sDate = date('Y-m-d\TH:i:s', strtotime('+1800 seconds', strtotime($sDate)));
+        }
+        return $items;
+
+//        $setParam = [
+//            "StartDate" => $sDate,
+//            "EndDate" => $eDate,
+//            "Portfolio" => $Portfolio
+//        ];
+//        $param = $this->setParam($setParam, 'web-root/restricted/report/v2/get-bet-list-by-modify-date.aspx');
+//
+//        $response = $this->push();
+//        $response = json_decode($response, true);
 
         $response['byDate'] = $date;
 
@@ -122,26 +150,27 @@ class BetsController extends SboController
 
             if(empty($byDate)) {
                 $bets = $this->getBetItems($Portfolio);
+
+                if($bets['error']['id'] != 0){
+                    continue;
+                }
+
+                if(count($bets['result']) == 0){
+                    continue;
+                }
+
+                $items = $bets['result'];
+
+                if(count($items) == 0){
+                    $items = [];
+                }
+
             }else{
                 $bets = $this->getBetItemsByDate($Portfolio, $byDate);
+                $items = $bets;
+
 //                print_r($bets);
 //                continue;
-            }
-//            print_r($bets);
-//            continue;
-
-            if($bets['error']['id'] != 0){
-                continue;
-            }
-
-            if(count($bets['result']) == 0){
-                continue;
-            }
-
-            $items = $bets['result'];
-
-            if(count($items) == 0){
-                $items = [];
             }
 
             foreach ($items as $item) {
@@ -331,7 +360,7 @@ class BetsController extends SboController
 
     }
 
-    public function betLogSave($game_id, $limit = 300, $status = null){
+    public function betLogSave($game_id, $limit = 3000, $status = null){
 
         $this->entityClass = Betlists::class;
         $repository = $this->getRepository();

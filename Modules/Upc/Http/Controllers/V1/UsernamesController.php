@@ -355,12 +355,6 @@ class UsernamesController extends UpcController
                 return $this->error(508, [], $res['errMsg']);
             }
 
-//            // For Mobile
-//            $resM =$api->actionGet($setParam, 'launchGames.aspx', [], ['html5' => 1]);
-//            if($resM['errCode'] != 0){
-//                return $this->respond(false, [], ['error' => 'login_error'], ['message' => $resM['errMsg']]);
-//            }
-
             $res['playUrl'] = str_replace("lang=en", "lang=th", $res['gameUrl']);
             $res['playUrlMobile'] = str_replace("lang=en", "lang=th", $res['gameUrl']);
 
@@ -472,6 +466,31 @@ class UsernamesController extends UpcController
 
             $res['playUrl'] = $api->gameUrl.$username['token'];
             $res['playUrlMobile'] = $api->gameUrl.$username['token'];
+
+            // Update Logs
+            LoginLogs::where('id', $logs->id)->update(['response_data' => json_encode($res, JSON_UNESCAPED_UNICODE), 'response_at' => date('Y-m-d H:i:s')]);
+
+            return $this->success(0, $res);
+
+        }
+
+        /**
+         * Ufa
+         */
+        elseif(in_array($username['code'], ['ufa', 'lga', 'vga'])){
+
+            $random = 'algwva6ht9';
+            $gameUrl = "https://".$random.".vvzzww.com/gameauth/";
+
+            $token = [
+                'game' => $username['code'],
+                'password' => Crypt::decryptString($username['password']),
+                'username' => $username['username'],
+                'time' => time()
+            ];
+            $encode = encrypter('encrypt', json_encode($token, JSON_UNESCAPED_UNICODE), config('app.key_api_admin'), config('app.salt_api_admin'));
+            $res['playUrl'] = $gameUrl."?token=".$encode."&device=d";
+            $res['playUrlMobile'] = $gameUrl."?token=".$encode."&device=m";
 
             // Update Logs
             LoginLogs::where('id', $logs->id)->update(['response_data' => json_encode($res, JSON_UNESCAPED_UNICODE), 'response_at' => date('Y-m-d H:i:s')]);

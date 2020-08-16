@@ -13,6 +13,7 @@ use Modules\Core\BanksPartners\Entities\BanksPartners;
 use Modules\Core\Games\Entities\Games;
 use Modules\Core\Partners\Entities\Partners;
 use Modules\Core\Username\Entities\Username;
+use Modules\Job\Jobs\Entities\Jobs;
 use Modules\Job\Jobs\Http\Controllers\JobsController;
 use Modules\Member\Members\Entities\Members;
 use Modules\Member\Members\Entities\MembersBanks;
@@ -630,6 +631,72 @@ class MembersController extends UpcController
         }
 
         return $this->success(0, [], 'ได้รับรายการเรียบร้อย เจ้าหน้าที่กำลังตรวจสอบ...');
+
+    }
+
+    public function transferLog(Request $request){
+
+        $input = $request->input();
+
+        $last_seven = date('Y-m-d', strtotime('-7 days', strtotime(date('Y-m-d'))));
+
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            // 'group' => 'required', // 1=statement, 2=order, 3=event
+            'startDate' => 'date_format:Y-m-d|after_or_equal:'.$last_seven,
+            'endDate' => 'date_format:Y-m-d|after_or_equal:startDate',
+        ]);
+
+        if($validator->fails()){
+            return $this->error(403, $validator->errors());
+        }
+
+        $token = $this->mathcKey($input['token'], 'key_change', 'front');
+        if($token['codeid'] != 0){
+            return $this->errorMsg(406);
+        }
+
+        $member_id = $token['data']['member_id'];
+
+        return $transactions = Jobs::where('member_id', $member_id)
+            // ->whereIn('group_id', $input['group'])
+            ->whereNotIn('status_id', [6,7])
+            ->whereRaw('DATE(created_at) >= ? AND DATE(created_at) <= ?', [$input['startDate'], $input['endDate']])
+            ->with(['jobsStatus' => function($query){
+                $query->select('id', 'name');
+            }])
+            ->with(['jobsType' => function($query){
+                $query->select('id', 'name');
+            }])
+            ->orderby('id', 'desc')
+            ->get()
+            ->toArray();
+
+        $arrData = [];
+        $arrRow = [];
+
+        $arrData['id'] = $member_id;
+        $arrData['records'] = count($transactions);
+
+        foreach ($transactions as $transaction){
+
+            $arrRow[] = [
+                'id' => $transaction['id'],
+                'status_id' => $transaction['jobs_status']['id'],
+                'status' => $transaction['jobs_status']['name'],
+                'ref_job_id' => $transaction['ref_job_id'],
+                'method' => parent::WALLET_MATHOD[$transaction['type_id']],
+                'type_id' => $transaction['type_id'],
+                'game_id' => $transaction['game_id'],
+                'game_name' => $transaction['jobs_game']['name'],
+                'amount' => $transaction['amount'],
+                'created_at' => $transaction['created_at'],
+            ];
+        }
+
+        $arrData['list'] = $arrRow;
+
+
 
     }
 

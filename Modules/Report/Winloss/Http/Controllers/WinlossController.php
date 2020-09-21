@@ -143,6 +143,8 @@ class WinlossController extends ModuleCrudController
                 $data['gameType'] = GamesTypes::getTypeFromGame($game_id);
                 $data['dataWinloss'] = $this->getData($formData, $game_id);
 
+                // return $data['dataWinloss'];
+
             }
 
             elseif($game == "sexy"){

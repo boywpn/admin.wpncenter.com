@@ -245,11 +245,11 @@ class TransferApiController extends GameApiController
 
             $user = $user->toArray();
 
-            if(!isset($user['username_board']['boards_game']['code'])){
-                Artisan::call('cache:clear');
-
-                $user = $this->getUsername($data['custid']);
-            }
+//            if(!isset($user['username_board']['boards_game']['code'])){
+//                Artisan::call('cache:clear');
+//
+//                $user = $this->getUsername($data['custid']);
+//            }
 
             $game = strtolower($user['username_board']['boards_game']['code']);
             $game_id = $user['username_board']['boards_game']['id'];
@@ -279,35 +279,35 @@ class TransferApiController extends GameApiController
         /**
          * Check have promotion exist
         */
-        if($data['type'] == "transfer") {
-            if (in_array($order, self::PROMO_CHECK)) {
-                // check amount
-                $promo = self::PROMO_CHECK_VAL[$order];
-                if ($amount > $promo['amount']) {
-                    $this->resJson['responseStatus']['code'] = 201;
-                    $this->resJson['responseStatus']['message'] = "ERROR";
-                    $this->resJson['responseStatus']['messageDetails'] = 'ไม่สามารถทำรายการโปรโมชั่นจำนวนเงินนี้ได้ ' . $amount . '>' . $promo['amount'];
-                    return $this->returnJson();
-                }
-            }
-
-            if (!in_array($data['from'], self::PROMO_ALLOW_CHECK_FROM)) {
-                $u = Username::findOrFail($username_id);
-                $m = Members::findOrFail($u->member_id);
-                if ($u->have_promo == 1) {
-                    $this->resJson['responseStatus']['code'] = 201;
-                    $this->resJson['responseStatus']['message'] = "ERROR";
-                    $this->resJson['responseStatus']['messageDetails'] = 'Username นี้มีโปรโมชั่นค้างอยู่ ' . $u->promo_code . ' สามารถยกเลิกโปรได้ในหน้าจัดการกิจกรรม.';
-                    return $this->returnJson();
-                }
-                if ($m->have_promo == 1) {
-                    $this->resJson['responseStatus']['code'] = 201;
-                    $this->resJson['responseStatus']['message'] = "ERROR";
-                    $this->resJson['responseStatus']['messageDetails'] = 'Member นี้มีโปรโมชั่นค้างอยู่ ' . $m->promo_code . ' สามารถยกเลิกโปรได้ในหน้าจัดการกิจกรรม.';
-                    return $this->returnJson();
-                }
-            }
-        }
+//        if($data['type'] == "transfer") {
+//            if (in_array($order, self::PROMO_CHECK)) {
+//                // check amount
+//                $promo = self::PROMO_CHECK_VAL[$order];
+//                if ($amount > $promo['amount']) {
+//                    $this->resJson['responseStatus']['code'] = 201;
+//                    $this->resJson['responseStatus']['message'] = "ERROR";
+//                    $this->resJson['responseStatus']['messageDetails'] = 'ไม่สามารถทำรายการโปรโมชั่นจำนวนเงินนี้ได้ ' . $amount . '>' . $promo['amount'];
+//                    return $this->returnJson();
+//                }
+//            }
+//
+//            if (!in_array($data['from'], self::PROMO_ALLOW_CHECK_FROM)) {
+//                $u = Username::findOrFail($username_id);
+//                $m = Members::findOrFail($u->member_id);
+//                if ($u->have_promo == 1) {
+//                    $this->resJson['responseStatus']['code'] = 201;
+//                    $this->resJson['responseStatus']['message'] = "ERROR";
+//                    $this->resJson['responseStatus']['messageDetails'] = 'Username นี้มีโปรโมชั่นค้างอยู่ ' . $u->promo_code . ' สามารถยกเลิกโปรได้ในหน้าจัดการกิจกรรม.';
+//                    return $this->returnJson();
+//                }
+//                if ($m->have_promo == 1) {
+//                    $this->resJson['responseStatus']['code'] = 201;
+//                    $this->resJson['responseStatus']['message'] = "ERROR";
+//                    $this->resJson['responseStatus']['messageDetails'] = 'Member นี้มีโปรโมชั่นค้างอยู่ ' . $m->promo_code . ' สามารถยกเลิกโปรได้ในหน้าจัดการกิจกรรม.';
+//                    return $this->returnJson();
+//                }
+//            }
+//        }
         /**
         */
 
@@ -2067,7 +2067,7 @@ class TransferApiController extends GameApiController
         /**
          * Ufabet
          */
-        elseif(in_array($game, ['ufa', 'lga', 'gcb', 'vga'])){
+        elseif(in_array($game, ['ufa', 'lga', 'gcb', 'vga', 'hol'])){
 
             $api = new TRNF($key);
 

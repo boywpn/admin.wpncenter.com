@@ -477,7 +477,7 @@ class UsernamesController extends UpcController
         /**
          * Ufa
          */
-        elseif(in_array($username['code'], ['ufa', 'lga', 'vga'])){
+        elseif(in_array($username['code'], ['ufa', 'lga', 'vga', 'gcb', 'hol'])){
 
             $random = 'algwva6ht9';
             $gameUrl = "https://".$random.".vvzzww.com/gameauth/";

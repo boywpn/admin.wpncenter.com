@@ -2,20 +2,46 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="7bd256ab-a15e-4f60-9c8b-3f31a199088c" name="wpncenter" url="http://13.250.124.30">
-        <fileTransfer host="13.250.124.30" port="21" rootFolder="/public_html/sub_domain/admin">
+      <webServer id="7bd256ab-a15e-4f60-9c8b-3f31a199088c" name="admin1" url="http://13.250.124.30">
+        <fileTransfer rootFolder="/public_html/sub_domain/admin" host="13.250.124.30" port="21">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
-          <option name="port" value="21" />
         </fileTransfer>
       </webServer>
-      <webServer id="6bb33b58-4c53-4bde-9c32-93f385f5861b" name="admin_bup" url="http://54.251.253.78">
-        <fileTransfer host="54.251.253.78" port="21" rootFolder="/public_html/admin">
+      <webServer id="6bb33b58-4c53-4bde-9c32-93f385f5861b" name="admin2" url="http://54.251.253.78">
+        <fileTransfer rootFolder="/public_html/admin" host="54.251.253.78" port="21">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
-          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="5adffe3b-1221-4036-bac2-71368a716edc" name="lb02">
+        <fileTransfer rootFolder="/var/www/html/admin" accessType="SFTP" host="54.169.116.162" port="22" sshConfigId="c4f1cdfe-9a60-492d-bf99-e0b53235e47d" sshConfig="admin-lb02" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="2a4c956a-66cc-4324-aaa9-7925f3e5fa39" name="lb03">
+        <fileTransfer rootFolder="/var/www/html/admin" accessType="SFTP" host="3.1.8.133" port="22" sshConfigId="3b11f934-0446-4a05-9a49-3808281ee695" sshConfig="admin-lb03" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="9c1601f0-344f-4bf8-825a-d430f1dd4a79" name="lb04">
+        <fileTransfer rootFolder="/var/www/html/admin" accessType="SFTP" host="54.169.153.55" port="22" sshConfigId="25413830-14e6-4411-9b34-2513b7a07881" sshConfig="admin-lb04" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="dd1923b0-3422-41d0-b98d-6d267b1e3fc1" name="lb05">
+        <fileTransfer rootFolder="/var/www/html/admin" accessType="SFTP" host="54.254.246.47" port="22" sshConfigId="ce3642a6-f30c-4936-8b6d-cab4b053133a" sshConfig="admin-lb05" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
         </fileTransfer>
       </webServer>
     </option>

@@ -26,48 +26,56 @@ class TransferLogsDatatables extends PlatformDataTable
                 'title' => trans('report/transferlogs::transfer.table.request_time'),
                 'data_type' => 'datetime',
                 'filter_type' => 'bap_date_range_picker',
+                'searchable' => false,
             ],
             'job_id' => [
                 'data' => 'job_id',
                 'title' => trans('report/transferlogs::transfer.table.job_id'),
                 'data_type' => 'text',
-                'filter_type' => 'text'
+                'filter_type' => 'text',
+                'searchable' => false,
             ],
             'order_code' => [
                 'data' => 'order_code',
                 'title' => trans('report/transferlogs::transfer.table.order_code'),
                 'data_type' => 'text',
-                'filter_type' => 'text'
+                'filter_type' => 'text',
+                'searchable' => false,
             ],
             'username' => [
                 'data' => 'username',
                 'title' => trans('report/transferlogs::transfer.table.username_id'),
                 'data_type' => 'text',
-                'filter_type' => 'text'
+                'filter_type' => 'text',
+                'searchable' => false,
             ],
             'amount' => [
                 'data' => 'amount',
                 'title' => trans('report/transferlogs::transfer.table.amount'),
                 'data_type' => 'text',
-                'filter_type' => 'text'
+                'filter_type' => 'text',
+                'searchable' => false,
             ],
             'credit_bf' => [
                 'data' => 'credit_bf',
                 'title' => trans('report/transferlogs::transfer.table.credit_bf'),
                 'data_type' => 'text',
-                'filter_type' => 'text'
+                'filter_type' => 'text',
+                'searchable' => false,
             ],
             'credit_af' => [
                 'data' => 'credit_af',
                 'title' => trans('report/transferlogs::transfer.table.credit_af'),
                 'data_type' => 'text',
-                'filter_type' => 'text'
+                'filter_type' => 'text',
+                'searchable' => false,
             ],
             'created_at' => [
                 'data' => 'created_at',
                 'title' => trans('core::core.table.created_at'),
                 'data_type' => 'datetime',
                 'filter_type' => 'bap_date_range_picker',
+                'searchable' => false,
             ],
         ];
     }
@@ -131,11 +139,11 @@ class TransferLogsDatatables extends PlatformDataTable
                 'responsive' => false,
                 'stateSave' => true,
                 'filterRules' => $this->filterRules,
-                'headerFilters' => true,
+                'headerFilters' => false,
                 'order' => [[ 0, 'desc' ]],
                 'buttons' => DataTableHelper::buttons(),
-                'regexp' => true
-
+                'regexp' => true,
+                'searching' => false,
             ]);
     }
 

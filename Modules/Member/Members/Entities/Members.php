@@ -10,6 +10,7 @@ use Modules\Core\Agents\Entities\Agents;
 use Modules\Core\Boards\Entities\Boards;
 use Modules\Core\Games\Entities\Games;
 use Modules\Core\Username\Entities\Username;
+use Modules\Core\Username\Entities\ViewCheckUsername;
 use Modules\Platform\Core\Traits\Commentable;
 use Modules\Platform\Core\Traits\FunctionalTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -111,7 +112,8 @@ class Members extends Model
      */
     public function banksMember()
     {
-        return $this->hasMany(MembersBanks::class, 'member_id');
+//        return $this->hasMany(MembersBanks::class, 'member_id');
+        return $this->hasOne(MembersBanks::class, 'member_id');
     }
 
     /**
@@ -167,11 +169,42 @@ class Members extends Model
             return $exist;
         }
 
+        // check from view check_username
+        $username = ViewCheckUsername::where('check_username.partner_id', $partner_id)
+            ->join('core_boards', 'core_boards.id', '=', 'check_username.board_id')
+            ->whereNull('check_username.member_id')
+            ->where('check_username.code', '!=', '000')
+            ->where('core_boards.for_test', 0)
+            ->where('core_boards.is_active', 1)
+            ->orderBy('check_username.board_number', 'asc')
+            ->orderBy('check_username.code', 'asc')
+            ->select(
+                'check_username.*'
+            )
+            ->first();
+
+        $username = $username->toArray();
+
+        $arrData = array(
+            'exist' => false,
+            'username_id' => null,
+            'username' => null,
+            'partner_id' => $partner_id,
+            'board_number' => $username['board_number'],
+            'username_code' => $username['code']
+        );
+
+        return $arrData;
+
+        /**
+         * Old Function Not use
+        */
         $member = Members::find($member_id);
 
         // Select Board Order By board_number
-        $boards = Boards::where('is_active', 1)
-            ->where('partner_id', $partner_id)
+        $boards = Boards::where('core_boards.is_active', 1)
+            ->join('core_games', 'core_games.id', '=', 'core_boards.game_id')
+            ->where('core_boards.partner_id', $partner_id)
             ->when(isset($filter['board_id']), function($query) use ($filter){
                 $query->where('id', $filter['board_id']);
             })
@@ -185,7 +218,11 @@ class Members extends Model
                     $query->where('for_test', 0);
                 }
             })
-            ->orderBy('board_number', 'asc')
+            ->where('core_games.is_active', 1)
+            ->select(
+                'core_boards.*'
+            )
+            ->orderBy('core_boards.board_number', 'asc')
             ->get();
 
 //        return $boards->toArray();
@@ -194,13 +231,15 @@ class Members extends Model
         $boards = $boards->groupBy('board_number');
         $boards = $boards->toArray();
 
+//        return $boards;
+
         // Loop check username from boards
         $arrData = array();
         foreach ($boards as $board_number => $board){
 
             $board_id = $board[0]['id'];
 
-            $usernames = Username::where('is_active', 1)
+            $usernames = ViewCheckUsername::where('is_active', 1)
                 ->whereNull('member_id')
                 ->where('code', '!=', '000')
                 ->where('board_id', $board_id)
@@ -209,22 +248,25 @@ class Members extends Model
                 ->get()
                 ->toArray();
 
+
             foreach ($usernames as $username) {
                 $arrData[] = array(
                     'exist' => false,
                     'username_id' => $username['id'],
-                    'username' => $username['username'],
+                    'username' => null,
                     'partner_id' => $partner_id,
                     'board_number' => $board_number,
                     'username_code' => $username['code']
                 );
             }
 
+            $arrTest[$board_id][] = $usernames;
+
         }
 
         $return = (isset($arrData[0])) ? $arrData[0] : "";
 
-        return $return;
+        return $arrTest;
 
     }
 

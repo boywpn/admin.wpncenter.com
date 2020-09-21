@@ -20,7 +20,7 @@ Route::group(['middleware' => ['web','permission:job.jobs.browse'], 'prefix'=>'j
 
     Route::get('jobs/check-statement/{id}', ['as'=>'jobs.check-statement', 'uses' => 'JobsController@checkStatementByJobID']);
 
-    Route::get('jobs/withdraw', ['as'=>'jobs.withdraw', 'uses' => 'WithdrawController@index']);
+//    Route::get('jobs/withdraw', ['as'=>'jobs.withdraw', 'uses' => 'WithdrawController@index']);
 
     Route::resource('jobs', 'JobsController');
     Route::post('jobs/new', ['as'=>'jobs.new', 'uses' => 'JobsController@formCreate']);

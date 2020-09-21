@@ -95,6 +95,10 @@ class CshController extends AppController
         $this->level = $key['level'];
         $this->id = $key['id'];
 
+        if(isset($key['game_url'])){
+            $this->gameUrl = $key['game_url'];
+        }
+
     }
 
     public function getCode($id){

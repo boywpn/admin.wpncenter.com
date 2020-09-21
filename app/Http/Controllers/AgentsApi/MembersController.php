@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AgentsApi;
 
+use App\Http\Controllers\Games\Csh\MemberController;
 use App\Models\AgentTransfersLog;
 use App\Models\TransfersAgentLog;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ use Modules\Core\Username\Http\Controllers\UsernameController;
 
 use App\Http\Controllers\Games\Ibc\BetsController AS IBC;
 use App\Http\Controllers\Games\Csh\BetsController AS CSH;
+use App\Http\Controllers\Games\Csh\MemberController AS MCSH;
 use App\Http\Controllers\Games\Sbo\BetsController AS SBO;
 use App\Http\Controllers\Games\Tfg\BetsController AS TFG;
 use App\Http\Controllers\Games\Lotto\BetsController AS LOTTO;
@@ -57,8 +59,83 @@ class MembersController extends ApiController
         $board = $game['boards_game'][0];
 
         // Check username format
-        if (strpos($data['username'], $board['ref']) === false) {
-            return $this->error(201, [], 'Username format not correct.');
+        if (strpos($data['username'], $board['member_prefix']) === false) {
+            return $this->error(201, [], 'Username format not correct. Please check agent prefix.');
+        }
+
+        if(strlen($data['username']) > $this->username_length){
+            return $this->error(201, [], 'Username should be less than or equal '.$this->username_length.' character.');
+        }
+
+        $username = $data['username'];
+        $password = Crypt::encryptString($data['password']);
+
+        // Check exist
+        $entity = Username::where('username', $username)->first();
+        if(!$entity){
+            $dataUsername = [
+                'board_id' => $board['id'],
+                'username' => $username,
+                'password' => $password,
+                'is_active' => 1,
+                'company_id' => $this->agent['company_id'],
+            ];
+            $entity = $repository->createEntity($dataUsername, \App::make(Username::class));
+        }else{
+            if($entity->is_created == 1){
+                return $this->error(201, [], 'Username is exist.');
+            }
+        }
+
+        // Created username on provider
+        $u = new UsernameController();
+        $res = $u->pushUsernameApi($entity->id);
+
+//        $response = compact('entity', 'res');
+
+        if(!$res['status']){
+            return $this->error(201, $res['message'], 'Register not success!');
+        }
+
+        return $this->success(0, $res['message'], 'Register Success!');
+
+    }
+
+    public function regisUsernameTest($data){
+
+        $validator = Validator::make($data, [
+            'agent' => 'required',
+            'pcode' => 'required',
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->error(201, $validator->errors());
+        }
+
+        return $game = Games::where('code', $data['pcode'])
+            ->with(['boardsGame' => function($query) use ($data){
+                $query->where('agent_id', $this->agent_id)->where('member_prefix', $data['agent'])->where('is_active', 1)->select('*');
+            }])
+            ->first();
+
+        if(!$game){
+            return $this->error(201, [], 'The pcode invalid');
+        }
+        $game = $game->toArray();
+        if(empty($game['boards_game'])){
+            return $this->error(201, [], 'This game not available for this agent.');
+        }
+
+        $this->entityClass = Username::class;
+        $repository = $this->getRepository();
+
+        $board = $game['boards_game'][0];
+
+        // Check username format
+        if (strpos($data['username'], $board['member_prefix']) === false) {
+            return $this->error(201, [], 'Username format not correct. Please check agent prefix.');
         }
 
         if(strlen($data['username']) > $this->username_length){
@@ -190,10 +267,10 @@ class MembersController extends ApiController
         }
 
         // Check Username
-        $username = Username::where('username', $data['username'])->first();
-        if(!$username){
-            return $this->error(201, [], 'Username doesn\'t have.');
-        }
+//        $username = Username::where('username', $data['username'])->first();
+//        if(!$username){
+//            return $this->error(201, [], 'Username doesn\'t have.');
+//        }
 
         $arrTrans = [
             'action' => 'transfer',
@@ -211,6 +288,10 @@ class MembersController extends ApiController
         $trans = new TransferApiController();
         $response = $trans->transfer($arrTrans);
 
+        if($response['responseStatus']['code'] != 200){
+            return $this->error(201, [], $response['responseStatus']['messageDetails']);
+        }
+
         $arrData = [
             'banlance' => $response['responseDetails']['banlance'],
             'outstanding' => $response['responseDetails']['playing'],
@@ -219,6 +300,58 @@ class MembersController extends ApiController
 
         return $this->success(0, $arrData);
 
+    }
+
+    public function testBalance($data){
+
+        $validator = Validator::make($data, [
+            'username' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->error(201, $validator->errors());
+        }
+
+        $username = Username::where('username', $data['username'])
+            ->with(['usernameBoard' => function($query){
+                $query->select('*');
+            }, 'usernameBoard.boardsGame' => function($query){
+                $query->select('*');
+            }])
+            ->first();
+        if(!$username){
+            return $this->error(201, [], 'Username doesn\'t have.');
+        }
+
+        $username = $username->toArray();
+
+        $game_code = $username['username_board']['boards_game']['code'];
+        $key = json_decode($username['username_board']['api_code'], true);
+        if($game_code == 'csh'){
+
+            $api = new MCSH();
+            $api->setKey($key);
+
+            $arrUsername = [
+                'id' => $username['ref_id']
+            ];
+            $res = $api->actionPost($arrUsername, 'balance');
+
+            if($res['status'] != "success"){
+                return $this->error(201, [], 'Cannot get balance.');
+            }
+
+            $arrData = [
+                'banlance' => $res['balance'],
+                'outstanding' => 0,
+                'netbanlance' => $res['balance'],
+            ];
+
+            return $this->success(0, $arrData);
+
+        }
+
+        return $username;
     }
 
     public function login($data){
@@ -231,7 +364,81 @@ class MembersController extends ApiController
             return $this->error(201, $validator->errors());
         }
 
-        $username = Username::where('username', $data['username'])
+        if(isset($data['pcode'])){
+            $game = Games::where('code', $data['pcode'])->first();
+            if(!$game){
+                return $this->error(201, [], 'pcode invalid.');
+            }
+
+            $username = Username::where('core_username.username', $data['username'])
+                ->join('core_boards' , 'core_boards.id', '=', 'core_username.board_id')
+                ->where('core_boards.game_id', $game->id)
+                ->with(['usernameBoard' => function($query){
+                    $query->select('*');
+                }, 'usernameBoard.boardsGame' => function($query){
+                    $query->select('*');
+                }])
+                ->first();
+            if(!$username){
+                return $this->error(201, [], 'Username doesn\'t have.');
+            }
+        }else{
+            $username = Username::where('username', $data['username'])
+                ->with(['usernameBoard' => function($query){
+                    $query->select('*');
+                }, 'usernameBoard.boardsGame' => function($query){
+                    $query->select('*');
+                }])
+                ->first();
+            if(!$username){
+                return $this->error(201, [], 'Username doesn\'t have.');
+            }
+        }
+
+        $username = $username->toArray();
+
+        if($username['username_board']['boards_game']['is_maintenance']){
+            $m_notes = (!empty($username['username_board']['boards_game']['maintenance_notes'])) ? $username['username_board']['boards_game']['maintenance_notes'] : 'ขณะนี้ระบบกำลังอยู่ระหว่างปิดปรับปรุงค่ะ.';
+            return $this->error(201, [], $m_notes);
+        }
+
+        $m = new MembersApiController();
+
+        // return $login = $m->usernameLogin($data, $username, true);
+        $login = $m->usernameLogin($data, $username);
+
+        if(!$login['status']){
+            return $this->error(201, $login['message'], 'Login not success!');
+        }
+
+        $arrData = [
+            'playUrl' => $login['data']['playUrl'],
+            'playUrlMobile' => $login['data']['playUrlMobile']
+        ];
+
+        return $this->success(0, $arrData, 'Login Success.');
+
+    }
+
+    public function loginTest($data){
+
+        $validator = Validator::make($data, [
+            'username' => 'required',
+            'pcode' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->error(201, $validator->errors());
+        }
+
+        $game = Games::where('code', $data['pcode'])->first();
+        if(!$game){
+            return $this->error(201, [], 'pcode invalid.');
+        }
+
+        $username = Username::where('core_username.username', $data['username'])
+            ->join('core_boards' , 'core_boards.id', '=', 'core_username.board_id')
+            ->where('core_boards.game_id', $game->id)
             ->with(['usernameBoard' => function($query){
                 $query->select('*');
             }, 'usernameBoard.boardsGame' => function($query){
@@ -348,6 +555,7 @@ class MembersController extends ApiController
             $api->setKey($key);
 
             $validator = Validator::make($data, [
+                'month' => 'required',
                 'lastedId' => 'required',
             ]);
 
@@ -355,7 +563,7 @@ class MembersController extends ApiController
                 return $this->error(201, $validator->errors());
             }
 
-            $items = $api->getBetItems();
+            $items = $api->getBetItems($data['lastedId'], $data['month']);
             if($items['status'] != 'success'){
                 return $this->error(302, $items['msg']);
             }

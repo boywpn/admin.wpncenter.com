@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Hash;
 
 class Controller extends BaseController
 {
@@ -25,5 +26,13 @@ class Controller extends BaseController
         return '<h1>Clear All</h1>';
 
     }
+
+//    public function genPass(){
+//
+//        $pass = "aa112233";
+//
+//        return Hash::make($pass);
+//
+//    }
 
 }

@@ -1,10 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Report_betlist extends CI_Controller {
+class Report_betlist_result extends CI_Controller {
 
-	var $master_table = 'report_betlists';
-	var $slave_table = 'report_betlists_bup_2020_02';
+	var $master_table = 'report_betlists_results';
+	var $slave_table = 'report_betlists_results_bup_2020_06';
 	var $countFiles = '';
 	var $process_rowlimit = 500;
 	var $curYear;
@@ -22,16 +22,16 @@ class Report_betlist extends CI_Controller {
 	public function index()
 	{
 		# setup var
-		$this->countFiles = dirname(__DIR__) . '/data/report_betlists.txt';
+		$this->countFiles = dirname(__DIR__) . '/data/report_betlists_results.txt';
 
 		# set slave table
 		$this->slave_table = $this->main->get_count_table($this->countFiles);
 
 		# get current time
-		$currentTime = $this->main->get_tablecurdate($this->slave_table);
+		$currentTime = $this->main->get_tablecurdate_last($this->slave_table);
 		$this->curYear = date('Y', strtotime($currentTime));
 		$this->curMonth = date('m', strtotime($currentTime));
-
+		
 		$fullCrTime = date('Y-m-00 00:00:00', strtotime($currentTime));
 		$nextCurrTime = date('Y-m', strtotime('+1 month', strtotime($currentTime)));
 		$fullnextCrTime = date('Y-m-00 00:00:00', strtotime($nextCurrTime));
@@ -48,23 +48,23 @@ class Report_betlist extends CI_Controller {
 			$this->db->query('ALTER TABLE ' . $this->slave_table . ' ADD `tmp_id` INT(11) NOT NULL AFTER `id`;');
 
 			# count table
-			// $countSlave = $this->db->from($this->master_table)
-			// 				->where('YEAR(work_time)', $this->curYear)
-			// 				->where('MONTH(work_time)', $this->curMonth)
-			// 				->count_all_results();
+// 			$countSlave = $this->db->select('id')
+// 							->from($this->master_table)
+// 							->where('YEAR(created_at)', $this->curYear)
+// 							->where('MONTH(created_at)', $this->curMonth)
+// 							->count_all_results();
+// 			$countSlave = $this->db->query('SELECT COUNT(id) as numrows FROM ' . $this->master_table . ' WHERE `created_at` BETWEEN \'' . $fullCrTime . '\' AND \'' . $fullnextCrTime . '\'')->row_array();
+// 			$countSlave = $countSlave['numrows'];
 
-			// $countSlave = $this->db->query('SELECT COUNT(id) as numrows FROM ' . $this->master_table . ' WHERE `work_time` BETWEEN \'' . $fullCrTime . '\' AND \'' . $fullnextCrTime . '\'')->row_array();
-			// $countSlave = $countSlave['numrows'];
-			
 			# loop data
-			$getData = $this->main->get_bltmp_data($this->master_table, $fullCrTime, $fullnextCrTime, $this->process_rowlimit);
+			$getData = $this->main->get_blrtmp_data($this->master_table, $fullCrTime, $fullnextCrTime, $this->process_rowlimit);
 
 			# start check
 			if(count($getData) == 0)
 			{
 				# set new slave table
         		$newCurrTime = date('Y-m', strtotime('+1 month', strtotime($currentTime)));
-				$this->slave_table = $this->main->regen_newtablebetlist($this->slave_table, str_replace('-','_', $newCurrTime));
+				$this->slave_table = $this->main->regen_newtablebetlist($this->slave_table, str_replace('-','_', $newCurrTime), 4);
 				$this->main->set_count_table($this->slave_table, $this->countFiles, $this->slave_table);
 
 				// $this->curYear = date('Y', strtotime($newCurrTime));
@@ -79,7 +79,7 @@ class Report_betlist extends CI_Controller {
 				}
 			} else {
 				# loop data
-				// $getData = $this->main->get_bltmp_data($this->master_table, $this->curYear, $this->curMonth, $this->process_rowlimit);
+				// $getData = $this->main->get_blrtmp_data($this->master_table, $this->curYear, $this->curMonth, $this->process_rowlimit);
 
 				# start looping
 				$inserted = 0;

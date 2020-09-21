@@ -186,35 +186,39 @@
                             @foreach($dataWinloss as $k => $list)
 
                                 @php
-                                    if($list->partner_id != $partner_id){
-                                        $pn = \Modules\Core\Partners\Entities\Partners::findOrFail($list->partner_id);
+
+                                   $ag = \Modules\Core\Agents\Entities\Agents::findOrFail($list->agent_id);
+
+
+                                    if($ag->partner_id != $partner_id){
+                                        $pn = \Modules\Core\Partners\Entities\Partners::findOrFail($ag->partner_id);
                                     }
-                                    $total_turnover_ss[$list->partner_id][$k] = $list->turnover;
-                                    $total_valid_amount_ss[$list->partner_id][$k] = $list->valid_amount;
-                                    $total_stack_count_ss[$list->partner_id][$k] = $list->stack_count;
+                                    $total_turnover_ss[$ag->partner_id][$k] = $list->turnover;
+                                    $total_valid_amount_ss[$ag->partner_id][$k] = $list->valid_amount;
+                                    $total_stack_count_ss[$ag->partner_id][$k] = $list->stack_count;
 
-                                    $total_member_winloss_ss[$list->partner_id][$k] = $list->member_winloss;
-                                    $total_member_comm_ss[$list->partner_id][$k] = $list->member_comm;
-                                    $total_member_total_ss[$list->partner_id][$k] = $list->member_total;
+                                    $total_member_winloss_ss[$ag->partner_id][$k] = $list->member_winloss;
+                                    $total_member_comm_ss[$ag->partner_id][$k] = $list->member_comm;
+                                    $total_member_total_ss[$ag->partner_id][$k] = $list->member_total;
 
-                                    $total_agent_amount_ss[$list->partner_id][$k] = $list->agent_amount;
-                                    $total_agent_winloss_ss[$list->partner_id][$k] = $list->agent_winloss;
-                                    $total_agent_comm_ss[$list->partner_id][$k] = $list->agent_comm;
-                                    $total_agent_total_ss[$list->partner_id][$k] = $list->agent_total;
+                                    $total_agent_amount_ss[$ag->partner_id][$k] = $list->agent_amount;
+                                    $total_agent_winloss_ss[$ag->partner_id][$k] = $list->agent_winloss;
+                                    $total_agent_comm_ss[$ag->partner_id][$k] = $list->agent_comm;
+                                    $total_agent_total_ss[$ag->partner_id][$k] = $list->agent_total;
 
-                                    $total_super_amount_ss[$list->partner_id][$k] = $list->super_amount;
-                                    $total_super_winloss_ss[$list->partner_id][$k] = $list->super_winloss;
-                                    $total_super_comm_ss[$list->partner_id][$k] = $list->super_comm;
-                                    $total_super_total_ss[$list->partner_id][$k] = $list->super_total;
+                                    $total_super_amount_ss[$ag->partner_id][$k] = $list->super_amount;
+                                    $total_super_winloss_ss[$ag->partner_id][$k] = $list->super_winloss;
+                                    $total_super_comm_ss[$ag->partner_id][$k] = $list->super_comm;
+                                    $total_super_total_ss[$ag->partner_id][$k] = $list->super_total;
 
-                                    $total_company_amount_ss[$list->partner_id][$k] = $list->company_amount;
-                                    $total_company_winloss_ss[$list->partner_id][$k] = $list->company_winloss;
-                                    $total_company_comm_ss[$list->partner_id][$k] = $list->company_comm;
-                                    $total_company_total_ss[$list->partner_id][$k] = $list->company_total;
+                                    $total_company_amount_ss[$ag->partner_id][$k] = $list->company_amount;
+                                    $total_company_winloss_ss[$ag->partner_id][$k] = $list->company_winloss;
+                                    $total_company_comm_ss[$ag->partner_id][$k] = $list->company_comm;
+                                    $total_company_total_ss[$ag->partner_id][$k] = $list->company_total;
 
                                 @endphp
 
-                                @if($list->partner_id != $partner_id)
+                                @if($ag->partner_id != $partner_id)
                                     @if($partner_id != 0)
                                         <tr class="total-partner">
                                             <th colspan="2" class="text-right">Total:</th>
@@ -275,9 +279,9 @@
                                     $total_company_comm += $list->company_comm;
                                     $total_company_total += $list->company_total;
 
-                                    $username = $list->ref;
+                                    $username = $ag->ref;
                                     $id = $list->agent_id;
-                                    $contact = $list->name;
+                                    $contact = $ag->name;
                                 @endphp
 
                                 <tr>
@@ -308,7 +312,7 @@
                                 </tr>
 
                                 @php
-                                    $partner_id = $list->partner_id;
+                                    $partner_id = $ag->partner_id;
                                 @endphp
 
                             @endforeach

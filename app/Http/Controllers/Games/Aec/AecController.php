@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Games\Aec;
 
+use App\Http\Controllers\AppController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class AecController extends Controller
+class AecController extends AppController
 {
 
     public $apiUrl;
@@ -62,9 +63,13 @@ class AecController extends Controller
         $this->gameUrl = $mode['game_url'];
 
         if(!empty($key)) { // If key not default
-            $this->key = $key['key'];
-            $this->agent = $key['agent'];
+            $this->setKey($key);
         }
+    }
+
+    public function setKey($key){
+        $this->key = $key['key'];
+        $this->agent = $key['agent'];
     }
 
     public function getCode($id){

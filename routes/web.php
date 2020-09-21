@@ -12,8 +12,15 @@
 */
 
 
+use Modules\Core\Username\Entities\Username;
 
+Route::get('genpass', ['as'=>'genpass','uses'=> 'Controller@genPass']);
 
+Route::get('test-api', function(){
+
+    return "TEST@";
+
+});
 
 
 Route::group(['middleware' => 'web', 'prefix' => 'games', 'as' => 'games.', 'namespace' => 'Games'], function()
@@ -215,6 +222,26 @@ Route::group(['middleware' => 'events', 'prefix' => 'events', 'as' => 'events.',
  * Route Domain API
 */
 Route::domain('api.hiwpn.com')->group(function () {
+
+    Route::get('/', function(){
+        return "Access Deny!";
+    });
+
+    Route::group(['middleware' => 'agentapi', 'prefix' => 'api', 'as' => 'api.', 'namespace' => 'AgentsApi'], function()
+    {
+        Route::group(['prefix' => 'agent', 'as' => 'agent.'], function()
+        {
+            Route::post('/', ['uses'=> 'AgentsController@action'])->name('agent');
+        });
+        Route::group(['prefix' => 'member', 'as' => 'member.'], function()
+        {
+            Route::post('/', ['uses'=> 'MembersController@action'])->name('member');
+        });
+    });
+
+});
+
+Route::domain('api.xxzzaa.com')->group(function () {
 
     Route::get('/', function(){
         return "Access Deny!";

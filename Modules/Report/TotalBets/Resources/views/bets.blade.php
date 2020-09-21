@@ -48,20 +48,20 @@
                             <th scope="row" class="text-right">{{ $ag }}</th>
                             <td class="text-center">{!! $ev['time'] !!}</td>
                             <td>{{ $ev['event'] }}</td>
-                            <td class="text-right {{ ($ev['f_hdp'] < 0) ? "text-danger" : "" }}">{{ $ev['f_hdp'] }}</td>
-                            <td class="text-right {{ ($ev['f_ou'] < 0) ? "text-danger" : "" }}">{{ $ev['f_ou'] }}</td>
-                            <td class="text-right {{ ($ev['h_hdp'] < 0) ? "text-danger" : "" }}">{{ $ev['h_hdp'] }}</td>
-                            <td class="text-right {{ ($ev['h_ou'] < 0) ? "text-danger" : "" }}">{{ $ev['h_ou'] }}</td>
+                            <td class="text-right {{ ($ev['f_hdp'] < 0) ? "text-danger" : "" }}">{{ number_format($ev['f_hdp'], 2) }}</td>
+                            <td class="text-right {{ ($ev['f_ou'] < 0) ? "text-danger" : "" }}">{{ number_format($ev['f_ou'], 2) }}</td>
+                            <td class="text-right {{ ($ev['h_hdp'] < 0) ? "text-danger" : "" }}">{{ number_format($ev['h_hdp'], 2) }}</td>
+                            <td class="text-right {{ ($ev['h_ou'] < 0) ? "text-danger" : "" }}">{{ number_format($ev['h_ou'], 2) }}</td>
                         </tr>
                     @endforeach
                     <tr data-toggle="collapse" href="#coll_{{ $key.$skey }}" style="background-color: #FFDCCC; color: #000">
                         <th scope="col">{{ $a }}</th>
                         <th scope="col">{!! $time !!}</th>
                         <th scope="col" class="text-left">{{ $event }}</th>
-                        <th scope="col" class="text-right {{ ($t_f_hdp < 0) ? "text-danger" : "" }}">{{ $t_f_hdp }}</th>
-                        <th scope="col" class="text-right {{ ($t_f_ou < 0) ? "text-danger" : "" }}">{{ $t_f_ou }}</th>
-                        <th scope="col" class="text-right {{ ($t_h_hdp < 0) ? "text-danger" : "" }}">{{ $t_h_hdp }}</th>
-                        <th scope="col" class="text-right {{ ($t_h_ou < 0) ? "text-danger" : "" }}">{{ $t_h_ou }}</th>
+                        <th scope="col" class="text-right {{ ($t_f_hdp < 0) ? "text-danger" : "" }}">{{ number_format($t_f_hdp, 2) }}</th>
+                        <th scope="col" class="text-right {{ ($t_f_ou < 0) ? "text-danger" : "" }}">{{ number_format($t_f_ou, 2) }}</th>
+                        <th scope="col" class="text-right {{ ($t_h_hdp < 0) ? "text-danger" : "" }}">{{ number_format($t_h_hdp, 2) }}</th>
+                        <th scope="col" class="text-right {{ ($t_h_ou < 0) ? "text-danger" : "" }}">{{ number_format($t_h_ou, 2) }}</th>
                     </tr>
                     @php
                         $a++;

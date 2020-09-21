@@ -32,10 +32,6 @@ class Report_betlist extends CI_Controller {
 		$this->curYear = date('Y', strtotime($currentTime));
 		$this->curMonth = date('m', strtotime($currentTime));
 
-		$fullCrTime = date('Y-m-00 00:00:00', strtotime($currentTime));
-		$nextCurrTime = date('Y-m', strtotime('+1 month', strtotime($currentTime)));
-		$fullnextCrTime = date('Y-m-00 00:00:00', strtotime($nextCurrTime));
-		
 		# current datemonth
 		$todayMonth = date('Y-m');
 
@@ -48,19 +44,13 @@ class Report_betlist extends CI_Controller {
 			$this->db->query('ALTER TABLE ' . $this->slave_table . ' ADD `tmp_id` INT(11) NOT NULL AFTER `id`;');
 
 			# count table
-			// $countSlave = $this->db->from($this->master_table)
-			// 				->where('YEAR(work_time)', $this->curYear)
-			// 				->where('MONTH(work_time)', $this->curMonth)
-			// 				->count_all_results();
-
-			// $countSlave = $this->db->query('SELECT COUNT(id) as numrows FROM ' . $this->master_table . ' WHERE `work_time` BETWEEN \'' . $fullCrTime . '\' AND \'' . $fullnextCrTime . '\'')->row_array();
-			// $countSlave = $countSlave['numrows'];
-			
-			# loop data
-			$getData = $this->main->get_bltmp_data($this->master_table, $fullCrTime, $fullnextCrTime, $this->process_rowlimit);
+			$countSlave = $this->db->from($this->master_table)
+							->where('YEAR(work_time)', $this->curYear)
+							->where('MONTH(work_time)', $this->curMonth)
+							->count_all_results();
 
 			# start check
-			if(count($getData) == 0)
+			if($countSlave == 0)
 			{
 				# set new slave table
         		$newCurrTime = date('Y-m', strtotime('+1 month', strtotime($currentTime)));
@@ -79,7 +69,7 @@ class Report_betlist extends CI_Controller {
 				}
 			} else {
 				# loop data
-				// $getData = $this->main->get_bltmp_data($this->master_table, $this->curYear, $this->curMonth, $this->process_rowlimit);
+				$getData = $this->main->get_bltmp_data($this->master_table, $this->curYear, $this->curMonth, $this->process_rowlimit);
 
 				# start looping
 				$inserted = 0;

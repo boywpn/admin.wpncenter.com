@@ -11,6 +11,7 @@ class MY_Controller extends CI_Controller {
     var $show_datareq = false;
     var $show_resptime = true;
     var $data;
+    var $odb;
 
     function __construct() {
         parent::__construct();
@@ -22,6 +23,9 @@ class MY_Controller extends CI_Controller {
         $this->raw_data = json_decode($this->input->raw_input_stream, true);
         $this->get_data = $this->input->get();
         $this->post_data = $this->input->post();
+
+        # load old database
+        $this->odb = $this->load->database('production_old', TRUE);
 
         # set default header
         $this->data->header = 200;

@@ -8,7 +8,7 @@
 (sleep 15 && wget http://report.hiwpn.com/games/report/bet-items/csh?bd_id=70 --delete-after >/dev/null 2>&1) & ## GC
 (sleep 20 && wget http://report.hiwpn.com/games/report/bet-items/csh?bd_id=71 --delete-after >/dev/null 2>&1) & ## MX
 (sleep 25 && wget http://report.hiwpn.com/games/report/bet-items/csh?bd_id=81 --delete-after >/dev/null 2>&1) & ## SHEV
-(sleep 30 && wget http://report.hiwpn.com/games/report/bet-items/csh?bd_id=113 --delete-after >/dev/null 2>&1) & ## BOY
+#(sleep 30 && wget http://report.hiwpn.com/games/report/bet-items/csh?bd_id=113 --delete-after >/dev/null 2>&1) & ## BOY
 
 #(sleep 35 && wget http://admin.hiwpn.com/games/report/bet-items/csh?bd_id=115 --delete-after >/dev/null 2>&1) & ## Bung b11ba1
 #(sleep 40 && wget http://admin.hiwpn.com/games/report/bet-items/csh?bd_id=116 --delete-after >/dev/null 2>&1) & ## O

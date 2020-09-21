@@ -2,8 +2,18 @@
 <project version="4">
   <component name="SshConfigs">
     <configs>
-      <sshConfig host="13.251.166.149" id="5a73f8bd-f2db-4073-9982-8444254ba41c" keyPath="E:\Dropbox\Files\SH\SSHKey\LightsailDefaultKey-ap-southeast-1.pem" port="22" customName="admin2" nameFormat="CUSTOM" />
-      <sshConfig host="13.251.166.149" id="c4f1cdfe-9a60-492d-bf99-e0b53235e47d" keyPath="E:\Dropbox\Files\SH\SSHKey\LightsailDefaultKey-ap-southeast-1.pem" port="22" customName="admin2" nameFormat="CUSTOM" />
+      <sshConfig host="54.169.116.162" id="c4f1cdfe-9a60-492d-bf99-e0b53235e47d" keyPath="$PROJECT_DIR$/../../Files/SH/SSHKey/LightsailDefaultKey-ap-southeast-1.pem" port="22" customName="admin-lb02" nameFormat="CUSTOM" username="centos">
+        <option name="customName" value="admin-lb02" />
+      </sshConfig>
+      <sshConfig host="3.1.8.133" id="3b11f934-0446-4a05-9a49-3808281ee695" keyPath="$PROJECT_DIR$/../../Files/SH/SSHKey/LightsailDefaultKey-ap-southeast-1.pem" port="22" customName="admin-lb03" nameFormat="CUSTOM" username="centos">
+        <option name="customName" value="admin-lb03" />
+      </sshConfig>
+      <sshConfig host="54.169.153.55" id="25413830-14e6-4411-9b34-2513b7a07881" keyPath="$PROJECT_DIR$/../../Files/SH/SSHKey/LightsailDefaultKey-ap-southeast-1.pem" port="22" customName="admin-lb04" nameFormat="CUSTOM" username="centos">
+        <option name="customName" value="admin-lb04" />
+      </sshConfig>
+      <sshConfig host="54.254.246.47" id="ce3642a6-f30c-4936-8b6d-cab4b053133a" keyPath="$PROJECT_DIR$/../../Files/SH/SSHKey/LightsailDefaultKey-ap-southeast-1.pem" port="22" customName="admin-lb05" nameFormat="CUSTOM" username="centos">
+        <option name="customName" value="admin-lb05" />
+      </sshConfig>
     </configs>
   </component>
 </project>

@@ -7,8 +7,12 @@ class Betlist extends MY_Controller {
 		parent::__construct();
 	}
 
-	public function sync_betlist($limit = 1000) {
-		$get_data = $this->main->get_reportbetlist($limit);
+	public function sync_betlist($date = null, $limit = 1000) {
+		$get_data = $this->main->get_reportbetlist($date, $limit);
+
+//		print_r($get_data);
+//		exit;
+
 		$this->main->insert_betlist($get_data);
 		echo 'Done';
 	}
@@ -19,22 +23,26 @@ class Betlist extends MY_Controller {
 	}
 
 	public function sync_report_agent($mandate = '') {
+		$game_id = $this->input->get('game_id');
 		$date = $mandate ? date('Y-m-d', strtotime($mandate)) : date('Y-m-d');
-		$report_data = $this->main->get_reportdata_agent($date);
+		$report_data = $this->main->get_reportdata_agent($date, $game_id);
 		if($report_data) {
 			$this->main->insert_tmpreport_agent($report_data);
 			echo '(Agent) Done -> '. $date;
+			echo $game_id ? ' / Game ID: ' . $game_id : '';
 		} else {
 			echo 'No data update';
 		}
 	}
 
 	public function sync_report_member($mandate = '') {
+		$game_id = $this->input->get('game_id');
 		$date = $mandate ? date('Y-m-d', strtotime($mandate)) : date('Y-m-d');
-		$report_data = $this->main->get_reportdata_member($date);
+		$report_data = $this->main->get_reportdata_member($date, $game_id);
 		if($report_data) {
 			$this->main->insert_tmpreport_member($report_data);
 			echo '(Member) Done -> '. $date;
+			echo $game_id ? ' / Game ID: ' . $game_id : '';
 		} else {
 			echo 'No data update';
 		}

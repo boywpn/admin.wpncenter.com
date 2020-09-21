@@ -591,15 +591,20 @@
                                 <tr>
                                     <td>{{ $no+1 }}</td>
                                     <td class="text-center">
-                                        <span class="text-blue">{{ trans("report/winloss::winloss.table.ref_no") }} {{ $list->id }}</span><br>
-                                        {{ $list->bet_date }}<br>
-                                        {{ $list->work_date }}
+                                        <span class="text-blue">No. {{ $list->id }}</span><br>
+                                        <span class="text-blue">{{ trans("report/winloss::winloss.table.ref_no") }} {{ $list->bet_id }}</span><br>
+                                        {{ $list->bet_date }}
                                     </td>
                                     <td class="text-right">
-                                        {{ trans("report/winloss::winloss.table.bet_on") }} {{ $type->name }}<br>
-                                        <span class="text-blue">{{ $game->name }}</span><br>
-                                        <span class="text-black-bold">{{ date('d/m', strtotime($list->bet_time)) }}</span><br>
-                                        {{ trans("report/winloss::winloss.table.bet_id") }} {{ $list->bet_id }}
+                                        @if(in_array($gameCode, ['sboapi']))
+                                            @include('report/winloss::games.results.'.$gameCode)
+                                        @else
+                                            {{ trans("report/winloss::winloss.table.bet_on") }} {{ $type->name }}<br>
+                                            <span class="text-blue">{{ $game->name }}</span><br>
+                                            <span class="text-black-bold">{{ date('d/m', strtotime($list->bet_time)) }}</span><br>
+                                            {{ trans("report/winloss::winloss.table.bet_id") }} {{ $list->bet_id }}
+                                        @endif
+
                                     </td>
                                     <td class="text-right">{{ number_format($list->bet_amount, 2) }}</td>
                                     <td class="text-right">{{ number_format($list->rolling, 2) }}</td>

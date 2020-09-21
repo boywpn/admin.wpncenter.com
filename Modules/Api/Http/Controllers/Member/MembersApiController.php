@@ -268,6 +268,9 @@ class MembersApiController extends CrudApiController
         */
         elseif($username['code'] == "aec"){
 
+//            $m_notes = 'ขณะนี้ระบบกำลังอยู่ระหว่างปิดปรับปรุงค่ะ.';
+//            return $this->respond(false, [], ['error' => 'game_is_maintenance'], ['message' => $m_notes]);
+
             $api = new AEC($key);
 
             $setParam = [
@@ -590,7 +593,7 @@ class MembersApiController extends CrudApiController
         /**
          * IBC
          */
-        elseif($username['code'] == "ibc"){
+        elseif($game_code == "ibc"){
 
             $api = new IBC($key);
             $setParam = [
@@ -613,7 +616,7 @@ class MembersApiController extends CrudApiController
             $res['playUrl'] = str_replace("lang=en", "lang=th", $res['gameUrl']);
             $res['playUrlMobile'] = str_replace("lang=en", "lang=th", $res['gameUrl']);
 
-            return $this->respond(true, [$res], [], ['message' =>  trans('core::core.entity.records_found')]);
+            return $this->respond(true, $res, [], ['message' =>  trans('core::core.entity.records_found')]);
 
         }
 

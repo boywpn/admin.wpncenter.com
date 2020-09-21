@@ -27,15 +27,15 @@ class BetsController extends CshController
         //
     }
 
-    public function getBetItems($key = 0, $debug = false)
+    public function getBetItems($key = 0, $month, $debug = false)
     {
 
-        $this->apiUrl = "http://betflikbetlog.psg-api.com/api/";
+        $this->apiUrl = "http://betflikbetlog.psg-api.com/v1/api/";
         $setParam = [
             'level' => $this->level,
             'upId' => $this->id,
             'lastedId' => $key,
-            'new' => 1,
+            'month' => $month,
             'limit' => 1000
         ];
 
@@ -228,7 +228,10 @@ class BetsController extends CshController
 
 //            $arrList[$key['agent']] = $this->getBetItems($lastKey, true);
 //            $lastKey = 0; // sh=163846, ma=163843, gl=163829, at=129698, wp=162043
-            $bets = $this->getBetItems($lastKey);
+
+            $month = date("n");
+            $bets = $this->getBetItems($lastKey, $month);
+
 //            print_r($bets);
 //            continue;
 //            $count = count($bets['data']);
@@ -248,7 +251,7 @@ class BetsController extends CshController
 
                 $user = $item['username'];
 
-                $hash = $board_game_id.$item['id'];
+                $hash = $board_game_id.$item['md5'];
                 $md5 = md5($hash);
 
                 $exist = BetlistsTmp::where('hash', $md5)->first();
@@ -276,6 +279,8 @@ class BetsController extends CshController
                 else{
 
                     $arrUpdate[] = $item;
+
+                    $lastKey = $item['id'];
 
                 }
 
@@ -338,7 +343,7 @@ class BetsController extends CshController
 
                 $user = $item['username'];
 
-                $hash = $board_game_id.$item['id'];
+                $hash = $board_game_id.$item['md5'];
                 $md5 = md5($hash);
 
                 $exist = BetlistsTmp::where('hash', $md5)->first();

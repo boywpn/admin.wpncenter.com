@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Games\Ibc;
+namespace App\Http\Controllers\Games\Aec;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,202 +15,19 @@ use Modules\Report\Betlists\Entities\BetlistsTmp;
 use Modules\Report\Betlists\Entities\BetlistsTmpBup;
 use Modules\Report\Commission\Entities\Commission;
 
-class BetsController extends IbcController
+class BetsController extends AecController
 {
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    public function getBetItems($key = 0, $debug = false)
-    {
-
-        $setParam = [
-            'keyOrdate' => 'key'
-        ];
-
-        $setSuffix = [
-            //'from' => date("Y-m-d\TH:i:s", strtotime(genDate('-885 minutes'))),
-            //'to' => date("Y-m-d\TH:i:s", strtotime(genDate('-660 minutes'))),
-            'versionkey' => $key
-        ];
-
-        $param = $this->setParam($setParam, 'repullBettingHistoryApiClient.ashx', ['providercode' => 'IB'], $setSuffix, $this->apiReportUrl);
-
-        $response = $this->push(false);
-
-        if($debug) {
-            return compact('param', 'response');
-        }
-
-        $response = json_decode($response, true);
-
-        return $response;
-    }
-
-    public function getBetItemsByTime($key = 0, $debug = false)
-    {
-
-        $setParam = [
-            'keyOrdate' => 'key'
-        ];
-
-        $setSuffix = [
-            'from' => '2020-08-28T00:00:00',
-            'to' => '2020-08-28T23:59:59',
-            'versionkey' => $key
-        ];
-
-        $param = $this->setParam($setParam, 'repullBettingHistoryApiClient.ashx', ['providercode' => 'IB'], $setSuffix, $this->apiReportUrl);
-
-        $response = $this->push(false);
-
-        if($debug) {
-            return compact('param', 'response');
-        }
-
-        $response = json_decode($response, true);
-
-        return $response;
-    }
-
-    public function getBetItemsByKey($lastKey, $debug = false)
-    {
-
-        $setParam = [];
-        $setPrefix = [];
-        $setSuffix = [
-            'versionkey' => $lastKey
-        ];
-
-        $param = $this->setParam($setParam, 'fetchbykey.aspx', $setPrefix, $setSuffix, $this->apiReportUrl);
-
-        $response = $this->push(false);
-
-        if($debug) {
-            return compact('param', 'response');
-        }
-
-        $response = json_decode($response, true);
-
-        return $response;
-    }
-
-    public function betLogTmpByTime($boards){
-
-        $this->entityClass = BetlistsTmp::class;
-        $repository = $this->getRepository();
-
-        $arrList = [];
-        $arrCount = [];
-
-        foreach ($boards as $board){
-
-            $key = json_decode($board['api_code'], true);
-            $this->setKey($key);
-
-            $arrList = [];
-            $arrAdd = [];
-            $arrUpdate = [];
-            $board_game_id = 21;
-
-            if(empty($board['lastkey'])){
-                $lastKey = 0;
-            }else{
-                $lastKey = $board['lastkey'];
-            }
-
-            $bets = $this->getBetItems($lastKey);
-
-            if($bets['errCode'] != 0){
-                continue;
-            }
-
-            $items = json_decode($bets['record'], true);
-
-//            print_r($items);
-//            continue;
-
-            if(!is_array($items)){
-                continue;
-            }
-
-            if(count($items['Data']) == 0){
-                continue;
-            }
-
-//                print_r($items);
-
-            foreach ($items['Data'] as $item) {
-
-                $user = str_replace($key['agent'], "", $item['PlayerName']);
-
-                $hash = $board_game_id.$item['TransId'].$item['VersionKey'];
-                $md5 = md5($hash);
-
-                $exist = BetlistsTmp::where('hash', $md5)->first();
-
-                if(empty($exist)) {
-
-                    $arrTmp = [
-                        'game_id' => $board_game_id,
-                        'hash' => $md5,
-                        'bet_ref' => $item['TransId'],
-                        'last_key' => $item['LastVersionKey'],
-                        'version_key' => $item['VersionKey'],
-                        'data' => json_encode($item, JSON_UNESCAPED_UNICODE),
-                    ];
-                    $entity = $repository->createEntity($arrTmp, \App::make(BetlistsTmp::class));
-
-                    $arrAdd[] = $item;
-
-                }
-                /**
-                 * Update
-                 */
-                else{
-
-                    $arrUpdate[] = $item;
-
-                }
-
-            }
-
-            /**
-             * Update Last Key
-             */
-            Boards::where(['ref' => $board['ref'], 'game_id' => $board_game_id])->update(['lastkey' => $items['LastVersionKey']]);
-
-            $arrList[$key['agent']] = [
-                'add' => $arrAdd,
-                'update' => $arrUpdate,
-                'lastKey' => $items['LastVersionKey']
-            ];
-
-            $arrCount[$key['agent']] = [
-                'add' => count($arrAdd),
-                'update' => count($arrUpdate),
-                'time' => date('Y-m-d H:i:s'),
-                'startKey' => $lastKey,
-                'lastKey' => $items['LastVersionKey']
-            ];
-
-        } // End foreach boards
-
-        return compact('arrCount', 'arrList');
-
-    }
 
     public function betLogTmp($boards){
 
         $this->entityClass = BetlistsTmp::class;
         $repository = $this->getRepository();
+
+        $date = date('Y-m-d H:i:s');
+        $sDate = date('Y-m-d H:i:s', strtotime('50 minutes', strtotime($date)));
+        $eDate = date('Y-m-d H:i:s', strtotime('60 minutes', strtotime($date)));
+
+        $game_type = "sportsbook";
 
         $arrList = [];
         $arrCount = [];
@@ -225,34 +42,17 @@ class BetsController extends IbcController
             $arrUpdate = [];
             $board_game_id = $board['game_id'];
 
-//            $last_tmp = BetlistsTmp::where('game_id', $board_game_id)
-//                ->select('id', 'board_id', 'last_key')
-//                ->orderBy('version_key', 'DESC')
-//                ->first();
+            $bets = $this->getBetItem($key['agent'], $game_type, $sDate, $eDate);
 
-            if(empty($board['lastkey'])){
-                $lastKey = 0;
-            }else{
-                $lastKey = $board['lastkey'];
-            }
-
-            $bets = $this->getBetItemsByKey($lastKey);
-
-//            print_r($bets);
-//            continue;
-
-            if($bets['errCode'] != 0){
+            if(count($bets['playerBetList']) == 0){
                 continue;
             }
 
-            $items = json_decode($bets['result'], true);
-
-//            print_r($items);
-//            continue;
+            $items = $bets['playerBetList'];
 
             foreach ($items as $item) {
 
-                $hash = $board_game_id.$item['id'].$item['ref_no'].$item['site'];
+                $hash = $board_game_id.$item['u'].$item['ventransid'];
                 $md5 = md5($hash);
 
                 $exist = BetlistsTmp::where('hash', $md5)->first();
@@ -262,8 +62,7 @@ class BetsController extends IbcController
                     $arrTmp = [
                         'game_id' => $board_game_id,
                         'hash' => $md5,
-                        'bet_id' => $item['id'],
-                        'bet_ref' => $item['site']."_".$item['ref_no'],
+                        'bet_ref' => $item['ventransid'],
                         'data' => json_encode($item, JSON_UNESCAPED_UNICODE),
                     ];
                     $entity = $repository->createEntity($arrTmp, \App::make(BetlistsTmp::class));
@@ -282,28 +81,103 @@ class BetsController extends IbcController
 
             }
 
-            /**
-             * Update Last Key
-             */
-            Boards::where(['ref' => $board['ref'], 'game_id' => $board_game_id])->update(['lastkey' => $bets['lastversionkey']]);
-
             $arrList[$key['agent']] = [
                 'add' => $arrAdd,
-                'update' => $arrUpdate,
-                'lastKey' => $bets['lastversionkey']
+                'update' => $arrUpdate
             ];
 
             $arrCount[$key['agent']] = [
                 'add' => count($arrAdd),
                 'update' => count($arrUpdate),
-                'time' => date('Y-m-d H:i:s'),
-                'startKey' => $lastKey,
-                'lastKey' => $bets['lastversionkey']
+                'time' => date('Y-m-d H:i:s')
             ];
 
         } // End foreach boards
 
         return compact('arrCount', 'arrList');
+
+    }
+
+    public function betLogTmpByTime($boards){
+
+        $this->entityClass = BetlistsTmp::class;
+        $repository = $this->getRepository();
+
+        $sDate = '2020-09-01';
+        $eDate = '2020-09-07';
+
+        $game_type = "sportsbook";
+
+        $arrList = [];
+        $arrCount = [];
+        $arrBet = [];
+
+        foreach ($boards as $board){
+
+            $key = json_decode($board['api_code'], true);
+            $this->setKey($key);
+
+            $arrList = [];
+            $arrAdd = [];
+            $arrUpdate = [];
+            $board_game_id = $board['game_id'];
+
+            $bets = $this->getBetItem($key['agent'], $game_type, $sDate, $eDate);
+
+//            $arrBet[] = $bets;
+//            continue;
+
+            if(count($bets['playerBetList']) == 0){
+                continue;
+            }
+
+            $items = $bets['playerBetList'];
+
+            foreach ($items as $item) {
+
+                $hash = $board_game_id.$item['t'].$item['u'].$item['ventransid'];
+                $md5 = md5($hash);
+
+                $exist = BetlistsTmp::where('hash', $md5)->first();
+
+                if(empty($exist)) {
+
+                    $arrTmp = [
+                        'game_id' => $board_game_id,
+                        'hash' => $md5,
+                        'bet_ref' => $item['ventransid'],
+                        'data' => json_encode($item, JSON_UNESCAPED_UNICODE),
+                    ];
+                    $entity = $repository->createEntity($arrTmp, \App::make(BetlistsTmp::class));
+
+                    $arrAdd[] = $entity;
+
+                }
+                /**
+                 * Update
+                 */
+                else{
+
+                    $arrUpdate[] = $item;
+
+                }
+
+            }
+
+            $arrList[$key['agent']] = [
+                'add' => $arrAdd,
+                'update' => $arrUpdate
+            ];
+
+            $arrCount[$key['agent']] = [
+                'add' => count($arrAdd),
+                'update' => count($arrUpdate),
+                'time' => date('Y-m-d H:i:s')
+            ];
+
+        } // End foreach boards
+
+        return compact('arrCount', 'arrList', 'arrBet');
 
     }
 
@@ -328,13 +202,8 @@ class BetsController extends IbcController
             $bet_id = $items->bet_id;
             $item = json_decode($items->data, true);
 
-//            print_r($item);
-//            continue;
-
-            $user = $item['member'];
+            $user = $item['u'];
             $username = Username::getUsernameByUser($user);
-//            print_r($username);
-//            continue;
 
             $member_id = (!empty($username['member_id'])) ? $username['member_id'] : 0;
             $agent_id = (!empty($username['agent_id'])) ? $username['agent_id'] : $username['b_agent_id'];
@@ -345,7 +214,7 @@ class BetsController extends IbcController
             $comm = MembersCommissions::getMemberCommissions($member_id);
 
             // Check Game Type
-            $game_type = $item['product'];
+            $game_type = "sportsbook";
             $gameType = GamesTypes::getTypeByCode($game_type, $board_game_id);
             $game_type_id = $gameType['id'];
 //                print_r($gameType);
@@ -359,8 +228,8 @@ class BetsController extends IbcController
             // check commission
             $commission = 0;
             $commission_amount = 0;
-            $result_amount = $item['payout'] - $item['bet'];
-            $validAmount = ($result_amount >= 0) ? $result_amount : $result_amount * -1;
+            $result_amount = $item['w'];
+            $validAmount = $item['ValidAmt'];
 
             if (isset($comm[$board_game_id][$game_type_id])) {
                 $commission = $comm[$board_game_id][$game_type_id] / 100; // b/c show on system 0.00 - 1.00
@@ -390,33 +259,32 @@ class BetsController extends IbcController
 
             $detail = json_encode($item, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 
-            $hash = md5($item['site'].$item['ref_no']);
+            $hash = md5($item['u'].$item['ventransid']);
 
             $arrItem = [
                 'member_id' => $member_id,
                 'agent_id' => $agent_id,
-                'username' => $item['member'],
+                'username' => $item['u'],
                 'username_id' => $username_id,
                 'board_game_id' => $board_game_id,
                 'game_type_id' => $game_type_id,
-                'bet_id' => $item['ref_no'],
+                'bet_id' => $item['ventransid'],
                 'hash' => $hash,
-                'bet_time' => $item['start_time'],
-                'payout_time' => $item['end_time'],
-                'work_time' => $item['start_time'],
-                'match_time' => $item['match_time'],
+                'bet_time' => $item['trandate'],
+                'payout_time' => $item['t'],
+                'work_time' => $item['workdate'],
+                'match_time' => $item['matchdate'],
                 'game_id' => $item['id'],
-                'host_id' => $item['site'],
+                'host_id' => $item['ip'],
                 'host_name' => null,
                 'game_type' => $game_type,
                 'set' => null,
                 'round' => null,
-                'bet_type' => $item['product'],
-                'bet_amount' => $item['bet'],
-                'turnover' => $item['turnover'],
-                'rolling' => (string)$validAmount,
-//                'detail' => $item['bet_detail'],
-                'result_amount' => (string)$result_winloss,
+                'bet_type' => $item['sportstype'],
+                'bet_amount' => $item['b'],
+                'turnover' => $item['b'],
+                'rolling' => $item['ValidAmt'],
+                'result_amount' => $result_winloss,
                 'balance' => null,
                 'state' => $item['status'],
                 'commission' => (string)$commission,
@@ -478,12 +346,7 @@ class BetsController extends IbcController
                 $repository->createEntity($arrResult, \App::make(BetlistsResults::class));
 
                 /**
-                 * Update Result
-                 */
-//                BetlistsResults::where(['betlist_id' => $exist->id])->update(['game_result' => $detail]);
-
-                /**
-                 * Update Tmp
+                 * Insert Tmp
                  */
                 BetlistsTmp::where(['id' => $id])->update(['status' => 2, 'request_at' => date('Y-m-d H:i:s'), 'betlist_id' => $exist->id]);
 

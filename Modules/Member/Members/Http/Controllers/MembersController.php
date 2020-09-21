@@ -11,6 +11,7 @@ use Modules\Core\Agents\Entities\Agents;
 use Modules\Core\Boards\Entities\Boards;
 use Modules\Core\Games\Entities\Games;
 use Modules\Core\Username\Entities\Username;
+use Modules\Core\Username\Http\Controllers\UsernameController;
 use Modules\Member\Members\Datatables\MembersDatatable;
 use Modules\Member\Members\Datatables\Tabs\MembersBanksDatatableTab;
 use Modules\Member\Members\Datatables\Tabs\MembersUsernameDatatableTab;
@@ -711,11 +712,13 @@ class MembersController extends ModuleCrudController
 
     }
 
-    public function genUsernameApi($identifier, $order_id)
+    public function genUsernameApi($identifier, $order_id = null, $auto_create = false, $checked = true)
     {
 
-        if ($this->permissions['browse'] != '' && !\Auth::user()->hasPermissionTo($this->permissions['browse'])) {
-            return $this->error('ไม่สามารถเข้าถึงระบบนี้ได้ ' . $this->permissions['browse']);
+        if($checked) {
+            if ($this->permissions['browse'] != '' && !\Auth::user()->hasPermissionTo($this->permissions['browse'])) {
+                return $this->error('ไม่สามารถเข้าถึงระบบนี้ได้ ' . $this->permissions['browse']);
+            }
         }
 
         $repository = $this->getRepository();
@@ -729,10 +732,10 @@ class MembersController extends ModuleCrudController
         $this->entityIdentifier = $entity->id;
 
         // Check GameID from Order
-        $order = Orders::where('id', $order_id)->first()->toArray();
+//        $order = Orders::where('id', $order_id)->first()->toArray();
 
         // Check New GameID
-        $game = Games::where('old_id', $order['web_to'])->first()->toArray();
+//        $game = Games::where('old_id', $order['web_to'])->first()->toArray();
 
         $data = Members::getUsernameCode($entity->agent_id, $entity->id);
 
@@ -815,11 +818,17 @@ class MembersController extends ModuleCrudController
                 );
                 $entity_username = $repository->updateEntity($input, $entity_username);
 
-                if($game['id'] == $board['game_id']) {
-                    $mask++;
-                }
+//                if($game['id'] == $board['game_id']) {
+//                    $mask++;
+//                }
 
                 $arr_username = $entity_username->toArray();
+
+                // Created Username Auto
+                if($auto_create){
+                    $u = new UsernameController();
+                    $u->pushUsernameApi($arr_username['id']);
+                }
 
                 if(!empty($board['old_id'])) { // Insert only have old id
 

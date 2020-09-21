@@ -62,11 +62,14 @@ class MemberController extends CshController
             'givePt_bg' => '0',
             'openGames[14]' => 'gamatron',
             'givePt_gamatron' => '0',
+            'openGames[15]' => 'ag',
+            'givePt_ag' => '0',
             'limitGames[0]' => 'dg',
             'limitGames[1]' => 'sa',
             'limitGames[2]' => 'sexy',
             'limitGames[3]' => 'wm',
             'limitGames[4]' => 'bg',
+            'limitGames[5]' => 'ag',
             'limitGames_dg[]' => 'B',
             'commission_dg' => $this->comm,
             'limitGames_sa[]' => 'B',
@@ -76,7 +79,9 @@ class MemberController extends CshController
             'limitGames_wm[]' => 'B',
             'commission_wm' => $this->comm,
             'limitGames_bg[]' => 'A',
-            'commission_bg' => $this->comm
+            'commission_bg' => $this->comm,
+            'limitGames_ag[]' => 'A',
+            'commission_ag' => $this->comm
         ];
 
         $param = $this->setParam($setParam, 'addmember_p');

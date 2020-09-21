@@ -401,6 +401,25 @@ class MembersController extends UpcController
 
     }
 
+    public function GenerateUsername(Request $request){
+
+        $input = $request->input();
+
+        $validator = Validator::make($request->all(), [
+            'member_id' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->error(403, $validator->errors());
+        }
+
+        $m = new \Modules\Member\Members\Http\Controllers\MembersController();
+        $g = $m->genUsernameApi($input['member_id'], null, true, false);
+
+        return $g;
+
+    }
+
     public function username_old(Request $request){
 
         $input = $request->input();
@@ -517,27 +536,37 @@ class MembersController extends UpcController
         $member = $member->toArray();
 
         $bank_to = ['bank_to' => null];
-//        if(isset($member['members_agent']['agents_partner']['id'])){
-//            // Check bank to transfer
-//            $bank = BanksPartners::where('partner_id', $member['members_agent']['agents_partner']['id'])
-//                ->where('member_status_id', $member['status_id'])
-//                ->with(['banksBank' => function($q){
-//                    $q->where('is_active', 1)->select('id', 'bank_id', 'account', 'number', 'is_active');
-//                }, 'banksBank.banks' => function($q){
-//                    $q->select('id', 'code', 'name');
-//                }])
-//                ->where('is_active', 1)
-//                //->select('id', 'bank_id', 'partner_id', 'member_status_id', 'is_active')
-//                ->get();
-//
-//            if($bank){
-//                $bank = $bank->toArray();
-//                $bank_to = ['bank_to' => $bank];
-//                if(!empty($bank['banks_bank'])) {
-//                    $bank_to = ['bank_to' => $bank];
-//                }
-//            }
-//        }
+        if(isset($member['members_agent']['agents_partner']['id'])){
+            // if Kbank KTB SCB
+            if(!in_array($member['banks_member']['bank_id'], [2,3,6])){
+                $to_bank = $member['banks_member']['bank_id'];
+            }else{
+                $to_bank = 6;
+            }
+
+            // Check bank to transfer
+            $bank = BanksPartners::where('partner_id', $member['members_agent']['agents_partner']['id'])
+                ->join('core_banks', 'core_banks.id', '=', 'core_banks_partners.bank_id')
+                ->where('core_banks_partners.member_status_id', $member['status_id'])
+                ->where('core_banks.is_active', 1)
+                ->where('core_banks.bank_id', $to_bank)
+                ->with(['banksBank' => function($q){
+                    $q->where('is_active', 1)->select('id', 'bank_id', 'account', 'number', 'is_active');
+                }, 'banksBank.banks' => function($q){
+                    $q->select('id', 'code', 'name');
+                }])
+                ->where('core_banks_partners.is_active', 1)
+                ->select(
+                    'core_banks_partners.*',
+                    'core_banks.bank_id AS b_bank_id'
+                )
+                ->first();
+
+            if($bank){
+                $bank = $bank->toArray();
+                $bank_to = ['bank_to' => $bank];
+            }
+        }
 
         $resArr = array_merge($member, $bank_to);
 
@@ -658,7 +687,7 @@ class MembersController extends UpcController
 
         $member_id = $token['data']['member_id'];
 
-        return $transactions = Jobs::where('member_id', $member_id)
+        $transactions = Jobs::where('member_id', $member_id)
             // ->whereIn('group_id', $input['group'])
             ->whereNotIn('status_id', [6,7])
             ->whereRaw('DATE(created_at) >= ? AND DATE(created_at) <= ?', [$input['startDate'], $input['endDate']])
@@ -685,10 +714,9 @@ class MembersController extends UpcController
                 'status_id' => $transaction['jobs_status']['id'],
                 'status' => $transaction['jobs_status']['name'],
                 'ref_job_id' => $transaction['ref_job_id'],
-                'method' => parent::WALLET_MATHOD[$transaction['type_id']],
+                'method' => (isset(parent::JOB_TYPE[$transaction['type_id'].$transaction['transfer_type']])) ? parent::JOB_TYPE[$transaction['type_id'].$transaction['transfer_type']] : "N/A",
                 'type_id' => $transaction['type_id'],
-                'game_id' => $transaction['game_id'],
-                'game_name' => $transaction['jobs_game']['name'],
+                'username' => $transaction['username'],
                 'amount' => $transaction['amount'],
                 'created_at' => $transaction['created_at'],
             ];
@@ -696,7 +724,7 @@ class MembersController extends UpcController
 
         $arrData['list'] = $arrRow;
 
-
+        return $arrData;
 
     }
 

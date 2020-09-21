@@ -21,6 +21,7 @@ Route::group(['middleware' => 'upc', 'prefix' => 'upc', 'namespace' => 'Modules\
                 Route::post('confirm_auto', ['uses'=> 'MembersController@confirmAuto']);
 
                 Route::post('username', ['uses'=> 'MembersController@username']);
+                Route::post('generate-username', ['uses'=> 'MembersController@GenerateUsername']);
                 Route::post('info', ['uses'=> 'MembersController@info']);
 
                 Route::post('deposit', ['uses'=> 'MembersController@deposit']);

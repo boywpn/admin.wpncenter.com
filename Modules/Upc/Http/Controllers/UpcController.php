@@ -89,7 +89,8 @@ class UpcController extends Controller
     ];
 
     const JOB_TYPE = [
-        ''
+        '14' => 'Wallet to Casino',
+        '25' => 'Casino to Wallet',
     ];
 
     /**

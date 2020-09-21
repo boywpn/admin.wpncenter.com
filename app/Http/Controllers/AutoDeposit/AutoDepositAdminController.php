@@ -32,6 +32,7 @@ class AutoDepositAdminController extends AppController
 
     public function index()
     {
+
         $lists = $this->getList();
 
         $data = [];
@@ -85,6 +86,8 @@ class AutoDepositAdminController extends AppController
         $auto = $this->postAuto($arrData);
         $response = json_decode($auto, true);
 
+//        return compact('arrData', 'response');
+
         $datetime = date('Y-m-d H:i:s');
         foreach ($response['lists'] as $id => $list){
             $json = json_encode($list, JSON_UNESCAPED_UNICODE);
@@ -133,7 +136,7 @@ class AutoDepositAdminController extends AppController
         $entity = $repository->createEntity($arrData, \App::make(TmpBankAutoRequest::class));
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'http://admin.wpnadmin.com/v1/account_transaction/');
+        curl_setopt($ch, CURLOPT_URL, 'http://api.wpnadmin.com/v1/account_transaction/');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);

@@ -98,10 +98,33 @@ $db['default'] = array(
 
 $db['production'] = array(
 	'dsn'	=> '',
-	'hostname' => 'ls-d46a7e3773881c5f3650793af766cb1f944338a6.cxhujhf1fmtp.ap-southeast-1.rds.amazonaws.com',
+	'hostname' => 'ls-7832b9fbea65a72eb08a51c7b9c082d76bfbffb6.cxhujhf1fmtp.ap-southeast-1.rds.amazonaws.com',
 	'username' => 'dbmasteruser',
-	'password' => 'f,8k$Mjt~N();n+Mp=V.ihz!RdyvZCoJ',
+	'password' => 'FNsDz-bq9m1h9Po03k+_Ys!)k=)[3CHz',
 	'database' => 'wpn_admin',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	//'db_debug' => (ENVIRONMENT !== 'production'),
+	'db_debug' => FALSE,
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);
+
+$db['production_old'] = array(
+	'dsn'	=> '',
+	'hostname' => 'wpn-admin-serverless.cluster-c3hdmuuf9sww.ap-southeast-1.rds.amazonaws.com',
+	'username' => 'admin',
+	'password' => '5F2PgX3t7234&3',
+	'database' => 'wpn_main',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

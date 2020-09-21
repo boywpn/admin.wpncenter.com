@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\AgentsApi;
 
+use App\Models\ApiAccessLogs;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Modules\Api\Traits\RespondTrait;
+use Modules\Core\Username\Entities\Username;
 use Modules\Platform\Core\Repositories\GenericRepository;
 
 class ApiController extends Controller
@@ -25,6 +27,8 @@ class ApiController extends Controller
     protected $agent;
     protected $agent_id;
     protected $username_length = 13;
+    protected $log_id;
+    protected $action;
 
     const CODEID = [
         '0' => 'Success',
@@ -48,12 +52,15 @@ class ApiController extends Controller
         ],
         'member' => [
             'regisUsername',
+            'regisUsernameTest',
             'transferCredit',
             'login',
+            'loginTest',
             'checkBalance',
             'changePassword',
 
-            'getWinloss'
+            'getWinloss',
+            'testBalance'
         ]
     ];
 
@@ -90,6 +97,20 @@ class ApiController extends Controller
     public function action(Request $request){
 
         $data =  $request->all();
+        $post = $request->all();
+
+        $this->action = $data['action'];
+
+        $this->entityClass = ApiAccessLogs::class;
+        $repository = $this->getRepository();
+
+        //unset($post['entity']);
+        $dataUsername = [
+            'data_request' => json_encode($post, JSON_UNESCAPED_UNICODE),
+            'ip_address' => get_client_ip(),
+        ];
+        $log = $repository->createEntity($dataUsername, \App::make(ApiAccessLogs::class));
+        $this->log_id = $log->id;
 
         $this->agent = $data['entity'];
         $this->agent_id = $data['entity']['id'];
@@ -122,7 +143,16 @@ class ApiController extends Controller
         if(empty($msg)) {
             $msg = self::CODEID[$codeid];
         }
-        return response()->json($this->respondWithCode(false, $codeid, $data, $msg), 400);
+
+        $res = $this->respondWithCode(false, $codeid, $data, $msg);
+
+        if(!in_array($this->action, ['getWinloss'])) {
+            //Update Response Data
+            $json_res = json_encode($res, JSON_UNESCAPED_UNICODE);
+            ApiAccessLogs::where('id', $this->log_id)->update(['data_response' => $json_res]);
+        }
+
+        return response()->json($res, 400);
     }
     public function errorMsg($codeid, $data = [], $status = null)
     {
@@ -135,7 +165,16 @@ class ApiController extends Controller
         if(empty($msg)) {
             $msg = self::CODEID[$codeid];
         }
-        return response()->json($this->respondWithCode(true, $codeid, $data, $msg), 200);
+
+        $res = $this->respondWithCode(true, $codeid, $data, $msg);
+
+        if(!in_array($this->action, ['getWinloss'])) {
+            //Update Response Data
+            $json_res = json_encode($res, JSON_UNESCAPED_UNICODE);
+            ApiAccessLogs::where('id', $this->log_id)->update(['data_response' => $json_res]);
+        }
+
+        return response()->json($res, 200);
     }
     public function successMsg($codeid, $data = [])
     {

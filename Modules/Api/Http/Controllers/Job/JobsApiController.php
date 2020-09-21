@@ -103,7 +103,7 @@ class JobsApiController extends CrudApiController
         $orderid = $exp_order[0]."_".$exp_order[1];
 
 
-        $json = file_get_contents('http://admin.wpnadmin.com/core_api.php?ss=true&backend=true&action=order_detail_wpnservice2&id=' . $orderid);
+        $json = file_get_contents('https://api.wpnadmin.com/core_api.php?ss=true&backend=true&action=order_detail_wpnservice2&id=' . $orderid);
         $json = json_decode($json, true);
 
 //        // create curl resource

@@ -24,8 +24,11 @@ class SmsController extends AppController
         $sms = $request->input();
         $sms_json = json_encode($sms, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_UNICODE);
 
-        //$dir = dirname(__FILE__);
-        //file_put_contents($dir."/".date("Y-m-d").'.json', json_encode($sms, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_UNICODE)."\n", FILE_APPEND);
+        $dir = dirname(__FILE__);
+        file_put_contents($dir."/".date("Y-m-d").'.json', json_encode($sms, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_UNICODE)."\n", FILE_APPEND);
+
+        //$p_sms = $request->post();
+        //file_put_contents($dir."/post_".date("Y-m-d").'.json', json_encode($p_sms, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_UNICODE)."\n", FILE_APPEND);
 
         $content = $request->input('content');
 
@@ -99,6 +102,7 @@ class SmsController extends AppController
                 preg_match('/Transfer from (.*?)\/x(.*?) amount THB (.*?) to your account x(.*?)  on ([0-9]{2})\/([0-9]{2})\@(.*?)  Available balance is THB (.*?)\./', $msg, $arr4); // Transfer from BAYA/x481033 amount THB 1,000.00 to your account x343261  on 15/04@03:05  Available balance is THB 19,044.68.
                 preg_match('/Cash\/transfer deposit amount THB (.*?) via (.*?) to your A\/C x(.*?) on ([0-9]{2})\/([0-9]{2})\@(.*?) Avai. Bal. is THB (.*?)\./', $msg, $arr5); // Cash/transfer deposit amount THB 200.00 via ATM to your A/C x344136 on 15/04@03:47 Avai. Bal. is THB 48,673.47.
                 preg_match('/Transfer amount THB (.*?) to your account x(.*?) on ([0-9]{2})\/([0-9]{2})\@(.*?)\./', $msg, $arr6); // Transfer amount THB 100.00 to your account x296297 on 30/04@15:40.
+                preg_match('/Withdrawal\/transfer transaction amount THB (.*?) from your account x(.*?) via (.*?) on ([0-9]{2})\/([0-9]{2})\@(.*?)\./', $msg, $arr7); // Withdrawal/transfer transaction amount THB 1,200.00 from your account x342003 via ENET on 17/08@02:30.
 
                 $datetime = date("Y-m-d H:i:s");
                 $ref = null;
@@ -200,6 +204,22 @@ class SmsController extends AppController
                     $datetime = $date . " " . $time;
                     $datetime = date('Y-m-d H:i:s', strtotime($datetime));
                 }
+                elseif($arr7){
+                    $arr = $arr7;
+
+                    $amount = $arr[1];
+                    $amount = floatval(preg_replace('/[^\d.]/', '', $amount));
+                    $amount = $amount * -1;
+                    $state_tran_type = $arr[3];
+                    $d = $arr[4];
+                    $m = $arr[5];
+                    $time = $arr[6];
+                    $y = date('Y');
+
+                    $date = $y . "-" . $m . "-" . $d;
+                    $datetime = $date . " " . $time;
+                    $datetime = date('Y-m-d H:i:s', strtotime($datetime));
+                }
 
                 if($amount >= 0){
                     $dp = $amount;
@@ -256,6 +276,7 @@ class SmsController extends AppController
         preg_match('/Transfer from (.*?)\/x(.*?) amount THB (.*?) to your account x(.*?)  on ([0-9]{2})\/([0-9]{2})\@(.*?)  Available balance is THB (.*?)\./', $msg, $arr4); // Transfer from BAYA/x481033 amount THB 1,000.00 to your account x343261  on 15/04@03:05  Available balance is THB 19,044.68.
         preg_match('/Cash\/transfer deposit amount THB (.*?) via (.*?) to your A\/C x(.*?) on ([0-9]{2})\/([0-9]{2})\@(.*?) Avai. Bal. is THB (.*?)\./', $msg, $arr5); // Cash/transfer deposit amount THB 200.00 via ATM to your A/C x344136 on 15/04@03:47 Avai. Bal. is THB 48,673.47.
         preg_match('/Transfer amount THB (.*?) to your account x(.*?) on ([0-9]{2})\/([0-9]{2})\@(.*?)\./', $msg, $arr6); // Transfer amount THB 100.00 to your account x296297 on 30/04@15:40.
+        preg_match('/Withdrawal\/transfer transaction amount THB (.*?) from your account x(.*?) via (.*?) on ([0-9]{2})\/([0-9]{2})\@(.*?)\./', $msg, $arr7);
 
         $datetime = date("Y-m-d H:i:s");
         $ref = null;
@@ -351,6 +372,22 @@ class SmsController extends AppController
             $d = $arr[3];
             $m = $arr[4];
             $time = $arr[5];
+            $y = date('Y');
+
+            $date = $y . "-" . $m . "-" . $d;
+            $datetime = $date . " " . $time;
+            $datetime = date('Y-m-d H:i:s', strtotime($datetime));
+        }
+        elseif($arr7){
+            $arr = $arr7;
+
+            $amount = $arr[1];
+            $amount = floatval(preg_replace('/[^\d.]/', '', $amount));
+            $amount = $amount * -1;
+            $state_tran_type = $arr[3];
+            $d = $arr[4];
+            $m = $arr[5];
+            $time = $arr[6];
             $y = date('Y');
 
             $date = $y . "-" . $m . "-" . $d;

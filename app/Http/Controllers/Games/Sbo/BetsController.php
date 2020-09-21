@@ -105,22 +105,22 @@ class BetsController extends SboController
         return $items;
 
 //        $setParam = [
-//            "StartDate" => $sDate,
-//            "EndDate" => $eDate,
+//            "StartDate" => "2020-08-28T00:00:00",
+//            "EndDate" => "2020-08-28T00:30:00",
 //            "Portfolio" => $Portfolio
 //        ];
 //        $param = $this->setParam($setParam, 'web-root/restricted/report/v2/get-bet-list-by-modify-date.aspx');
 //
 //        $response = $this->push();
 //        $response = json_decode($response, true);
-
-        $response['byDate'] = $date;
-
-        if($debug) {
-            return compact('param', 'response');
-        }
-
-        return $response;
+//
+//        $response['byDate'] = $date;
+//
+//        if($debug) {
+//            return compact('param', 'response');
+//        }
+//
+//        return $response;
     }
 
     public function betLogTmp($boards, $Portfolio, $byDate = null){
@@ -147,6 +147,7 @@ class BetsController extends SboController
             }
 
             $start = $lastKey;
+            $last_key = null;
 
             if(empty($byDate)) {
                 $bets = $this->getBetItems($Portfolio);
@@ -169,6 +170,8 @@ class BetsController extends SboController
                 $bets = $this->getBetItemsByDate($Portfolio, $byDate);
                 $items = $bets;
 
+                $last_key = 1;
+
 //                print_r($bets);
 //                continue;
             }
@@ -185,6 +188,7 @@ class BetsController extends SboController
                     $arrTmp = [
                         'game_id' => $board_game_id,
                         'hash' => $md5,
+                        'last_key' => $last_key,
                         'bet_ref' => $item['refNo'],
                         'agent_ref' => $key['agent'],
                         'data' => json_encode($item, JSON_UNESCAPED_UNICODE),
@@ -360,7 +364,7 @@ class BetsController extends SboController
 
     }
 
-    public function betLogSave($game_id, $limit = 3000, $status = null){
+    public function betLogSave($game_id, $limit = 500, $status = null){
 
         $this->entityClass = Betlists::class;
         $repository = $this->getRepository();
@@ -706,6 +710,12 @@ class BetsController extends SboController
 
         $detail = json_encode($item, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 
+        $winlossDate = (isset($item['winLostDate'])) ? $item['winLostDate'] : $item['orderTime'];
+
+        if($winlossDate == '0001-01-01T00:00:00'){
+            $winlossDate = $item['orderTime'];
+        }
+
         $arrItem = [
             'member_id' => $member_id,
             'agent_id' => $agent_id,
@@ -717,7 +727,7 @@ class BetsController extends SboController
             'hash' => $hash,
             'bet_time' => $item['orderTime'],
             'payout_time' => $item['modifyDate'],
-            'work_time' => (isset($item['winLostDate'])) ? $item['winLostDate'] : $item['orderTime'],
+            'work_time' => $winlossDate,
             'match_time' => $item['orderTime'],
             'game_id' => $item['gamePeriodId'],
             'host_id' => null,
@@ -904,6 +914,12 @@ class BetsController extends SboController
 
         $hash = md5($board_game_id.$item['refNo']);
 
+        $winlossDate = (isset($item['winLostDate'])) ? $item['winLostDate'] : $item['orderTime'];
+
+        if($winlossDate == '0001-01-01T00:00:00'){
+            $winlossDate = $item['orderTime'];
+        }
+
         $arrItem = [
             'member_id' => $member_id,
             'agent_id' => $agent_id,
@@ -915,7 +931,7 @@ class BetsController extends SboController
             'hash' => $hash,
             'bet_time' => $item['orderTime'],
             'payout_time' => $item['modifyDate'],
-            'work_time' => (isset($item['winLostDate'])) ? $item['winLostDate'] : $item['orderTime'],
+            'work_time' => $winlossDate,
             'match_time' => $item['orderTime'],
             'game_id' => null,
             'host_id' => null,

@@ -33,9 +33,9 @@ class Main_model extends MY_Model {
         return $new_slavetb;
     }
 
-    function regen_newtablebetlist($table_name = '', $newCurrTime = '', $rkey = 3) {
+    function regen_newtablebetlist($table_name = '', $newCurrTime = '') {
         $extract_stb = explode('_', $table_name);
-        $extract_stb = array_slice($extract_stb, 0, $rkey);
+        $extract_stb = array_slice($extract_stb, 0, 3);
         $new_slavetb = implode('_', $extract_stb);
         return $new_slavetb . '_' . $newCurrTime;
     }
@@ -43,12 +43,6 @@ class Main_model extends MY_Model {
     function get_tablecurdate($table_name = '') {
         $extract_stb = explode('_', $table_name);
         return date('Y-m', strtotime($extract_stb[3] . '-' . $extract_stb[4]));
-    }
-
-    function get_tablecurdate_last($table_name = '') {
-        $extract_stb = explode('_', $table_name);
-        $lastKey = count($extract_stb);
-        return date('Y-m', strtotime($extract_stb[($lastKey - 2)] . '-' . $extract_stb[($lastKey - 1)]));
     }
     
     function get_count_table($countFile = '') {
@@ -71,8 +65,8 @@ class Main_model extends MY_Model {
         if($game_id) {
             $this->db->where('game_id', $game_id);
         }
-        $this->db->where('`betlist_id` != 0');
-        $this->db->where('`status` != 0');
+        $this->db->where('`betlist_id` IS NOT NULL');
+        $this->db->where('`status` IS NOT NULL');
         $this->db->where('`updated_at` < \'' . $settime . '\'');
         if($limit) {
             $this->db->limit($limit);
@@ -84,9 +78,8 @@ class Main_model extends MY_Model {
     function get_bltmp_data($table = '', $year = '', $month = '', $limit = '') {
         $this->db->select('*');
         $this->db->from($table);
-        // $this->db->where('YEAR(work_time)', $year);
-        // $this->db->where('MONTH(work_time)', $month);
-        $this->db->where('work_time BETWEEN \'' . $year . '\' AND \'' . $month . '\'');
+        $this->db->where('YEAR(work_time)', $year);
+        $this->db->where('MONTH(work_time)', $month);
         if($limit) {
             $this->db->limit($limit);
         }
@@ -94,22 +87,8 @@ class Main_model extends MY_Model {
         return $query->result_array();
     }
 
-    function get_blrtmp_data($table = '', $year = '', $month = '', $limit = '') {
-        $this->db->select('*');
-        $this->db->from($table);
-        // $this->db->where('YEAR(created_at)', $year);
-        // $this->db->where('MONTH(created_at)', $month);
-        $this->db->where('created_at BETWEEN \'' . $year . '\' AND \'' . $month . '\'');
-        if($limit) {
-            $this->db->limit($limit);
-        }
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-
-    function get_reportbetlist($data = null, $limit = 1000, $game_id = 24, $game_type_id = 55, $bet_type = 'Football') {
-
-        $sql = "SELECT rb.id, rbs.game_result 
+    function get_reportbetlist($limit = 1000, $game_id = 24, $game_type_id = 55, $bet_type = 'Football') {
+        $query = $this->db->query("SELECT rb.id, rbs.game_result 
             FROM
                 report_betlists AS rb
                 LEFT JOIN report_betlists_results AS rbs ON ( rb.id = rbs.betlist_id ) 
@@ -120,12 +99,8 @@ class Main_model extends MY_Model {
                 AND rbs.game_result IS NOT NULL )
                 AND rb.is_fixtures IS NULL
             ORDER BY
-                rb.bet_time ASC,
-                rbs.created_at DESC
-            LIMIT 0,". $limit . "";
-
-        $query = $this->db->query($sql);
-
+                rb.bet_time ASC 
+                LIMIT 0,". $limit . "");
         // $query = $this->db->query("SELECT rb.id, rbs.game_result 
         //     FROM
         //         report_betlists AS rb
@@ -334,7 +309,6 @@ class Main_model extends MY_Model {
     function get_match_data($leauge_id = '', $data = [], $limit = 1000) {
         $sql = "SELECT
                 rp.id,
-                rp.betlist_id,
                 rp.isLive,
                 rp.isHalf,
                 rp.isHalfWonLose,
@@ -347,7 +321,6 @@ class Main_model extends MY_Model {
                 DATE_FORMAT(rp.winlostDate, '%Y-%m-%d') as winlostDate,
                 rpm.match_name,
                 rpm.id as match_id,
-                rb.state as rb_state,
                 ( SELECT SUM( stake ) FROM rp_gameresult WHERE isLive = 0 AND isHalf = 0 AND betOption = rpm.team_home AND `league` = rp.league AND `match` = rp.`match` AND winlostDate = rp.winlostDate AND liveScore = rp.liveScore ) AS home_summary_bef,
                 ( SELECT SUM( stake ) FROM rp_gameresult WHERE isLive = 0 AND isHalf = 0 AND betOption = rpm.team_aways AND `league` = rp.league AND `match` = rp.`match` AND winlostDate = rp.winlostDate AND liveScore = rp.liveScore ) AS aways_summary_bef,
                 ( SELECT SUM( stake ) FROM rp_gameresult WHERE isLive = 0 AND isHalf = 0 AND betOption = 'Over' AND `league` = rp.league AND `match` = rp.`match` AND winlostDate = rp.winlostDate AND liveScore = rp.liveScore ) AS over_summary_bef,
@@ -367,10 +340,8 @@ class Main_model extends MY_Model {
             FROM
                 rp_gameresult AS rp
                 LEFT JOIN rp_match AS rpm ON ( rpm.leauge_id = rp.league AND rpm.id = rp.`match` ) 
-                LEFT JOIN report_betlists AS rb ON rp.betlist_id = rb.id 
             WHERE
-                rp.league = '" . $leauge_id . "'
-                AND rb.state = 'Running'
+                rp.league = '" . $leauge_id . "' 
                 AND DATE(rp.winlostDate) = '" . $data['select_date'] . "' 
             GROUP BY
                 rp.`match`,
@@ -395,22 +366,18 @@ class Main_model extends MY_Model {
         
         return $leauge_data;
     }
-    
-    function get_table_data($table = '', $id = '', $field = '*') {
-        $this->odb->select($field);
-        $this->odb->from($table);
-        $this->odb->where($id);
-        $result = $this->odb->get();
-        return $result->row_array();
-    }
 
     function get_reportdata_agent($date = '', $game_id = '') {
         $sql = "SELECT
         rb.id,
         rb.agent_id,
         rb.username_id,
+        ca.name AS contact,
+        ca.ref AS username,
         rb.board_game_id AS game_id,
         rb.game_type_id AS type_id,
+        pn.name AS pn_name,
+        pn.id AS pn_id,
         DATE_FORMAT(rb.work_time, '%Y-%m-%d') AS work_date,
         rb.bet_amount,
         COUNT(rb.id) AS stake,
@@ -433,6 +400,8 @@ class Main_model extends MY_Model {
         Sum(rb.company_winloss + rb.company_commission) AS company_total
         FROM
         report_betlists AS rb
+        LEFT JOIN core_agents AS ca ON rb.agent_id = ca.id
+        LEFT JOIN core_partners AS pn ON ca.partner_id = pn.id
         WHERE
         rb.work_time BETWEEN '" . $date . " 00:00:00' AND '" . $date . " 23:59:59'";
         if ($game_id) {
@@ -454,6 +423,8 @@ class Main_model extends MY_Model {
         rb.username_id,
         rb.board_game_id AS game_id,
         rb.game_type_id AS type_id,
+        mb.name AS contact,
+        cu.username,
         DATE_FORMAT(rb.work_time, '%Y-%m-%d') AS work_date,
         rb.bet_amount,
         COUNT(rb.id) AS stake,
@@ -476,6 +447,8 @@ class Main_model extends MY_Model {
         Sum(rb.company_winloss + rb.company_commission) AS company_total
         FROM
         report_betlists AS rb
+        LEFT JOIN core_username AS cu ON rb.username_id = cu.id
+        LEFT JOIN member_members AS mb ON cu.member_id = mb.id
         WHERE
         rb.work_time BETWEEN '" . $date . " 00:00:00' AND '" . $date . " 23:59:59'";
         if ($game_id) {
@@ -495,8 +468,12 @@ class Main_model extends MY_Model {
         rb.id,
         rb.agent_id,
         rb.username_id,
+        ca.name AS contact,
+        ca.ref AS username,
         rb.board_game_id AS game_id,
         rb.game_type_id AS type_id,
+        pn.name AS pn_name,
+        pn.id AS pn_id,
         DATE_FORMAT(rb.work_time, '%Y-%m-%d') AS work_date,
         rb.bet_amount,
         COUNT(rb.id) AS stake,
@@ -519,6 +496,8 @@ class Main_model extends MY_Model {
         Sum(rb.company_winloss + rb.company_commission) AS company_total
         FROM
         " . $tables_is . " AS rb
+        LEFT JOIN core_agents AS ca ON rb.agent_id = ca.id
+        LEFT JOIN core_partners AS pn ON ca.partner_id = pn.id
         WHERE
             rb.work_time BETWEEN '" . $date . " 00:00:00' AND '" . $date . " 23:59:59'
         GROUP BY
@@ -535,6 +514,8 @@ class Main_model extends MY_Model {
         rb.username_id,
         rb.board_game_id AS game_id,
         rb.game_type_id AS type_id,
+        mb.name AS contact,
+        cu.username,
         DATE_FORMAT(rb.work_time, '%Y-%m-%d') AS work_date,
         rb.bet_amount,
         COUNT(rb.id) AS stake,
@@ -557,6 +538,8 @@ class Main_model extends MY_Model {
         Sum(rb.company_winloss + rb.company_commission) AS company_total
         FROM
         " . $tables_is . " AS rb
+        LEFT JOIN core_username AS cu ON rb.username_id = cu.id
+        LEFT JOIN member_members AS mb ON cu.member_id = mb.id
         WHERE
             rb.work_time BETWEEN '" . $date . " 00:00:00' AND '" . $date . " 23:59:59'
         GROUP BY
@@ -569,22 +552,16 @@ class Main_model extends MY_Model {
     public function insert_tmpreport_agent($report_data = []) {
         if($report_data) {
             foreach($report_data as $key => $data) {
-
-                $agent_info = $this->get_table_data('core_agents', 'id = ' . $data['agent_id'], 'partner_id, name AS contact, ref AS username');
-                if($agent_info) {
-                    $partner_info = $this->get_table_data('core_partners', 'id = ' . $agent_info['partner_id'], 'name AS pn_name, id AS pn_id');
-                }
-
                 if($this->check_tmpresult_agent($data['agent_id'], $data['game_id'], $data['type_id'], $data['work_date']) == 0) {
                     $this->db->insert('report_betlists_temp_agent', [
                         'agent_id' => $data['agent_id'],
                         'username_id' => $data['username_id'],
-                        'contact' => $agent_info['contact'],
-                        'username' => $agent_info['username'],
+                        'contact' => $data['contact'],
+                        'username' => $data['username'],
                         'game_id' => $data['game_id'],
                         'type_id' => $data['type_id'],
-                        'pn_name' => $partner_info['pn_name'],
-                        'pn_id' => $partner_info['pn_id'],
+                        'pn_name' => $data['pn_name'],
+                        'pn_id' => $data['pn_id'],
                         'work_date' => $data['work_date'],
                         'bet_amount' => $data['bet_amount'],
                         'stake' => $data['stake'],
@@ -615,12 +592,12 @@ class Main_model extends MY_Model {
                     $this->db->update('report_betlists_temp_agent', [
                         'agent_id' => $data['agent_id'],
                         'username_id' => $data['username_id'],
-                        'contact' => $agent_info['contact'],
-                        'username' => $agent_info['username'],
+                        'contact' => $data['contact'],
+                        'username' => $data['username'],
                         'game_id' => $data['game_id'],
                         'type_id' => $data['type_id'],
-                        'pn_name' => $partner_info['pn_name'],
-                        'pn_id' => $partner_info['pn_id'],
+                        'pn_name' => $data['pn_name'],
+                        'pn_id' => $data['pn_id'],
                         'work_date' => $data['work_date'],
                         'bet_amount' => $data['bet_amount'],
                         'stake' => $data['stake'],
@@ -650,19 +627,13 @@ class Main_model extends MY_Model {
     public function insert_tmpreport_member($report_data = []) {
         if($report_data) {
             foreach($report_data as $key => $data) {
-
-                $username_info = $this->get_table_data('core_username', 'id = ' . $data['username_id'], 'username, member_id');
-                if($username_info) {
-                    $member_info = $this->get_table_data('member_members', 'id = ' . $username_info['member_id'], 'name AS contact');
-                }
-
                 if($this->check_tmpresult_member($data['agent_id'], $data['game_id'], $data['type_id'], $data['work_date'], $data['username_id']) == 0) {
                     # insert new
                     $this->db->insert('report_betlists_temp_member', [
                         'agent_id' => $data['agent_id'],
                         'username_id' => $data['username_id'],
-                        'contact' => $member_info['contact'],
-                        'username' => $username_info['username'],
+                        'contact' => $data['contact'],
+                        'username' => $data['username'],
                         'game_id' => $data['game_id'],
                         'type_id' => $data['type_id'],
                         'pn_name' => $data['pn_name'],
@@ -698,8 +669,8 @@ class Main_model extends MY_Model {
                     $this->db->update('report_betlists_temp_member', [
                         'agent_id' => $data['agent_id'],
                         'username_id' => $data['username_id'],
-                        'contact' => $member_info['contact'],
-                        'username' => $username_info['username'],
+                        'contact' => $data['contact'],
+                        'username' => $data['username'],
                         'game_id' => $data['game_id'],
                         'type_id' => $data['type_id'],
                         'pn_name' => $data['pn_name'],
@@ -770,7 +741,6 @@ class Main_model extends MY_Model {
                 LEFT JOIN report_betlists AS rb ON ( rp.betlist_id = rb.id ) 
             WHERE
                 rp.league = '" . $leauge_id . "'  
-                AND rb.state != '' 
                 AND rp.`match` = '" . $match_id . "'
             ";
 

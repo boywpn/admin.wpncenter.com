@@ -25,9 +25,6 @@ class Report_tmp extends CI_Controller {
 		$current_time = date('Y-m-d H:i:s');
 		$setting_time = date('Y-m-d H:i:s', strtotime('-1 hour'));
 
-		# parameter
-		$game_id = $this->input->get('game_id');
-
 		# set slave table
 		$this->slave_table = $this->main->get_count_table($this->countFiles);
 
@@ -55,7 +52,7 @@ class Report_tmp extends CI_Controller {
 		}
 
 		# loop data
-		$getData = $this->main->get_tmp_data($this->master_table, $setting_time, $game_id, $this->process_rowlimit);
+		$getData = $this->main->get_tmp_data($this->master_table, $setting_time, $this->process_rowlimit);
 
 		# start looping
 		$inserted = 0;
